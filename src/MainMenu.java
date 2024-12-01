@@ -12,10 +12,10 @@ public class MainMenu extends JFrame {
         setSize(320, 240);
         setVisible(true);
 
-//        loginButton.addActionListener(e -> {
-//            new Login();
-//            dispose();
-//        });
+        loginButton.addActionListener(e -> {
+            new Login();
+            dispose();
+        });
 //
 //        signInButton.addActionListener(e -> {
 //            new SignIn();
