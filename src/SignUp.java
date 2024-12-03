@@ -1,10 +1,13 @@
+import Utils.Utilities;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Date;
 
-public class SignUpWindow extends JFrame{
+public class SignUp extends JFrame{
 
-    public SignUpWindow(){
+    public SignUp(){
         setTitle("Sign up");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 400);
@@ -28,32 +31,54 @@ public class SignUpWindow extends JFrame{
         dateSpinner.setEditor(dateEditor);
         dateSpinner.setValue(new Date());
         window.add(dateSpinner);
+        JButton backButton = new JButton("Back");
+        window.add(backButton);
         JButton signUpButton = new JButton("Sign Up");
         window.add(signUpButton);
-        JButton signInButton = new JButton("Sign In");
-        window.add(signInButton);
 
         signUpButton.addActionListener(_ -> {
             String username = usernameField.getText();
             String email = emailField.getText();
             String password = "";
-            if (passwordField.getPassword() == checkPasswordField.getPassword()){
+
+            // Return if password don't match
+            if (Arrays.toString(passwordField.getPassword()).equals(Arrays.toString(checkPasswordField.getPassword()))){
                 password = new String(passwordField.getPassword());
             }
+            else {
+                JOptionPane.showMessageDialog(this, "Passwords do not match", "Password Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Return if username or email already exists
+            // TODO: Implement this
+
             Date dateOfBirth = (Date) dateSpinner.getValue();
             if (Utilities.validateEmail(email) && Utilities.validateUsername(username)){
-                JOptionPane.showMessageDialog(this, "New user created", "User Created", JOptionPane.INFORMATION_MESSAGE);
                 User user = new User(username, email, password, dateOfBirth);
+
+                // TODO: Add user to database
+
+                JOptionPane.showMessageDialog(this, "New user created", "User Created", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println(user.getUserId());
+
+                // TODO: Open new user's profile
             }
             else{
                 JOptionPane.showMessageDialog(this, "You entered wrong data", "Wrong Input", JOptionPane.ERROR_MESSAGE);
             }
-        }
+        });
 
-        );
+        backButton.addActionListener(_ -> {
+            dispose();
+            new MainMenu();
+        });
+
         add(window, BorderLayout.CENTER);
         setVisible(true);
     }
 
+    public static void main(String[] args) {
+        new SignUp();
+    }
 }
