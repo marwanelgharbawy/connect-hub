@@ -12,7 +12,8 @@ public class User {
     boolean online;
 
     public User(String username, String email, String password, Date dateOfBirth){
-        this.userId = generateId();
+        Utilities utilities = new Utilities();
+        this.userId = utilities.generateId();
         this.email = email;
         this.username = username;
         this.password = hashPassword(password);
@@ -54,10 +55,6 @@ public class User {
             System.out.println("Algorithm not found");
             return null;
         }
-    }
-
-    private String generateId(){
-        return UUID.randomUUID().toString();
     }
 
     public void setDateOfBirth(Date dateOfBirth) {
