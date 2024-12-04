@@ -1,26 +1,25 @@
+import Utils.UIUtils;
+
 import javax.swing.*;
 
 public class MainMenu extends JFrame {
     private JPanel contentPane;
     private JButton loginButton;
-    private JButton signInButton;
+    private JButton signUpButton;
     private JButton exitButton;
 
     public MainMenu() {
-        setContentPane(contentPane);
-        setTitle("Main Menu");
-        setSize(320, 240);
-        setVisible(true);
+        UIUtils.initializeWindow(this, contentPane, "Main Menu", 400, 400);
 
-//        loginButton.addActionListener(e -> {
-//            new Login();
-//            dispose();
-//        });
-//
-//        signInButton.addActionListener(e -> {
-//            new SignIn();
-//            dispose();
-//        });
+        loginButton.addActionListener(e -> {
+            new Login();
+            dispose();
+        });
+
+        signUpButton.addActionListener(e -> {
+            new SignUp();
+            dispose();
+        });
 
         exitButton.addActionListener(e -> {
             dispose();

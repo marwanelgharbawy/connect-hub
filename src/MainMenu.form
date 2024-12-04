@@ -20,27 +20,30 @@
       <component id="4487" class="javax.swing.JButton" binding="loginButton" default-binding="true">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="160" height="-1"/>
+            <preferred-size width="200" height="30"/>
+            <maximum-size width="200" height="30"/>
           </grid>
         </constraints>
         <properties>
           <text value="Login"/>
         </properties>
       </component>
-      <component id="40769" class="javax.swing.JButton" binding="signInButton" default-binding="true">
+      <component id="40769" class="javax.swing.JButton" binding="signUpButton">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="160" height="-1"/>
+            <preferred-size width="200" height="30"/>
+            <maximum-size width="200" height="30"/>
           </grid>
         </constraints>
         <properties>
-          <text value="Sign In"/>
+          <text value="Sign Up"/>
         </properties>
       </component>
       <component id="70ee6" class="javax.swing.JButton" binding="exitButton" default-binding="true">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="160" height="-1"/>
+            <preferred-size width="200" height="30"/>
+            <maximum-size width="200" height="30"/>
           </grid>
         </constraints>
         <properties>
