@@ -17,7 +17,7 @@ public class Database {
     private Map<String, User> id_to_user = new HashMap<>();
     private Map<String, User> email_to_user = new HashMap<>();
 
-    public Database() throws IOException {
+    private Database() throws IOException {
         checkExistenceOfDatabase();
         parseUsersData();
     }
