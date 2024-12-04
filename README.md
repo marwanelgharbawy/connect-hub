@@ -1,1 +1,1 @@
-# Connect Hub
+# connect-hub
