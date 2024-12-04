@@ -46,8 +46,9 @@ public class FriendManagerC implements FriendManagerI {
 
     }
     @Override
-    public void removeFriend(User user){
-        friends.remove(user);
+    public void removeFriend(User mainUser, User userToRemove){
+        friends.remove(userToRemove);
+        userToRemove.getFriendManager().getFriends().remove(mainUser);
     }
 
 }

@@ -10,5 +10,5 @@ public interface FriendManagerI {
     SuggestionManagerI getSuggestionManager();
     ArrayList<User> getFriends();
     void addFriend(User user);
-    void removeFriend(User user);
+    void removeFriend(User mainUser, User removedUser);
 }
