@@ -84,18 +84,23 @@ public class SignUp extends JFrame{
                 return;
             }
 
-            // Backend validations
+            String errorMessage;
 
-            // Return if username or email already exists
-            // TODO: Implement this
+            try {
+                errorMessage = Database.getInstance().signUpUser(username, email, password, dateOfBirth);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error creating user", "Database Error", JOptionPane.ERROR_MESSAGE);
+                throw new RuntimeException(e);
+            }
 
-            // Would only reach here if all fields are valid
-            User user = new User(username, email, password, dateOfBirth);
-
-            // TODO: Add user to database
-
-            JOptionPane.showMessageDialog(this, "New user created", "User Created", JOptionPane.INFORMATION_MESSAGE);
-            System.out.println(user.getUserId());
+            // The error message returned by signUpUser is null if the user was created successfully
+            // If not, it contains the error message
+            if (errorMessage == null) {
+                JOptionPane.showMessageDialog(this, "New user created", "User Created", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, errorMessage, "Sign Up Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             // TODO: Open new user's profile
             // Profile window pending
