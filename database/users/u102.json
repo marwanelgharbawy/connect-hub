@@ -1,6 +1,6 @@
 {
   "dataOfBirth": "",
-  "status": "",
+  "online": true,
   "profile-photo": "",
   "cover-photo": "",
   "friends": ["", "", ""],
