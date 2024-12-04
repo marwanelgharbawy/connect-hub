@@ -1,8 +1,10 @@
 package utils;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 public class Utilities {
@@ -44,6 +46,11 @@ public class Utilities {
         return ft.format(date);
     }
 
+    public static String DateTo_y_M_d(LocalDate date){
+        DateTimeFormatter ft = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(ft);
+    }
+
     /**
      * return String of Date with format yyyy-MM-dd-HH-mm
      */
@@ -68,5 +75,13 @@ public class Utilities {
         int hour = Integer.parseInt(date[3]);
         int min = Integer.parseInt(date[4]);
         return LocalDateTime.of(year, month, day, hour, min);
+    }
+
+    public static LocalDate y_M_dToDate(String date_str){
+        String[] date = date_str.split("-");
+        int year = Integer.parseInt(date[0]);
+        int month = Integer.parseInt(date[1]);
+        int day = Integer.parseInt(date[2]);
+        return LocalDate.of(year, month, day);
     }
 }

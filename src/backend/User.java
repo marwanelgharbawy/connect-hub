@@ -7,9 +7,9 @@ import friendManager.FriendManagerI;
 
 import utils.Utilities;
 
-import java.text.SimpleDateFormat;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Base64;
-import java.util.Date;
 import java.security.*;
 import org.json.*;
 
@@ -19,12 +19,15 @@ public class User {
     String email;
     String username;
     String password;
-    Date dateOfBirth;
+    LocalDate dateOfBirth;
     boolean online;
+    String profile_img_path;
+    String cover_img_path;
+
     public User(){
         this.friendManager = FriendManagerFactory.createFriendManager();
     }
-    public User(String username, String email, String password, Date dateOfBirth){
+    public User(String username, String email, String password, LocalDate dateOfBirth){
         Utilities utilities = new Utilities();
         this.userId = utilities.generateId();
         this.email = email;
@@ -33,6 +36,32 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
+    }
+
+    public User(JSONObject credentials){
+        userId = credentials.getString("id");
+        username = credentials.getString("username");
+        email = credentials.getString("username");
+        password = credentials.getString("password");
+        this.friendManager = FriendManagerFactory.createFriendManager();
+    }
+
+    public void setUserData(JSONObject userData) throws IOException {
+        dateOfBirth = Utilities.y_M_dToDate(userData.getString("dataOfBirth"));
+        online = userData.getBoolean("online");
+        profile_img_path = userData.getString("profile-photo");
+        cover_img_path = userData.getString("cover-photo");
+        // TODO: profile management: posts, stories
+
+
+        Database database = Database.getInstance();
+        JSONArray friends = userData.getJSONArray("friends");
+        for(Object friend: friends){
+            String friend_id = (String) friend;
+            User friend_ = database.getUser(friend_id);
+            friendManager.addFriend(friend_);
+        }
+
     }
 
     public boolean isOnline() {
@@ -55,7 +84,7 @@ public class User {
         return username;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
@@ -71,7 +100,7 @@ public class User {
         }
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -108,9 +137,8 @@ public class User {
         JSONObject data = new JSONObject();
         data.put("dataOfBirth", Utilities.DateTo_y_M_d(dateOfBirth));
         data.put("status", online);
-        // TODO: photos
-//        data.put("profile-photo", );
-//        data.put("cover-photo", );
+        data.put("profile-photo", profile_img_path);
+        data.put("cover-photo", cover_img_path);
 
 
         /* friends */
