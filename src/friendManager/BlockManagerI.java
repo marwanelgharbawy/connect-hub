@@ -1,6 +1,6 @@
 package friendManager;
 
-import user.User;
+import backend.User;
 
 import java.util.ArrayList;
 
