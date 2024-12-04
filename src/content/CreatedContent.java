@@ -22,6 +22,17 @@ public abstract class CreatedContent {
         contentFields = new ContentFields(text,imagePath);
         // TODO: In the GUI, the user picks the image using file chooser, send the image path as argument
     }
+
+    CreatedContent(JSONObject data){
+        contentId = data.getString("id");
+        authorId = data.getString("authorId");
+        timestamp = Utilities.y_M_d_hh_mmToDate(data.getString("date"));
+
+        String text = data.getString("text");
+        String photo = data.getString("photo");
+        contentFields = new ContentFields(text, photo);
+    }
+
     public String getContentId() {
         return contentId;
     }
