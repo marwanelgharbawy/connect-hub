@@ -1,6 +1,4 @@
 package content;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Story extends CreatedContent{
