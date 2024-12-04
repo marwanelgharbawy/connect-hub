@@ -1,6 +1,7 @@
 package frontend;
 
 import utils.Utilities;
+import backend.User;
 
 import javax.swing.*;
 import java.awt.*;
