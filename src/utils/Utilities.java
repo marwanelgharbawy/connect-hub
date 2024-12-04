@@ -1,4 +1,6 @@
 package utils;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class Utilities {
@@ -31,4 +33,12 @@ public class Utilities {
         return username.matches("^[a-zA-Z][a-zA-Z0-9_]{4,14}$");
     }
 
+
+    /**
+    * return String of date with format yyyy-MM-dd
+    * */
+    public static String DateTo_y_M_d(Date date){
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
+        return ft.format(date);
+    }
 }
