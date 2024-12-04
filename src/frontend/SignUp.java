@@ -5,6 +5,8 @@ import backend.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -58,7 +60,8 @@ public class SignUp extends JFrame{
 
             Date dateOfBirth = (Date) dateSpinner.getValue();
             if (Utilities.validateEmail(email) && Utilities.validateUsername(username)){
-                User user = new User(username, email, password, dateOfBirth);
+                LocalDate data = dateOfBirth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                User user = new User(username, email, password, data);
 
                 // TODO: Add user to database
 
