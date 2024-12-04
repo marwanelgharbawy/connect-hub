@@ -41,4 +41,9 @@ public class Utilities {
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
         return ft.format(date);
     }
+
+    public static String DataTo_y_M_d_hh_mm(Date date){
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd-hh-mm");
+        return ft.format(date);
+    }
 }
