@@ -7,6 +7,7 @@ import utils.Utilities;
 import java.util.Base64;
 import java.util.Date;
 import java.security.*;
+import org.json.*;
 
 public class User {
     private final FriendManagerC friendManager;
@@ -88,5 +89,14 @@ public class User {
 
     public FriendManagerI getFriendManager() {
         return friendManager;
+    }
+
+    public JSONObject getCredentials(){
+        JSONObject credentials = new JSONObject();
+        credentials.put("id", userId);
+        credentials.put("username", username);
+        credentials.put("email", email);
+        credentials.put("password", password);
+        return credentials;
     }
 }
