@@ -5,7 +5,7 @@ public class Utilities {
 
     public Utilities(){}
 
-    public String capitalize(String input){
+    public static String capitalize(String input){
         String[] words  = input.split(" ");
         StringBuilder output = new StringBuilder(words[0].substring(0, 1).toUpperCase() + words[0].substring(1));
         String word;
@@ -15,11 +15,11 @@ public class Utilities {
         }
         return output.toString();
     }
-    public String generateId(){
+    public static String generateId(){
         return UUID.randomUUID().toString();
     }
 
-    public boolean validateName(String name){
+    public static boolean validateName(String name){
         return name.matches("^[a-zA-Z][a-zA-Z '-]+$");
     }
 
