@@ -1,13 +1,9 @@
-<<<<<<<< HEAD:src/user/User.java
-package user;
-
+package backend;
 import friendManager.FriendManagerC;
 import friendManager.FriendManagerFactory;
 import friendManager.FriendManagerI;
-========
-package backend;
->>>>>>>> devel:src/backend/User.java
 
+import utils.Utilities;
 import java.util.Base64;
 import java.util.Date;
 import java.security.*;
@@ -86,12 +82,8 @@ public class User {
     public void setPassword(String password){
         this.password = hashPassword(password);
     }
-<<<<<<<< HEAD:src/user/User.java
 
     public FriendManagerI getFriendManager() {
         return friendManager;
     }
 }
-========
-}
->>>>>>>> devel:src/backend/User.java
