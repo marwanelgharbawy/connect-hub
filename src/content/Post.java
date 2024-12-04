@@ -7,7 +7,7 @@ public class Post extends CreatedContent{
         super(authorId, text, imagePath);
     }
 
-    Post(JSONObject data){
-        super(data);
+    Post(String authorId,JSONObject data){
+        super(authorId,data);
     }
 }

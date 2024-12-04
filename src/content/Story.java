@@ -9,8 +9,8 @@ public class Story extends CreatedContent{
         super(authorId, text, imagePath);
     }
 
-    Story(JSONObject data){
-        super(data);
+    Story(String authorId, JSONObject data){
+        super(authorId,data);
     }
     // Check if the story is due in order to delete it
     boolean isDue(){

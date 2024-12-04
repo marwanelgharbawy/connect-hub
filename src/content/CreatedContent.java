@@ -23,9 +23,8 @@ public abstract class CreatedContent {
         // TODO: In the GUI, the user picks the image using file chooser, send the image path as argument
     }
 
-    CreatedContent(JSONObject data){
+    CreatedContent(String authorId, JSONObject data){
         contentId = data.getString("id");
-        authorId = data.getString("authorId");
         timestamp = Utilities.y_M_d_hh_mmToDate(data.getString("date"));
 
         String text = data.getString("text");
@@ -52,7 +51,6 @@ public abstract class CreatedContent {
     public JSONObject toJSONObject(){
         JSONObject data = new JSONObject();
         data.put("id", contentId);
-        data.put("author_id", authorId);
 
         data.put("text", contentFields.getText());
         data.put("photo", contentFields.getImagePath());
