@@ -1,17 +1,21 @@
+package user;
+
+import friendManager.FriendManagerC;
+import friendManager.FriendManagerFactory;
+import friendManager.FriendManagerI;
+
 import java.util.Base64;
 import java.util.Date;
 import java.security.*;
-import java.util.UUID;
 
 public class User {
+    private final FriendManagerC friendManager;
     String userId;
     String email;
     String username;
     String password;
     Date dateOfBirth;
     boolean online;
-    private final FriendManagement friendManagement;
-
     public User(String username, String email, String password, Date dateOfBirth){
         Utilities utilities = new Utilities();
         this.userId = utilities.generateId();
@@ -20,7 +24,7 @@ public class User {
         this.password = hashPassword(password);
         this.dateOfBirth = dateOfBirth;
         this.online = true;
-        this.friendManagement = new FriendManagement(this);
+        this.friendManager = FriendManagerFactory.createFriendManager();
     }
 
     public boolean isOnline() {
@@ -79,7 +83,7 @@ public class User {
         this.password = hashPassword(password);
     }
 
-    public FriendManagement getFriendManagement() {
-        return friendManagement;
+    public FriendManagerI getFriendManager() {
+        return friendManager;
     }
 }
