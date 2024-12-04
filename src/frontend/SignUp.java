@@ -1,10 +1,15 @@
+package frontend;
+
+import backend.User;
+import utils.Utilities;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Date;
 
-public class SignUpWindow extends JFrame{
+public class SignUp extends JFrame{
 
-    public SignUpWindow(){
+    public SignUp(){
         setTitle("Sign up");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 400);
