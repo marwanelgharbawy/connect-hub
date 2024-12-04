@@ -1,12 +1,17 @@
 package backend;
+import content.Post;
+import content.Story;
 import friendManager.FriendManagerC;
 import friendManager.FriendManagerFactory;
 import friendManager.FriendManagerI;
 
 import utils.Utilities;
+
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Base64;
-import java.util.Date;
 import java.security.*;
+import org.json.*;
 
 public class User {
     private final FriendManagerC friendManager;
@@ -14,12 +19,15 @@ public class User {
     String email;
     String username;
     String password;
-    Date dateOfBirth;
+    LocalDate dateOfBirth;
     boolean online;
+    String profile_img_path;
+    String cover_img_path;
+
     public User(){
         this.friendManager = FriendManagerFactory.createFriendManager();
     }
-    public User(String username, String email, String password, Date dateOfBirth){
+    public User(String username, String email, String password, LocalDate dateOfBirth){
         Utilities utilities = new Utilities();
         this.userId = utilities.generateId();
         this.email = email;
@@ -28,6 +36,32 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
+    }
+
+    public User(JSONObject credentials){
+        userId = credentials.getString("id");
+        username = credentials.getString("username");
+        email = credentials.getString("username");
+        password = credentials.getString("password");
+        this.friendManager = FriendManagerFactory.createFriendManager();
+    }
+
+    public void setUserData(JSONObject userData) throws IOException {
+        dateOfBirth = Utilities.y_M_dToDate(userData.getString("dataOfBirth"));
+        online = userData.getBoolean("online");
+        profile_img_path = userData.getString("profile-photo");
+        cover_img_path = userData.getString("cover-photo");
+        // TODO: profile management: posts, stories
+
+
+        Database database = Database.getInstance();
+        JSONArray friends = userData.getJSONArray("friends");
+        for(Object friend: friends){
+            String friend_id = (String) friend;
+            User friend_ = database.getUser(friend_id);
+            friendManager.addFriend(friend_);
+        }
+
     }
 
     public boolean isOnline() {
@@ -50,7 +84,7 @@ public class User {
         return username;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
@@ -66,7 +100,7 @@ public class User {
         }
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -89,4 +123,49 @@ public class User {
     public FriendManagerI getFriendManager() {
         return friendManager;
     }
+
+    public JSONObject getCredentials(){
+        JSONObject credentials = new JSONObject();
+        credentials.put("id", userId);
+        credentials.put("username", username);
+        credentials.put("email", email);
+        credentials.put("password", password);
+        return credentials;
+    }
+
+    public JSONObject getUserData(){
+        JSONObject data = new JSONObject();
+        data.put("dataOfBirth", Utilities.DateTo_y_M_d(dateOfBirth));
+        data.put("status", online);
+        data.put("profile-photo", profile_img_path);
+        data.put("cover-photo", cover_img_path);
+
+
+        /* friends */
+        JSONArray friends = new JSONArray();
+        for(User user: friendManager.getFriends()){
+            friends.put(user.getUserId());
+        }
+        data.put("friends", friends);
+
+        /* posts */
+        JSONArray posts = new JSONArray();
+        // TODO: posts
+//        for(Post post: ){
+//            posts.put(post.toJSONObject());
+//        }
+        data.put("posts", posts);
+
+        /* stories */
+        JSONArray stories = new JSONArray();
+        // TODO: stories
+//        for (Story story: ){
+//            stories.put(story.toJSONObject());
+//        }
+        data.put("stories", stories);
+
+
+        return data;
+    }
+
 }

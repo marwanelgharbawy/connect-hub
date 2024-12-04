@@ -29,6 +29,8 @@ public class Database {
         return instance;
     }
 
+    public User getUser(String user_id){return id_to_user.get(user_id);}
+
     /**
      * check the existence of database folder, users folder and users.json
      * */
@@ -47,45 +49,30 @@ public class Database {
         JSONArray array = new JSONArray(data);
         for(Object obj: array){
             JSONObject jsonObject = (JSONObject) obj;
-            String id = jsonObject.getString("id");
-            String username = jsonObject.getString("username");
-            String email = jsonObject.getString("email");
-            String password = jsonObject.getString("password");
-
-            User new_user = new User(); // then put parameters
-            // func1 parse data.json
-            // func2 parse posts.json and stories.json
-            id_to_user.put(id, new_user);
-            email_to_user.put(email, new_user);
+            User user = new User(jsonObject);
+            id_to_user.put(user.getUserId(), user);
+            email_to_user.put(user.getEmail(), user);
         }
-    }
 
-    private String getUserFolder(String user_id){
-        return users_folder+"/"+user_id;
+        for(String id: id_to_user.keySet()){
+            String user_file = users_folder+"/"+id+".json";
+            String user_data = Files.readString(Path.of(user_file));
+            JSONObject userData = new JSONObject(user_data);
+            getUser(id).setUserData(userData);
+        }
     }
 
     /**
     * checks the credentials and return user object or null
     */
     public void signInUser(String email, String password){
-
     }
 
-    public void signUpUser(String args[]){}
-
-    public void getUserData(String user_id){}
-
-    public void getUserFriends(String user_id){}
-
-    public void getUserContent(String user_id){}
-
-    public void getUserPosts(String user_id){}
-    public void getUserPost(String user_id, String post_id){}
-
-    public void getUserStories(String user_id){}
-    public void getUserStory(String user_id, String story_id){}
+    public void signUpUser(String args[]){
+    }
 
     public static void main(String[] args) throws IOException {
         Database database = Database.getInstance();
+        database.parseUsersData();
     }
 }
