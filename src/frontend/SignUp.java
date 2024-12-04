@@ -1,6 +1,3 @@
-import user.User;
-import user.Utilities;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.Date;
@@ -45,7 +42,7 @@ public class SignUpWindow extends JFrame{
             }
             Date dateOfBirth = (Date) dateSpinner.getValue();
             if (Utilities.validateEmail(email) && Utilities.validateUsername(username)){
-                JOptionPane.showMessageDialog(this, "New user created", "user.User Created", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "New user created", "User Created", JOptionPane.INFORMATION_MESSAGE);
                 User user = new User(username, email, password, dateOfBirth);
                 System.out.println(user.getUserId());
             }
