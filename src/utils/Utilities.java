@@ -1,10 +1,5 @@
-<<<<<<<< HEAD:src/user/Utilities.java
-package user;
-
-import java.util.UUID;
-========
 package utils;
->>>>>>>> devel:src/utils/Utilities.java
+import java.util.UUID;
 
 public class Utilities {
 
