@@ -10,6 +10,7 @@ public class User {
     String password;
     Date dateOfBirth;
     boolean online;
+    private final FriendManagement friendManagement;
 
     public User(String username, String email, String password, Date dateOfBirth){
         Utilities utilities = new Utilities();
@@ -19,6 +20,7 @@ public class User {
         this.password = hashPassword(password);
         this.dateOfBirth = dateOfBirth;
         this.online = true;
+        this.friendManagement = new FriendManagement(this);
     }
 
     public boolean isOnline() {
@@ -75,5 +77,9 @@ public class User {
 
     public void setPassword(String password){
         this.password = hashPassword(password);
+    }
+
+    public FriendManagement getFriendManagement() {
+        return friendManagement;
     }
 }
