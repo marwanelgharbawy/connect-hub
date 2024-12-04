@@ -1,8 +1,14 @@
 package content;
 
+import org.json.JSONObject;
 import utils.Utilities;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.Date;
 
 public abstract class CreatedContent {
     String contentId;// Unique ID for each content
@@ -31,5 +37,18 @@ public abstract class CreatedContent {
     public ContentFields getContentFields() {
         return contentFields;
     }
+
+    public JSONObject toJSONObject(){
+        JSONObject data = new JSONObject();
+        data.put("id", contentId);
+        data.put("author_id", authorId);
+
+        data.put("text", contentFields.getText());
+        data.put("photo", contentFields.getImagePath());
+
+        data.put("date", Utilities.DataTo_y_M_d_hh_mm(timestamp));
+        return data;
+    }
+
 
 }
