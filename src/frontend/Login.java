@@ -1,4 +1,6 @@
-import Utils.UIUtils;
+package frontend;
+
+import utils.UIUtils;
 
 import javax.swing.*;
 

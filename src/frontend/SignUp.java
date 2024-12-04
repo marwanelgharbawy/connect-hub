@@ -1,4 +1,6 @@
-import Utils.Utilities;
+package frontend;
+
+import utils.Utilities;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,7 +61,7 @@ public class SignUp extends JFrame{
 
                 // TODO: Add user to database
 
-                JOptionPane.showMessageDialog(this, "New user created", "User Created", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "New user created", "backend.User Created", JOptionPane.INFORMATION_MESSAGE);
                 System.out.println(user.getUserId());
 
                 // TODO: Open new user's profile
