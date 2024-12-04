@@ -1,9 +1,13 @@
 package backend;
+import content.Post;
+import content.Story;
 import friendManager.FriendManagerC;
 import friendManager.FriendManagerFactory;
 import friendManager.FriendManagerI;
 
 import utils.Utilities;
+
+import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
 import java.security.*;
@@ -99,4 +103,41 @@ public class User {
         credentials.put("password", password);
         return credentials;
     }
+
+    public JSONObject getUserData(){
+        JSONObject data = new JSONObject();
+        data.put("dataOfBirth", Utilities.DateTo_y_M_d(dateOfBirth));
+        data.put("status", online);
+        // TODO: photos
+//        data.put("profile-photo", );
+//        data.put("cover-photo", );
+
+
+        /* friends */
+        JSONArray friends = new JSONArray();
+        for(User user: friendManager.getFriends()){
+            friends.put(user.getUserId());
+        }
+        data.put("friends", friends);
+
+        /* posts */
+        JSONArray posts = new JSONArray();
+        // TODO: posts
+//        for(Post post: ){
+//            posts.put(post.toJSONObject());
+//        }
+        data.put("posts", posts);
+
+        /* stories */
+        JSONArray stories = new JSONArray();
+        // TODO: stories
+//        for (Story story: ){
+//            stories.put(story.toJSONObject());
+//        }
+        data.put("stories", stories);
+
+
+        return data;
+    }
+
 }
