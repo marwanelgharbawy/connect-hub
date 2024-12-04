@@ -59,4 +59,14 @@ public class Utilities {
         DateTimeFormatter ft = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm");
         return date.format(ft);
     }
+
+    public static LocalDateTime y_M_d_hh_mmToDate(String date_str){
+        String[] date = date_str.split("-");
+        int year = Integer.parseInt(date[0]);
+        int month = Integer.parseInt(date[1]);
+        int day = Integer.parseInt(date[2]);
+        int hour = Integer.parseInt(date[3]);
+        int min = Integer.parseInt(date[4]);
+        return LocalDateTime.of(year, month, day, hour, min);
+    }
 }
