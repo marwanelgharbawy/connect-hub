@@ -1,4 +1,5 @@
 package utils;
+import java.util.UUID;
 
 public class Utilities {
 
@@ -13,6 +14,9 @@ public class Utilities {
             output.append(" ").append(word.substring(0, 1).toUpperCase()).append(word.substring(1));
         }
         return output.toString();
+    }
+    public String generateId(){
+        return UUID.randomUUID().toString();
     }
 
     public boolean validateName(String name){
