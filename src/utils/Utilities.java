@@ -37,18 +37,24 @@ public class Utilities {
 
 
     /**
-    * return String of date with format yyyy-MM-dd
-    * */
+    * return String of Date with format yyyy-MM-dd
+    */
     public static String DateTo_y_M_d(Date date){
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
         return ft.format(date);
     }
 
+    /**
+     * return String of Date with format yyyy-MM-dd-HH-mm
+     */
     public static String DataTo_y_M_d_hh_mm(Date date){
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd-HH-mm");
         return ft.format(date);
     }
 
+    /**
+     * return String of LocalDateTime with format yyyy-MM-dd-HH-mm
+     */
     public static String DataTo_y_M_d_hh_mm(LocalDateTime date){
         DateTimeFormatter ft = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm");
         return date.format(ft);
