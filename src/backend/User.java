@@ -16,6 +16,9 @@ public class User {
     String password;
     Date dateOfBirth;
     boolean online;
+    public User(){
+        this.friendManager = FriendManagerFactory.createFriendManager();
+    }
     public User(String username, String email, String password, Date dateOfBirth){
         Utilities utilities = new Utilities();
         this.userId = utilities.generateId();
