@@ -20,8 +20,7 @@ public class User {
         this.friendManager = FriendManagerFactory.createFriendManager();
     }
     public User(String username, String email, String password, Date dateOfBirth){
-        Utilities utilities = new Utilities();
-        this.userId = utilities.generateId();
+        this.userId = Utilities.generateId();
         this.email = email;
         this.username = username;
         this.password = hashPassword(password);
