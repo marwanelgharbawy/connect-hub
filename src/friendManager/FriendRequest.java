@@ -1,8 +1,12 @@
+package friendManager;
+
+import user.User;
+
 import java.time.LocalDate;
 
 public class FriendRequest {
-    private final User sender; // User who sent the friend request
-    private final User receiver; // User who is receiving the friend request
+    private final User sender; // user.User who sent the friend request
+    private final User receiver; // user.User who is receiving the friend request
     private String status; // Status of the friend request : pending, accepted, declined
     private final LocalDate timestamp; // The date on which the friend request was sent
 
