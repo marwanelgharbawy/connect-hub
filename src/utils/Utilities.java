@@ -1,5 +1,7 @@
 package utils;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.UUID;
 
@@ -43,7 +45,12 @@ public class Utilities {
     }
 
     public static String DataTo_y_M_d_hh_mm(Date date){
-        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd-hh-mm");
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd-HH-mm");
         return ft.format(date);
+    }
+
+    public static String DataTo_y_M_d_hh_mm(LocalDateTime date){
+        DateTimeFormatter ft = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm");
+        return date.format(ft);
     }
 }
