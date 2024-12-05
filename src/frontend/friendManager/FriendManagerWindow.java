@@ -5,6 +5,7 @@ import utils.UIUtils;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
+import java.io.IOException;
 
 public class FriendManagerWindow extends JFrame {
 
@@ -72,7 +73,7 @@ public class FriendManagerWindow extends JFrame {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         User user = new User();
         FriendManagerWindow friendManagerWindow = new FriendManagerWindow(user);
     }
