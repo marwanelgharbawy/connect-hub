@@ -141,6 +141,9 @@ public class Database {
         file.write(user.getUserData().toString(2));
         file.close();
     }
+    public void saveUser(User user) throws IOException {
+        writeUserData(user);
+    }
 
     // Write all users credentials to users.json
     private void writeDataToFiles() throws IOException {
