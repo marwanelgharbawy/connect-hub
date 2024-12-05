@@ -34,7 +34,7 @@ public class Utilities {
     }
 
     public static boolean validateUsername(String username){
-        return username.matches("^[a-zA-Z][a-zA-Z0-9_]{4,14}$");
+        return username.matches("^[a-zA-Z][a-zA-Z0-9_]{3,14}$");
     }
 
 
