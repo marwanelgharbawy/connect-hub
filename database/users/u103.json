@@ -1,6 +1,6 @@
 {
-  "dataOfBirth": "",
-  "online": true,
+  "dateOfBirth": "2003-11-06",
+  "online": false,
   "profile-photo": "",
   "cover-photo": "",
   "friends": ["", "", ""],

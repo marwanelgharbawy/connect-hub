@@ -41,18 +41,17 @@ public class User {
     public User(JSONObject credentials){
         userId = credentials.getString("id");
         username = credentials.getString("username");
-        email = credentials.getString("username");
+        email = credentials.getString("email");
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
     }
 
     public void setUserData(JSONObject userData) throws IOException {
-        dateOfBirth = Utilities.y_M_dToDate(userData.getString("dataOfBirth"));
+        dateOfBirth = Utilities.y_M_dToDate(userData.getString("dateOfBirth"));
         online = userData.getBoolean("online");
-        profile_img_path = userData.getString("profile-photo");
-        cover_img_path = userData.getString("cover-photo");
+//        profile_img_path = userData.getString("profile-photo");
+//        cover_img_path = userData.getString("cover-photo");
         // TODO: profile management: posts, stories
-
 
         Database database = Database.getInstance();
         JSONArray friends = userData.getJSONArray("friends");
@@ -61,7 +60,6 @@ public class User {
             User friend_ = database.getUser(friend_id);
             friendManager.addFriend(friend_);
         }
-
     }
 
     public boolean isOnline() {
@@ -135,8 +133,8 @@ public class User {
 
     public JSONObject getUserData(){
         JSONObject data = new JSONObject();
-        data.put("dataOfBirth", Utilities.DateTo_y_M_d(dateOfBirth));
-        data.put("status", online);
+        data.put("dateOfBirth", Utilities.DateTo_y_M_d(dateOfBirth));
+        data.put("online", online);
         data.put("profile-photo", profile_img_path);
         data.put("cover-photo", cover_img_path);
 
