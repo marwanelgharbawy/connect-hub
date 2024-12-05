@@ -29,6 +29,14 @@ public class FriendUtils {
             }
             return false;
         }
+        // CHeck for duplicate requests
+    public  static boolean havePendingRequest(User firstUser, User secondUser){
+            if(firstUser.getFriendManager().getRequestManager().getReceivedRequest(secondUser.getUserId())!=null
+            && secondUser.getFriendManager().getRequestManager().getReceivedRequest(firstUser.getUserId())!=null){
+                return true;
+            }
+            return false;
+    }
 
 
 }
