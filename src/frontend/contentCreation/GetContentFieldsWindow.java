@@ -1,4 +1,4 @@
-package frontend;
+package frontend.contentCreation;
 
 import content.ContentFields;
 import utils.UIUtils;
@@ -11,12 +11,12 @@ public class GetContentFieldsWindow extends JFrame {
     private JPanel mainPanel;
     private JButton addPictureButton; // Button to upload picture
     private JButton submitButton; // Submit Button
-    String text;
-    String imagePath;
-    String title;
+    private String text;
+    private String imagePath;
 
     public GetContentFieldsWindow(ContentFields contentFields, boolean isStory) {
         // Set the title dynamically according to the instance of the content
+        String title;
         if (isStory) {
             title = "Add Story";
         } else {

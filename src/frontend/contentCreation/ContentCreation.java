@@ -1,4 +1,4 @@
-package frontend;
+package frontend.contentCreation;
 
 import content.ContentFields;
 import content.Post;
