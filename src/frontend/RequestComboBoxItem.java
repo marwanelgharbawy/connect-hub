@@ -1,6 +1,4 @@
 package frontend;
-
-import backend.User;
 import friendManager.FriendRequest;
 
 public class RequestComboBoxItem {
