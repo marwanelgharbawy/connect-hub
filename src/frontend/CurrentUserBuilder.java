@@ -15,50 +15,36 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 
-public class CurrentUserProfile extends JFrame {
+public class CurrentUserBuilder extends Component {
+    private final User currentUser;
+    private final JPanel mainPanel;
 
-    JPanel coverPhotoPanel;
-    JLabel coverPhotoLabel;
-    JPanel profilePhotoPanel;
-    JLabel profilePhotoLabel;
-    JLabel usernameLabel;
-    JPanel mainContentPanel;
-    JPanel bioPanel;
-    JLabel bioLabel;
-    JButton settingsButton;
-    JPanel postsPanel;
-    JScrollPane scrollPane;
+    public CurrentUserBuilder(User currentUser) {
+        this.currentUser = currentUser;
+        this.mainPanel = new JPanel(new BorderLayout());
+    }
 
-    public CurrentUserProfile(Profile profile) throws IOException {
-        // Window setup
-        setTitle(profile.getUser().getUsername() + "'s Profile");
-        setSize(700, 800);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
-
-        // Cover photo panel
-        coverPhotoPanel = new JPanel();
-        coverPhotoPanel.setLayout(null); // Absolute layout for custom positioning
+    public JPanel buildCoverPhoto() throws IOException {
+        JPanel coverPhotoPanel = new JPanel(null);
         coverPhotoPanel.setPreferredSize(new Dimension(1000, 350));
-        coverPhotoLabel = new JLabel();
+        JLabel coverPhotoLabel = new JLabel();
         coverPhotoLabel.setBounds(0, 0, 1000, 270);
-        coverPhotoLabel.setIcon(new ImageIcon(profile.getCoverPhoto().toIcon().getImage().getScaledInstance(
+        coverPhotoLabel.setIcon(new ImageIcon(currentUser.getProfile().getCoverPhoto().toIcon().getImage().getScaledInstance(
                 1000, 300, Image.SCALE_DEFAULT)));
 
-        profilePhotoPanel = new JPanel(null);
+        JPanel profilePhotoPanel = new JPanel(null);
         profilePhotoPanel.setBounds(300, 130, 180, 220);
         profilePhotoPanel.setOpaque(false);
 
-        profilePhotoLabel = new JLabel();
-        profilePhotoLabel.setIcon(new ImageIcon(profile.getProfilePhoto().getImage().getScaledInstance(
+        JLabel profilePhotoLabel = new JLabel();
+        profilePhotoLabel.setIcon(new ImageIcon(currentUser.getProfile().getProfilePhoto().getImage().getScaledInstance(
                 180, 180, Image.SCALE_SMOOTH)));
         profilePhotoLabel.setBounds(0, 0, 180, 180);
         profilePhotoLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
 
-        usernameLabel = new JLabel(profile.getUser().getUsername(), SwingConstants.CENTER);
+        JLabel usernameLabel = new JLabel(currentUser.getUsername(), SwingConstants.CENTER);
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 18));
         usernameLabel.setBounds(0, 180, 180, 20);
 
@@ -68,59 +54,28 @@ public class CurrentUserProfile extends JFrame {
         coverPhotoPanel.add(profilePhotoPanel);
         coverPhotoPanel.add(coverPhotoLabel);
 
-        add(coverPhotoPanel, BorderLayout.NORTH);
+        return coverPhotoPanel;
+    }
 
-        // Main content panel
-        mainContentPanel = new JPanel();
-        mainContentPanel.setLayout(new BorderLayout());
-
-        bioPanel = new JPanel(new BorderLayout());
+    public JPanel buildBioPanel() {
+        JPanel bioPanel = new JPanel(new BorderLayout());
         bioPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        bioLabel = new JLabel(profile.getBio());
+        JLabel bioLabel = new JLabel(currentUser.getProfile().getBio());
         bioLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         bioLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
-        settingsButton = new JButton("Settings");
+        JButton settingsButton = new JButton("Settings");
         settingsButton.setPreferredSize(new Dimension(100, 30));
-        settingsButton.addActionListener(_ -> showProfileSettings(profile));
+        settingsButton.addActionListener(_ -> showProfileSettings(currentUser));
 
         bioPanel.add(bioLabel, BorderLayout.CENTER);
         bioPanel.add(settingsButton, BorderLayout.EAST);
 
-        mainContentPanel.add(bioPanel, BorderLayout.NORTH);
-
-        // Add dummy "Posts" section
-        postsPanel = new JPanel();
-        postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
-        postsPanel.setBorder(BorderFactory.createEmptyBorder(10, 80, 10, 80));
-        for (int i = 1; i <= 100; i++) {
-//            JLabel post = new JLabel("Post " + i + ": This is a dummy post.");
-//            post.setFont(new Font("Arial", Font.PLAIN, 14));
-//            post.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-//            post.setBackground(Color.LIGHT_GRAY);
-//            post.setOpaque(true);
-//            post.setAlignmentX(Component.CENTER_ALIGNMENT);
-            ContentFields contentFields = new ContentFields("hello omar how you doing\nhbfhdsfh\njbskafd\njfjbgerbg\sbkgbsjfg\nbgfhkbsfd", "C:/Users/Omar Hekal/Desktop/img.jpg");
-            Post post1 = new Post("fdsdfs", contentFields);
-
-            JFrame frame = new JFrame();
-            PostCard postCard = new PostCard(post1);
-            postsPanel.add(postCard);
-            postsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
-        }
-
-        scrollPane = new JScrollPane(postsPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        mainContentPanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Add main content panel to the frame
-        add(mainContentPanel, BorderLayout.CENTER);
-
-        setVisible(true);
+        return bioPanel;
     }
 
-    private void showProfileSettings(Profile profile) {
+    private void showProfileSettings(User currentUser){
         JPanel settingsPanel = new JPanel(new GridLayout(7, 1));
         JButton usernameButton = new JButton("Change username");
         JButton emailButton = new JButton("Change email");
@@ -129,17 +84,17 @@ public class CurrentUserProfile extends JFrame {
         JButton profilePictureButton = new JButton("Change profile picture");
         JButton coverPhotoButton = new JButton("Change cover photo");
         JButton bioButton = new JButton("Change bio");
-        usernameButton.addActionListener(_ -> changeUsername(profile));
+        usernameButton.addActionListener(_ -> changeUsername(currentUser));
         settingsPanel.add(emailButton);
-        emailButton.addActionListener(_ -> changeEmail(profile));
+        emailButton.addActionListener(_ -> changeEmail(currentUser));
         settingsPanel.add(passwordButton);
-        passwordButton.addActionListener(_ -> changePassword(profile));
+        passwordButton.addActionListener(_ -> changePassword(currentUser));
         settingsPanel.add(dobButton);
-        dobButton.addActionListener(_ -> changeDob(profile));
+        dobButton.addActionListener(_ -> changeDob(currentUser));
         settingsPanel.add(profilePictureButton);
         profilePictureButton.addActionListener(_ -> {
             try {
-                changeProfilePicture(profile);
+                changeProfilePicture(currentUser.getProfile());
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Can not change profile picture", "Failed upload", JOptionPane.ERROR_MESSAGE);
             }
@@ -147,13 +102,13 @@ public class CurrentUserProfile extends JFrame {
         settingsPanel.add(coverPhotoButton);
         coverPhotoButton.addActionListener(_ -> {
             try {
-                changeCoverPhoto(profile);
+                changeCoverPhoto(currentUser.getProfile());
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Can not change cover photo", "Failed upload", JOptionPane.ERROR_MESSAGE);
             }
         });
         settingsPanel.add(bioButton);
-        bioButton.addActionListener(_ -> changeBio(profile));
+        bioButton.addActionListener(_ -> changeBio(currentUser.getProfile()));
 
         int result = JOptionPane.showConfirmDialog(this, settingsPanel,
                 "Change profile settings", JOptionPane.OK_CANCEL_OPTION);
@@ -176,7 +131,7 @@ public class CurrentUserProfile extends JFrame {
             }
             else{
                 profile.setBio(newBio);
-                bioLabel.setText(newBio);
+                //bioLabel.setText(newBio);
             }
         }
     }
@@ -194,7 +149,7 @@ public class CurrentUserProfile extends JFrame {
         if (result == JFileChooser.APPROVE_OPTION) {
             path = coverPhotoChooser.getSelectedFile().getAbsolutePath();
             profile.setCoverPhoto(path);
-            coverPhotoLabel.setIcon(profile.getCoverPhoto().toIcon());
+            //coverPhotoLabel.setIcon(profile.getCoverPhoto().toIcon());
         }
     }
 
@@ -211,11 +166,11 @@ public class CurrentUserProfile extends JFrame {
         if (result == JFileChooser.APPROVE_OPTION) {
             path = profilePictureChooser.getSelectedFile().getAbsolutePath();
             profile.setProfilePhoto(path);
-            profilePhotoLabel.setIcon(profile.getProfilePhoto().toIcon());
+            //profilePhotoLabel.setIcon(profile.getProfilePhoto().toIcon());
         }
     }
 
-    private void changeDob(Profile profile) {
+    private void changeDob(User user) {
         JPanel changeDobPanel = new JPanel(new GridLayout(1, 2));
         changeDobPanel.add(new JLabel("Enter date of birth: "));
         JSpinner dateSpinner = new JSpinner(new SpinnerDateModel());
@@ -227,11 +182,11 @@ public class CurrentUserProfile extends JFrame {
         int result = JOptionPane.showConfirmDialog(this, changeDobPanel, "Change date of birth", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION){
             LocalDate newDateOfBirth = ((Date) dateSpinner.getValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            profile.getUser().setDateOfBirth(newDateOfBirth);
+            user.setDateOfBirth(newDateOfBirth);
         }
     }
 
-    private void changePassword(Profile profile) {
+    private void changePassword(User user) {
         JPanel changePasswordPanel = new JPanel(new GridLayout(2, 2));
         changePasswordPanel.add(new JLabel("Enter new password: "));
         JPasswordField passwordField1 = new JPasswordField();
@@ -244,7 +199,7 @@ public class CurrentUserProfile extends JFrame {
         if (result == JOptionPane.OK_OPTION){
             String password1 = Arrays.toString(passwordField1.getPassword());
             String password2 = Arrays.toString(passwordField2.getPassword());
-            String currentPassword = profile.getUser().getPassword();
+            String currentPassword = user.getPassword();
             if (!password1.equals(password2)){
                 JOptionPane.showMessageDialog(this, "Passwords don't match", "Unmatched passwords", JOptionPane.ERROR_MESSAGE);
             }
@@ -252,13 +207,13 @@ public class CurrentUserProfile extends JFrame {
                 JOptionPane.showMessageDialog(this, "Password is not changed", "Unchanged Password", JOptionPane.ERROR_MESSAGE);
             }
             else{
-                profile.getUser().setPassword(password1);
+                user.setPassword(password1);
                 JOptionPane.showMessageDialog(this, "New password set", "Password changed", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
 
-    private void changeEmail(Profile profile) {
+    private void changeEmail(User user) {
         JPanel changeEmailPanel = new JPanel(new GridLayout(1, 2));
         changeEmailPanel.add(new JLabel("Enter new email"));
         JTextField newEmailField = new JTextField();
@@ -271,12 +226,12 @@ public class CurrentUserProfile extends JFrame {
                 JOptionPane.showMessageDialog(this, "Email is not valid", "Incorrect username", JOptionPane.ERROR_MESSAGE);
             }
             else{
-                profile.getUser().setEmail(newEmail);
+                user.setEmail(newEmail);
             }
         }
     }
 
-    private void changeUsername(Profile profile) {
+    private void changeUsername(User user) {
         JPanel changeUsernamePanel = new JPanel(new GridLayout(1, 2));
         changeUsernamePanel.add(new JLabel("Enter new username"));
         JTextField newUsernameField = new JTextField();
@@ -289,16 +244,36 @@ public class CurrentUserProfile extends JFrame {
                 JOptionPane.showMessageDialog(this, "Username is not valid", "Incorrect username", JOptionPane.ERROR_MESSAGE);
             }
             else{
-                profile.getUser().setUsername(newUsername);
-                usernameLabel.setText(newUsername);
+                user.setUsername(newUsername);
+                //usernameLabel.setText(newUsername);
             }
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        User user = new User("minareda", "minareda03@gmail.com", "mnr115279", LocalDate.of(2003, 3, 17));
-        Profile profile = new Profile(user, "", "", "");
-        profile.setBio("Co-founder Connect-Hub");
-        new CurrentUserProfile(profile);
+    public JPanel buildPostsPanel() throws IOException {
+        JPanel postsPanel = new JPanel();
+        postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
+        postsPanel.setBorder(BorderFactory.createEmptyBorder(10, 80, 10, 80));
+
+        for (int i = 1; i <= 10; i++) { // Add 10 sample posts for testing
+            ContentFields contentFields = new ContentFields("Sample post content", "C:/path/to/image.jpg");
+            Post post = new Post("Post title " + i, contentFields);
+
+            PostCard postCard = new PostCard(post);
+            postsPanel.add(postCard);
+            postsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+        }
+
+        return postsPanel;
+    }
+
+    public JPanel build() throws IOException {
+        mainPanel.add(buildCoverPhoto(), BorderLayout.NORTH);
+        JPanel mainContentPanel = new JPanel(new BorderLayout());
+        mainContentPanel.add(buildBioPanel(), BorderLayout.NORTH);
+        mainContentPanel.add(buildPostsPanel(), BorderLayout.CENTER);
+        mainPanel.add(mainContentPanel, BorderLayout.CENTER);
+
+        return mainPanel;
     }
 }

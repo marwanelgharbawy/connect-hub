@@ -3,10 +3,9 @@
   "online": false,
   "profile-photo": "",
   "cover-photo": "",
-  "friends": ["", "", ""],
+  "friends": ["u101", "u102", "u104"],
   "blocked": ["", "", ""],
   "requests": ["", "", ""],
-  "suggestions": ["", "", ""],
   "posts": [
     {
       "id":"",

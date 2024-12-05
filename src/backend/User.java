@@ -1,6 +1,14 @@
 package backend;
 import content.ContentManager;
+import friendManager.FriendManagerC;
+import friendManager.FriendManagerFactory;
+import friendManager.FriendManagerI;
+
+import content.Post;
+import content.Story;
+
 import friendManager.*;
+
 
 import utils.Utilities;
 
@@ -22,7 +30,7 @@ public class User {
 
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile(this, "", "", "");
+        this.profile = new Profile("", "", "");
     }
     public User(String username, String email, String password, LocalDate dateOfBirth) throws IOException {
         this.userId = Utilities.generateId();
@@ -32,7 +40,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile(this, "", "", "");
+        this.profile = new Profile("", "", "");
     }
 
     public User(JSONObject credentials) throws IOException {
@@ -41,7 +49,7 @@ public class User {
         email = credentials.getString("email");
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile(this, "", "", "");
+        this.profile = new Profile("", "", "");
     }
 
     public void setUserData(JSONObject userData) throws IOException {
@@ -63,8 +71,6 @@ public class User {
         setBlocked(database,userData);
         // requests
         setRequests(database,userData);
-        // suggestions
-        setSuggestions(database,userData);
     }
 
     public boolean isOnline() {
@@ -146,8 +152,6 @@ public class User {
         loadBlocked(data);
         /* friend requests */
         loadRequests(data);
-        /* suggestions */
-        loadSuggestions(data);
         /* posts */
         data.put("posts", contentManager.postsToJsonArray());
         /* stories */
@@ -197,19 +201,7 @@ public class User {
         }
 
     }
-    public void setSuggestions(Database database,JSONObject userData){
-        JSONArray suggestions = userData.getJSONArray("suggestions");
-        for (Object suggested : suggestions) {
-            String suggestedId = (String) suggested;
-            User suggested_ = database.getUser(suggestedId);
-            if (suggested_ != null) {
-                if (!FriendUtils.isDuplicate(suggested_, friendManager.getSuggestionManager().getSuggestions())) {
-                    friendManager.getSuggestionManager().addSuggestion(suggested_);
-                }
-            }
-        }
 
-    }
     public void loadFriends(JSONObject data){
         JSONArray friends = new JSONArray();
         for (User user : friendManager.getFriends()) {
@@ -234,6 +226,7 @@ public class User {
         data.put("requests", friendRequests);
 
     }
+
     public void loadSuggestions(JSONObject data){
         JSONArray suggestions = new JSONArray();
         for (User user : friendManager.getSuggestionManager().getSuggestions()) {
