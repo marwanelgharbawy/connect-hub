@@ -4,6 +4,7 @@ import backend.User;
 import utils.UIUtils;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class Friends extends JFrame {
     private JComboBox<UserComboBoxItem> friendsComboBox;
@@ -26,7 +27,11 @@ public class Friends extends JFrame {
         // Remove friend
         removeButton.addActionListener(_ -> {
             if (friendsComboBox.getSelectedItem() != null) {
-                user.getFriendManager().removeFriend(user, ((UserComboBoxItem) friendsComboBox.getSelectedItem()).getUser());
+                try {
+                    user.getFriendManager().confirmRemove(user, ((UserComboBoxItem) friendsComboBox.getSelectedItem()).getUser());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 // Update combo box after each deletion
                 updateComboBox();
             } else {
@@ -37,11 +42,15 @@ public class Friends extends JFrame {
         // Block friend
         blockButton.addActionListener(_ -> {
             if (friendsComboBox.getSelectedItem() != null) {
-                user.getFriendManager().getBlockManager().blockUser(user, ((UserComboBoxItem) friendsComboBox.getSelectedItem()).getUser());
+                try {
+                    user.getFriendManager().getBlockManager().blockUser(user, ((UserComboBoxItem) friendsComboBox.getSelectedItem()).getUser());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 // Update combo box after each blocking
                 updateComboBox();
             } else {
-                // Display an error ,essage if no friend is selected
+                // Display an error message if no friend is selected
                 JOptionPane.showMessageDialog(null, "No friend selected!", "Empty Field Error", JOptionPane.ERROR_MESSAGE);
             }
 

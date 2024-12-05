@@ -3,11 +3,10 @@
   "online": false,
   "profile-photo": "",
   "cover-photo": "",
-  "bio": "",
   "friends": ["", "", ""],
-  "blocked-users": [],
-  "friend-requests": [],
-  "sent-requests": [],
+  "blocked": ["", "", ""],
+  "requests": ["", "", ""],
+  "suggestions": ["", "", ""],
   "posts": [
     {
       "id":"",

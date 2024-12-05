@@ -13,8 +13,8 @@ import utils.Utilities;
 public class Database {
     private static Database instance;
     private final String database_folder = "database";
-    private final String users_folder = database_folder+"/users";
-    private final String users_json_file =  database_folder+"/users.json";
+    private final String users_folder = database_folder + "/users";
+    private final String users_json_file = database_folder + "/users.json";
 
     private User currentUser;
     private Map<String, User> id_to_user = new HashMap<>();
@@ -25,18 +25,22 @@ public class Database {
     }
 
     public static Database getInstance() throws IOException {
-        if(instance == null)
+        if (instance == null) {
             instance = new Database();
+            instance.parseUsersData();
+        }
         return instance;
     }
 
-    public User getUser(String user_id){return id_to_user.get(user_id);}
+    public User getUser(String user_id) {
+        return id_to_user.get(user_id);
+    }
 
     /**
      * check the existence of database folder, users folder and users.json
-     * */
+     */
     private void checkExistenceOfDatabase() throws IOException {
-        if(!new File(database_folder).exists()){
+        if (!new File(database_folder).exists()) {
             new File(users_folder).mkdirs();
 
             FileWriter file = new FileWriter(users_json_file);
@@ -50,21 +54,21 @@ public class Database {
         JSONArray array = new JSONArray(data);
         System.out.println("Users data loaded successfully from file");
 
-        for(Object obj: array){
+        for (Object obj : array) {
             JSONObject jsonObject = (JSONObject) obj;
             User user = new User(jsonObject);
             id_to_user.put(user.getUserId(), user);
             email_to_user.put(user.getEmail(), user);
-            System.out.println("Successfully added user: "+user.getUsername());
+            System.out.println("Successfully added user: " + user.getUsername());
         }
 
-        for(String id: id_to_user.keySet()){
-            String user_file = users_folder+"/"+id+".json";
+        for (String id : id_to_user.keySet()) {
+            String user_file = users_folder + "/" + id + ".json";
             String user_data = Files.readString(Path.of(user_file));
             JSONObject userData = new JSONObject(user_data);
-            System.out.println("Setting user data: "+getUser(id).getUsername());
+            System.out.println("Setting user data: " + getUser(id).getUsername());
             getUser(id).setUserData(userData);
-            System.out.println("Successfully added user data: "+getUser(id).getUsername());
+            System.out.println("Successfully added user data: " + getUser(id).getUsername());
         }
     }
 
@@ -125,21 +129,30 @@ public class Database {
 
     public void getUserData(String user_id){}
 
-    public void getUserFriends(String user_id){}
+    public void getUserContent(String user_id) {
+    }
 
-    public void getUserContent(String user_id){}
+    public void getUserPosts(String user_id) {
+    }
 
-    public void getUserPosts(String user_id){}
-    public void getUserPost(String user_id, String post_id){}
+    public void getUserPost(String user_id, String post_id) {
+    }
 
-    public void getUserStories(String user_id){}
-    public void getUserStory(String user_id, String story_id){}
+    public void getUserStories(String user_id) {
+    }
+
+    public void getUserStory(String user_id, String story_id) {
+    }
 
     // Write user data to a file, can overwrite existing files or add a new user
     private void writeUserData(User user) throws IOException {
         FileWriter file = new FileWriter(users_folder + "/" + user.getUserId() + ".json");
         file.write(user.getUserData().toString(2));
         file.close();
+    }
+
+    public void saveUser(User user) throws IOException {
+        writeUserData(user);
     }
 
     // Write all users credentials to users.json
@@ -160,19 +173,19 @@ public class Database {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        System.out.println(LocalDate.now());
-        Database database = Database.getInstance();
-        System.out.println("Database loaded successfully");
-        database.parseUsersData();
-        System.out.println("Users loaded successfully");
-
-        // Test sign up user
-        String errorMessage = database.signUpUser("u104", "u104@gmail.com", "password", LocalDate.now());
-        if (errorMessage == null) {
-            System.out.println("User created successfully");
-        } else {
-            System.out.println(errorMessage);
-        }
-    }
+//    public static void main(String[] args) throws IOException {
+//        System.out.println(LocalDate.now());
+//        Database database = Database.getInstance();
+//        System.out.println("Database loaded successfully");
+//        database.parseUsersData();
+//        System.out.println("Users loaded successfully");
+//
+//        // Test sign up user
+//        String errorMessage = database.signUpUser("u104", "u104@gmail.com", "password", LocalDate.now());
+//        if (errorMessage == null) {
+//            System.out.println("User created successfully");
+//        } else {
+//            System.out.println(errorMessage);
+//        }
+//    }
 }
