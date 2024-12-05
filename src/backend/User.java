@@ -49,8 +49,8 @@ public class User {
     public void setUserData(JSONObject userData) throws IOException {
         dateOfBirth = Utilities.y_M_dToDate(userData.getString("dateOfBirth"));
         online = userData.getBoolean("online");
-        profile_img_path = userData.getString("profile-photo");
-        cover_img_path = userData.getString("cover-photo");
+//        profile_img_path = userData.getString("profile-photo");
+//        cover_img_path = userData.getString("cover-photo");
         // TODO: profile management: posts, stories
 
         Database database = Database.getInstance();
@@ -134,7 +134,7 @@ public class User {
     public JSONObject getUserData(){
         JSONObject data = new JSONObject();
         data.put("dateOfBirth", Utilities.DateTo_y_M_d(dateOfBirth));
-        data.put("status", online);
+        data.put("online", online);
         data.put("profile-photo", profile_img_path);
         data.put("cover-photo", cover_img_path);
 
