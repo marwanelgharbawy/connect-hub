@@ -41,7 +41,7 @@ public class User {
     public User(JSONObject credentials){
         userId = credentials.getString("id");
         username = credentials.getString("username");
-        email = credentials.getString("username");
+        email = credentials.getString("email");
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
     }
@@ -53,7 +53,6 @@ public class User {
         cover_img_path = userData.getString("cover-photo");
         // TODO: profile management: posts, stories
 
-
         Database database = Database.getInstance();
         JSONArray friends = userData.getJSONArray("friends");
         for(Object friend: friends){
@@ -61,7 +60,6 @@ public class User {
             User friend_ = database.getUser(friend_id);
             friendManager.addFriend(friend_);
         }
-
     }
 
     public boolean isOnline() {
