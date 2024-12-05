@@ -74,7 +74,9 @@ public class Database {
     }
 
     // Sign up user method, returns a string with the error message, or null if it's successful
-    public String signUpUser(String username, String email, String password, LocalDate dateOfBirth) {
+    public String signUpUser(String username, String email, String password, LocalDate dateOfBirth) throws IOException {
+
+        parseUsersData();
 
         if (id_to_user.values().stream().anyMatch(user -> user.getUsername().equals(username))) {
             return "Username already exists";
