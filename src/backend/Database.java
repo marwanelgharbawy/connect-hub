@@ -112,36 +112,13 @@ public class Database {
         id_to_user.put(newUser.getUserId(), newUser);
         email_to_user.put(email, newUser);
 
-        // TODO: Write user data to its file
-
-        // Create a file for the user with its id
         try {
-            FileWriter file = new FileWriter(users_folder + "/" + newUser.getUserId() + ".json");
-            file.write(newUser.getUserData().toString(2));
-            file.close();
+            writeUserData(newUser); // Create a file for the user with its id in the users directory
+            writeDataToFiles();     // Update the users.json file for all users
         } catch (IOException e) {
             e.printStackTrace();
             return "Error writing to file";
         }
-
-        // TODO: Add user to users.json file
-
-        // Get all users
-        JSONArray users = new JSONArray();
-        for (User user : id_to_user.values()) {
-            users.put(user.getCredentials());
-        }
-
-        // Write to file
-        try {
-            FileWriter file = new FileWriter(users_json_file);
-            file.write(users.toString(2));
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Error writing to file";
-        }
-
 
         return null;
     }
@@ -157,6 +134,31 @@ public class Database {
 
     public void getUserStories(String user_id){}
     public void getUserStory(String user_id, String story_id){}
+
+    // Write user data to a file, can overwrite existing files or add a new user
+    private void writeUserData(User user) throws IOException {
+        FileWriter file = new FileWriter(users_folder + "/" + user.getUserId() + ".json");
+        file.write(user.getUserData().toString(2));
+        file.close();
+    }
+
+    // Write all users credentials to users.json
+    private void writeDataToFiles() throws IOException {
+        // Get all users
+        JSONArray users = new JSONArray();
+        for (User user : id_to_user.values()) {
+            users.put(user.getCredentials());
+        }
+
+        // Write to file
+        try {
+            FileWriter file = new FileWriter(users_json_file);
+            file.write(users.toString(2));
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         System.out.println(LocalDate.now());
