@@ -1,7 +1,9 @@
 package friendManager;
 
+import backend.Database;
 import backend.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class FriendManagerC implements FriendManagerI {
@@ -10,7 +12,7 @@ public class FriendManagerC implements FriendManagerI {
     private final SuggestionManagerI suggestionManager;
     private final ArrayList<User> friends;
 
-    public FriendManagerC(RequestManagerI requestManager, BlockManagerI blockManager, SuggestionManagerI suggestionManager) {
+    public FriendManagerC(RequestManagerI requestManager, BlockManagerI blockManager, SuggestionManagerI suggestionManager) throws IOException {
         this.requestManager = requestManager;
         this.blockManager = blockManager;
         this.suggestionManager = suggestionManager;
@@ -39,16 +41,26 @@ public class FriendManagerC implements FriendManagerI {
         return friends;
     }
     @Override
-    public void addFriend(User user){
+    public void addFriend(User mainUser ,User user) {
         if(!friends.contains(user)){
             friends.add(user);
         }
 
     }
     @Override
-    public void removeFriend(User mainUser, User userToRemove){
+    public void removeFriend(User mainUser, User userToRemove) {
         friends.remove(userToRemove);
         userToRemove.getFriendManager().getFriends().remove(mainUser);
+
+    }
+
+    @Override
+    public void confirmRemove(User mainUser, User removedUser) throws IOException {
+        removeFriend(mainUser,removedUser);
+        Database database = Database.getInstance();
+        database.saveUser(mainUser);
+        database.saveUser(removedUser);
+
     }
 
 }
