@@ -1,5 +1,6 @@
 package frontend;
 
+import backend.Database;
 import utils.Utilities;
 import backend.User;
 
@@ -44,7 +45,34 @@ public class SignUp extends JFrame{
         signUpButton.addActionListener(_ -> {
             String username = usernameField.getText();
             String email = emailField.getText();
+            LocalDate dateOfBirth = ((Date) dateSpinner.getValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             String password = "";
+
+            // Frontend validation
+
+            // Return if any field is empty
+            if (username.isEmpty() || email.isEmpty() || Arrays.toString(passwordField.getPassword()).isEmpty() || Arrays.toString(checkPasswordField.getPassword()).isEmpty()){
+                JOptionPane.showMessageDialog(this, "All fields are required", "Empty Fields", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Return if username is invalid
+            if (!Utilities.validateUsername(username)){
+                JOptionPane.showMessageDialog(this, "Invalid username", "Username Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Return if email is invalid
+            if (!Utilities.validateEmail(email)){
+                JOptionPane.showMessageDialog(this, "Invalid email", "Email Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Return if date of birth is invalid
+            if (dateOfBirth.isAfter(LocalDate.now())){
+                JOptionPane.showMessageDialog(this, "Invalid date of birth", "Date of Birth Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             // Return if password don't match
             if (Arrays.toString(passwordField.getPassword()).equals(Arrays.toString(checkPasswordField.getPassword()))){
@@ -55,24 +83,18 @@ public class SignUp extends JFrame{
                 return;
             }
 
-            // Return if username or email already exists
-            // TODO: Implement this
-
-            Date dateOfBirth = (Date) dateSpinner.getValue();
-            if (Utilities.validateEmail(email) && Utilities.validateUsername(username)){
-                LocalDate data = dateOfBirth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                User user = new User(username, email, password, data);
-
-                // TODO: Add user to database
-
-                JOptionPane.showMessageDialog(this, "New user created", "backend.User Created", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println(user.getUserId());
-
-                // TODO: Open new user's profile
+            try {
+                Database.getInstance().signUpUser(username, email, password, dateOfBirth);
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error creating user", "backend.User Creation Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-            else{
-                JOptionPane.showMessageDialog(this, "You entered wrong data", "Wrong Input", JOptionPane.ERROR_MESSAGE);
-            }
+
+            JOptionPane.showMessageDialog(this, "New user created", "backend.User Created", JOptionPane.INFORMATION_MESSAGE);
+            // TODO: Open profile
+            // Window pending
+
         });
 
         backButton.addActionListener(_ -> {
