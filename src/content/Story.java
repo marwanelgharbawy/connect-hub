@@ -5,8 +5,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Story extends CreatedContent{
-    Story(String authorId, String text, String imagePath) {
-        super(authorId, text, imagePath);
+    public Story(String authorId, ContentFields contentFields) {
+        super(authorId, contentFields);
     }
 
     Story(String authorId, JSONObject data){

@@ -15,4 +15,12 @@ public class ContentFields {
     public String getImagePath() {
         return imagePath;
     }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 }

@@ -15,11 +15,10 @@ public abstract class CreatedContent {
     String authorId; // Reference to the user who created the content
     ContentFields contentFields; //Text with optional images (store image paths in the database).
     LocalDateTime timestamp;// Creation time.
-    CreatedContent(String authorId, String text, String imagePath){
-        Utilities utilities = new Utilities();
-        contentId = utilities.generateId(); // Generate unique ID for content
-        this.authorId = authorId;
-        contentFields = new ContentFields(text,imagePath);
+    public CreatedContent(String authorId, ContentFields contentFields){
+        contentId = Utilities.generateId(); // Generate unique ID for content
+        this.authorId = authorId; // Assign userID
+        this.contentFields = contentFields;
         // TODO: In the GUI, the user picks the image using file chooser, send the image path as argument
     }
 
@@ -31,7 +30,11 @@ public abstract class CreatedContent {
         String photo = data.getString("photo");
         contentFields = new ContentFields(text, photo);
     }
-
+    
+    public void setContentFields(ContentFields contentFields) {
+        this.contentFields = contentFields;
+    }
+  
     public String getContentId() {
         return contentId;
     }

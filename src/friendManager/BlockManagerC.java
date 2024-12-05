@@ -13,11 +13,11 @@ public class BlockManagerC implements BlockManagerI{
     }
 
     @Override
-    public void blockUser(User userToBlock) {
+    public void blockUser(User mainUser,User userToBlock) {
         // Check for duplicates and remove user from friend list if they are friends
         if(!FriendUtils.isDuplicate(userToBlock,blockedUsers)){
             blockedUsers.add(userToBlock);
-            friendManager.removeFriend(userToBlock);
+            friendManager.removeFriend(mainUser,userToBlock);
         }
     }
 

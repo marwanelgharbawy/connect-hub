@@ -42,7 +42,7 @@ public class RequestManagerC implements RequestManagerI { // Friends list
         friendRequest.setStatus("cancelled");
         sentRequests.remove(friendRequest);
         friendRequest.getReceiver().getFriendManager().getRequestManager().getReceivedRequests().remove(friendRequest);
-
+        friendRequest.getSender().getFriendManager().getRequestManager().getSentRequests().remove(friendRequest);
     }
     @Override
     public void addReceivedRequest(FriendRequest friendRequest) {
