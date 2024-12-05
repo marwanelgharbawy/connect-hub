@@ -10,4 +10,5 @@ public interface SuggestionManagerI {
     ArrayList<User> getFriendsOfFriends();
     ArrayList<User> getSuggestions();
     void removeSuggestion(User user);
+    void addSuggestion(User user);
 }

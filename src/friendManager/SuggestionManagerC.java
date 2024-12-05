@@ -45,4 +45,9 @@ public class SuggestionManagerC implements SuggestionManagerI {
     public void removeSuggestion(User user) {
         suggestions.remove(user);
     }
+
+    @Override
+    public void addSuggestion(User user) {
+        suggestions.add(user);
+    }
 }
