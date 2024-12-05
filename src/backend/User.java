@@ -1,9 +1,7 @@
 package backend;
 import content.Post;
 import content.Story;
-import friendManager.FriendManagerC;
-import friendManager.FriendManagerFactory;
-import friendManager.FriendManagerI;
+import friendManager.*;
 
 import utils.Utilities;
 
