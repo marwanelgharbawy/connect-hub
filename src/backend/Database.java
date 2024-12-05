@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.*;
+import utils.Utilities;
 
 public class Database {
     private static Database instance;
@@ -67,10 +68,27 @@ public class Database {
         }
     }
 
-    /**
-    * checks the credentials and return user object or null
-    */
-    public void signInUser(String email, String password){
+    // Login user method, returns a string with the error message, or null if it's successful
+    public String loginUser(String username, String password) throws IOException {
+        parseUsersData();
+
+        // Check if username exists
+        if (id_to_user.values().stream().noneMatch(user -> user.getUsername().equals(username))) {
+            return "Username does not exist";
+        }
+
+        // Get user object by username: Get all users, filter by username, get the first one which is unique
+        User user = id_to_user.values().stream().filter(u -> u.getUsername().equals(username)).findFirst().get();
+
+        // Check if password is correct
+        // Hash the input password to compare it with the database's hashed password
+        password = Utilities.hashPassword(password);
+
+        if (!user.getPassword().equals(password)) {
+            return "Incorrect password";
+        }
+
+        return null;
     }
 
     // Sign up user method, returns a string with the error message, or null if it's successful

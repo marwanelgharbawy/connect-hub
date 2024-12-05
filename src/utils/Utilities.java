@@ -1,8 +1,11 @@
 package utils;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -83,5 +86,17 @@ public class Utilities {
         int month = Integer.parseInt(date[1]);
         int day = Integer.parseInt(date[2]);
         return LocalDate.of(year, month, day);
+    }
+
+    public static String hashPassword(String password){
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(password.getBytes());
+            byte[] hashedPassword = md.digest();
+            return Base64.getEncoder().encodeToString(hashedPassword);
+        } catch (NoSuchAlgorithmException e){
+            System.out.println("Algorithm not found");
+            return null;
+        }
     }
 }

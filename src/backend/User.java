@@ -9,8 +9,6 @@ import utils.Utilities;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Base64;
-import java.security.*;
 import org.json.*;
 
 public class User {
@@ -28,11 +26,10 @@ public class User {
         this.friendManager = FriendManagerFactory.createFriendManager();
     }
     public User(String username, String email, String password, LocalDate dateOfBirth){
-        Utilities utilities = new Utilities();
-        this.userId = utilities.generateId();
+        this.userId = Utilities.generateId();
         this.email = email;
         this.username = username;
-        this.password = hashPassword(password);
+        this.password = Utilities.hashPassword(password);
         this.dateOfBirth = dateOfBirth;
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
@@ -86,18 +83,6 @@ public class User {
         return dateOfBirth;
     }
 
-    private String hashPassword(String password){
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(password.getBytes());
-            byte[] hashedPassword = md.digest();
-            return Base64.getEncoder().encodeToString(hashedPassword);
-        } catch (NoSuchAlgorithmException e){
-            System.out.println("Algorithm not found");
-            return null;
-        }
-    }
-
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
@@ -115,7 +100,7 @@ public class User {
     }
 
     public void setPassword(String password){
-        this.password = hashPassword(password);
+        this.password = Utilities.hashPassword(password);
     }
 
     public FriendManagerI getFriendManager() {
