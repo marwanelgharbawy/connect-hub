@@ -2,16 +2,16 @@ package friendManager;
 
 import backend.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public interface RequestManagerI {
-    public void sendFriendRequest(User sender, User receiver);
-    void acceptFriendRequest(FriendRequest friendRequest);
-    void cancelRequest(FriendRequest friendRequest);
-    void addReceivedRequest(FriendRequest friendRequest);
-    void addSentRequest(FriendRequest friendRequest);
+    void removeFriendRequest(FriendRequest friendRequest);
+    void sendFriendRequest(User sender, User receiver) throws IOException;
+    void acceptFriendRequest(FriendRequest friendRequest) throws IOException;
+    void cancelRequest(FriendRequest friendRequest) throws IOException;
+    void addFriendRequest(FriendRequest friendRequest);
     FriendRequest getReceivedRequest(String senderId);
-    FriendRequest getSentRequest(String receiverID);
     ArrayList<FriendRequest> getReceivedRequests();
     ArrayList<FriendRequest> getSentRequests();
 }
