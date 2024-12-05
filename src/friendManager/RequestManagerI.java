@@ -9,6 +9,9 @@ public interface RequestManagerI {
     void acceptFriendRequest(FriendRequest friendRequest);
     void cancelRequest(FriendRequest friendRequest);
     void addReceivedRequest(FriendRequest friendRequest);
+    void addSentRequest(FriendRequest friendRequest);
+    FriendRequest getReceivedRequest(String senderId);
+    FriendRequest getSentRequest(String receiverID);
     ArrayList<FriendRequest> getReceivedRequests();
     ArrayList<FriendRequest> getSentRequests();
 }

@@ -50,6 +50,27 @@ public class RequestManagerC implements RequestManagerI { // Friends list
     }
 
     @Override
+    public void addSentRequest(FriendRequest friendRequest) {sentRequests.add(friendRequest);}
+
+    @Override
+    public FriendRequest getReceivedRequest(String senderId) {
+        for (FriendRequest friendRequest: receivedRequests){
+            if (friendRequest.getSender().getUserId().equals(senderId))
+                return friendRequest;
+        }
+        return null;
+    }
+
+    @Override
+    public FriendRequest getSentRequest(String receiverId) {
+        for (FriendRequest friendRequest: sentRequests){
+            if (friendRequest.getSender().getUserId().equals(receiverId))
+                return friendRequest;
+        }
+        return null;
+    }
+
+    @Override
     public ArrayList<FriendRequest> getReceivedRequests() {
         return receivedRequests;
     }
