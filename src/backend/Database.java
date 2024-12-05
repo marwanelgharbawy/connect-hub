@@ -92,8 +92,36 @@ public class Database {
         id_to_user.put(newUser.getUserId(), newUser);
         email_to_user.put(email, newUser);
 
-        // TODO: Add user to users.json
-        // Method pending
+        // TODO: Write user data to its file
+
+        // Create a file for the user with its id
+        try {
+            FileWriter file = new FileWriter(users_folder + "/" + newUser.getUserId() + ".json");
+            file.write(newUser.getUserData().toString());
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Error writing to file";
+        }
+
+        // TODO: Add user to users.json file
+
+        // Get all users
+        JSONArray users = new JSONArray();
+        for (User user : id_to_user.values()) {
+            users.put(user.getCredentials());
+        }
+
+        // Write to file
+        try {
+            FileWriter file = new FileWriter(users_json_file);
+            file.write(users.toString());
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Error writing to file";
+        }
+
 
         return null;
     }
@@ -116,5 +144,13 @@ public class Database {
         System.out.println("Database loaded successfully");
         database.parseUsersData();
         System.out.println("Users loaded successfully");
+
+        // Test sign up user
+        String errorMessage = database.signUpUser("u104", "u104@gmail.com", "password", LocalDate.now());
+        if (errorMessage == null) {
+            System.out.println("User created successfully");
+        } else {
+            System.out.println(errorMessage);
+        }
     }
 }
