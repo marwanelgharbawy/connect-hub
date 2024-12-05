@@ -1,48 +1,61 @@
 package frontend;
 
+import backend.Database;
 import utils.Utilities;
-import backend.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 
-public class SignUp extends JFrame{
+public class SignUp extends JFrame {
+    JButton signUpButton;
+    JButton backButton;
+    JTextField usernameField;
+    JTextField emailField;
+    JPasswordField passwordField;
+    JPasswordField checkPasswordField;
+    JSpinner dateSpinner;
 
     public SignUp(){
-        setTitle("Sign up");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 400);
-        JPanel window = new JPanel(new GridLayout(7, 2, 10, 10));
-        window.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        window.add(new JLabel("Username: "));
-        JTextField usernameField = new JTextField();
-        window.add(usernameField);
-        window.add(new JLabel("Email: "));
-        JTextField emailField = new JTextField();
-        window.add(emailField);
-        window.add(new JLabel("Password: "));
-        JPasswordField passwordField = new JPasswordField();
-        window.add(passwordField);
-        window.add(new JLabel("Confirm Password: "));
-        JPasswordField checkPasswordField = new JPasswordField();
-        window.add(checkPasswordField);
-        window.add(new JLabel("Birthdate: "));
-        JSpinner dateSpinner = new JSpinner(new SpinnerDateModel());
-        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd");
-        dateSpinner.setEditor(dateEditor);
-        dateSpinner.setValue(new Date());
-        window.add(dateSpinner);
-        JButton backButton = new JButton("Back");
-        window.add(backButton);
-        JButton signUpButton = new JButton("Sign Up");
-        window.add(signUpButton);
+        initializeUI();
+        addListeners();
+    }
 
+    private void addListeners() {
         signUpButton.addActionListener(_ -> {
             String username = usernameField.getText();
             String email = emailField.getText();
+            LocalDate dateOfBirth = ((Date) dateSpinner.getValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             String password = "";
+
+            // Frontend validation
+
+            // Return if any field is empty
+            if (username.isEmpty() || email.isEmpty() || Arrays.toString(passwordField.getPassword()).isEmpty() || Arrays.toString(checkPasswordField.getPassword()).isEmpty()){
+                JOptionPane.showMessageDialog(this, "All fields are required", "Empty Fields", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Return if username is invalid
+            if (!Utilities.validateUsername(username)){
+                JOptionPane.showMessageDialog(this, "Invalid username", "Username Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Return if email is invalid
+            if (!Utilities.validateEmail(email)){
+                JOptionPane.showMessageDialog(this, "Invalid email", "Email Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Return if date of birth is invalid
+            if (dateOfBirth.isAfter(LocalDate.now())){
+                JOptionPane.showMessageDialog(this, "Invalid date of birth", "Date of Birth Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             // Return if password don't match
             if (Arrays.toString(passwordField.getPassword()).equals(Arrays.toString(checkPasswordField.getPassword()))){
@@ -53,22 +66,21 @@ public class SignUp extends JFrame{
                 return;
             }
 
-            // Return if username or email already exists
-            // TODO: Implement this
+            try {
+                String errorMessage = Database.getInstance().signUpUser(username, email, password, dateOfBirth);
+                if (errorMessage == null) {
+                    JOptionPane.showMessageDialog(this, "New user created", "User Created", JOptionPane.INFORMATION_MESSAGE);
 
-            Date dateOfBirth = (Date) dateSpinner.getValue();
-            if (Utilities.validateEmail(email) && Utilities.validateUsername(username)){
-                User user = new User(username, email, password, dateOfBirth);
-
-                // TODO: Add user to database
-
-                JOptionPane.showMessageDialog(this, "New user created", "backend.User Created", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println(user.getUserId());
-
-                // TODO: Open new user's profile
-            }
-            else{
-                JOptionPane.showMessageDialog(this, "You entered wrong data", "Wrong Input", JOptionPane.ERROR_MESSAGE);
+                    // TODO: Open new user's profile
+                    // dispose();
+                    // Window pending
+                } else {
+                    JOptionPane.showMessageDialog(this, errorMessage, "User Creation Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error creating user", "backend.User Creation Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
         });
 
@@ -76,6 +88,36 @@ public class SignUp extends JFrame{
             dispose();
             new MainMenu();
         });
+    }
+
+    private void initializeUI() {
+        setTitle("Sign up");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 400);
+        JPanel window = new JPanel(new GridLayout(7, 2, 10, 10));
+        window.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        window.add(new JLabel("Username: "));
+        usernameField = new JTextField();
+        window.add(usernameField);
+        window.add(new JLabel("Email: "));
+        emailField = new JTextField();
+        window.add(emailField);
+        window.add(new JLabel("Password: "));
+        passwordField = new JPasswordField();
+        window.add(passwordField);
+        window.add(new JLabel("Confirm Password: "));
+        checkPasswordField = new JPasswordField();
+        window.add(checkPasswordField);
+        window.add(new JLabel("Birthdate: "));
+        dateSpinner = new JSpinner(new SpinnerDateModel());
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd");
+        dateSpinner.setEditor(dateEditor);
+        dateSpinner.setValue(new Date());
+        window.add(dateSpinner);
+        backButton = new JButton("Back");
+        window.add(backButton);
+        signUpButton = new JButton("Sign Up");
+        window.add(signUpButton);
 
         add(window, BorderLayout.CENTER);
         setVisible(true);
