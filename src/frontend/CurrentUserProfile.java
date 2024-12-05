@@ -9,6 +9,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -216,7 +218,7 @@ public class CurrentUserProfile extends JFrame {
 
         int result = JOptionPane.showConfirmDialog(this, changeDobPanel, "Change date of birth", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION){
-            Date newDateOfBirth = (Date) dateSpinner.getValue();
+            LocalDate newDateOfBirth = ((Date) dateSpinner.getValue()).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             profile.getUser().setDateOfBirth(newDateOfBirth);
         }
     }
@@ -286,7 +288,7 @@ public class CurrentUserProfile extends JFrame {
     }
 
     public static void main(String[] args) throws IOException {
-        User user = new User("minareda", "minareda03@gmail.com", "mnr115279", new Date(103, Calendar.APRIL, 17));
+        User user = new User("minareda", "minareda03@gmail.com", "mnr115279", LocalDate.of(2003, 4, 17));
         Profile profile = new Profile(user);
         profile.setBio("Co-founder Connect-Hub");
         new CurrentUserProfile(profile);
