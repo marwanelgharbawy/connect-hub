@@ -52,11 +52,11 @@ public class Database {
             String email = jsonObject.getString("email");
             String password = jsonObject.getString("password");
 
-            User new_user = new User(); // then put parameters
+            //User new_user = new User(); // then put parameters
             // func1 parse data.json
             // func2 parse posts.json and stories.json
-            id_to_user.put(id, new_user);
-            email_to_user.put(email, new_user);
+            //id_to_user.put(id, new_user);
+            //email_to_user.put(email, new_user);
         }
     }
 
