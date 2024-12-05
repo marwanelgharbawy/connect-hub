@@ -167,7 +167,7 @@ public class User {
             User friend_ = database.getUser(friend_id);
             if (friend_ != null) {
                 if (!FriendUtils.isDuplicate(friend_, friendManager.getFriends())) {
-                    friendManager.addFriend(friend_);
+                    friendManager.addFriend(this,friend_);
                 }
             }
         }
@@ -180,7 +180,7 @@ public class User {
             User blockedUser_ = database.getUser(blockedUserId);
             if (blockedUser_ != null) {
                 if (!FriendUtils.isDuplicate(blockedUser_, friendManager.getBlockManager().getBlockedUsers())) {
-                    friendManager.getBlockManager().blockUser(this, blockedUser_);
+                    friendManager.getBlockManager().appendBlock(this, blockedUser_);
                 }
             }
         }
@@ -194,7 +194,7 @@ public class User {
                 if (sender != null) {
                     FriendRequest friendRequest = friendManager.getRequestManager().getReceivedRequest(senderId);
                     if (friendRequest == null) {
-                        friendManager.getRequestManager().addReceivedRequest(new FriendRequest(sender, this));
+                        friendManager.getRequestManager().addFriendRequest(new FriendRequest(sender, this));
                     }
                 }
             }
