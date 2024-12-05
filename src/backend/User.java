@@ -66,8 +66,6 @@ public class User {
         setBlocked(database,userData);
         // requests
         setRequests(database,userData);
-        // suggestions
-        setSuggestions(database,userData);
     }
 
     public boolean isOnline() {
@@ -145,8 +143,6 @@ public class User {
         loadBlocked(data);
         /* friend requests */
         loadRequests(data);
-        /* suggestions */
-        loadSuggestions(data);
         /* posts */
         JSONArray posts = new JSONArray();
         // TODO: posts
@@ -207,19 +203,7 @@ public class User {
         }
 
     }
-    public void setSuggestions(Database database,JSONObject userData){
-        JSONArray suggestions = userData.getJSONArray("suggestions");
-        for (Object suggested : suggestions) {
-            String suggestedId = (String) suggested;
-            User suggested_ = database.getUser(suggestedId);
-            if (suggested_ != null) {
-                if (!FriendUtils.isDuplicate(suggested_, friendManager.getSuggestionManager().getSuggestions())) {
-                    friendManager.getSuggestionManager().addSuggestion(suggested_);
-                }
-            }
-        }
 
-    }
     public void loadFriends(JSONObject data){
         JSONArray friends = new JSONArray();
         for (User user : friendManager.getFriends()) {
@@ -242,14 +226,6 @@ public class User {
             friendRequests.put(friendRequest.getReceiver().userId); // Each friend request is linked to its sender
         }
         data.put("requests", friendRequests);
-
-    }
-    public void loadSuggestions(JSONObject data){
-        JSONArray suggestions = new JSONArray();
-        for (User user : friendManager.getSuggestionManager().getSuggestions()) {
-            suggestions.put(user.getUserId());
-        }
-        data.put("suggestions", suggestions);
 
     }
 
