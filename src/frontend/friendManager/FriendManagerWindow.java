@@ -1,10 +1,12 @@
 package frontend.friendManager;
 
+import backend.Database;
 import backend.User;
 import utils.UIUtils;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
+import java.io.IOException;
 
 public class FriendManagerWindow extends JFrame {
 
@@ -13,8 +15,10 @@ public class FriendManagerWindow extends JFrame {
     private JButton viewSuggestionsButton;
     private JPanel mainPanel;
     private final User user;
+    private final Database database;
 
-    FriendManagerWindow(User user) {
+    FriendManagerWindow(Database database, User user) {
+        this.database = database;
         UIUtils.initializeWindow(this, mainPanel, "Friend Manager", 400, 400);
         this.user = user;
         // Setup button listeners for friend manager menu
@@ -30,7 +34,7 @@ public class FriendManagerWindow extends JFrame {
     }
 
     private void showFriends(User user) {
-        Friends friends = new Friends(user);
+        Friends friends = new Friends(database,user);
         // Hide Friend Manager window
         setVisible(false);
         friends.addWindowListener(new WindowAdapter() {
@@ -45,7 +49,7 @@ public class FriendManagerWindow extends JFrame {
     }
 
     private void showFriendRequests(User user) {
-        FriendRequests friendRequests = new FriendRequests(user);
+        FriendRequests friendRequests = new FriendRequests(database,user);
         // Hide Friend Manager window
         setVisible(false);
         friendRequests.addWindowListener(new WindowAdapter() {
@@ -60,7 +64,7 @@ public class FriendManagerWindow extends JFrame {
     }
 
     private void showSuggestions(User user) {
-        Suggestions suggestions = new Suggestions(user);
+        Suggestions suggestions = new Suggestions(database,user);
         setVisible(false); // Hide Friend Manager window
         suggestions.addWindowListener(new WindowAdapter() {
             @Override
@@ -72,8 +76,9 @@ public class FriendManagerWindow extends JFrame {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         User user = new User();
-        FriendManagerWindow friendManagerWindow = new FriendManagerWindow(user);
+        Database database = Database.getInstance();
+        FriendManagerWindow friendManagerWindow = new FriendManagerWindow(database,user);
     }
 }

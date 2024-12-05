@@ -1,9 +1,11 @@
 package frontend.friendManager;
 
+import backend.Database;
 import backend.User;
 import utils.UIUtils;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class Suggestions extends JFrame {
     private JComboBox<UserComboBoxItem> suggestionsComboBox;
@@ -14,8 +16,10 @@ public class Suggestions extends JFrame {
     private JButton deleteButton1;
     private JPanel mainPanel;
     private final User user;
+    private final Database database;
 
-    public Suggestions(User user) {
+    public Suggestions(Database database,User user) {
+        this.database = database;
         this.user = user;
         UIUtils.initializeWindow(this, mainPanel, "Suggestions", 800, 400);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -49,14 +53,21 @@ public class Suggestions extends JFrame {
                 // If sending friend request, send the request to the selected user
                 user.getFriendManager().getRequestManager().sendFriendRequest(user, selectedItem.getUser());
             }
-            // After action, update the combo boxes to reflect the changes
-            updateComboBoxes();
+            // After action, update the combo boxes and database to reflect the changes
+            updateData();
         } else {
             // If no item is selected, show an error message
             JOptionPane.showMessageDialog(null, "No suggestion selected!", "Empty Field Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    private void updateData(){
+        updateComboBoxes();
+        try {
+            database.saveUser(user);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     // Update both the suggested and friends of friends combo boxes
     private void updateComboBoxes() {
         // Update the combo box for suggestions
