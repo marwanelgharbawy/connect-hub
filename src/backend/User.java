@@ -115,6 +115,10 @@ public class User {
         return friendManager;
     }
 
+    public ContentManager getContentManager(){
+        return contentManager;
+    }
+
     public Profile getProfile(){
         return profile;
     }

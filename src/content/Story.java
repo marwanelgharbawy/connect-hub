@@ -13,7 +13,7 @@ public class Story extends CreatedContent{
         super(authorId,data);
     }
     // Check if the story is due in order to delete it
-    boolean isDue(){
+    public boolean isDue(){
 //        return (LocalDateTime.now().getHour() - super.timestamp.getHour() >= 24);
         LocalDateTime now = LocalDateTime.now();
         Duration duration = Duration.between(super.timestamp, now);
