@@ -65,7 +65,7 @@ public class FriendRequests extends JFrame {
 
     }
     // Update the friend requests combo box
-    void updateComboBox() {
+    private void updateComboBox() {
         // Clear all items in the combo box
         requestsComboBox.removeAllItems();
         // Add each request to the combo box
