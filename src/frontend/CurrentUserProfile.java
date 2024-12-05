@@ -289,7 +289,7 @@ public class CurrentUserProfile extends JFrame {
 
     public static void main(String[] args) throws IOException {
         User user = new User("minareda", "minareda03@gmail.com", "mnr115279", LocalDate.of(2003, 3, 17));
-        Profile profile = new Profile(user);
+        Profile profile = new Profile(user, "", "", "");
         profile.setBio("Co-founder Connect-Hub");
         new CurrentUserProfile(profile);
     }
