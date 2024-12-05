@@ -1,6 +1,5 @@
 package backend;
-import content.Post;
-import content.Story;
+import content.ContentManager;
 import friendManager.*;
 
 import utils.Utilities;
@@ -19,6 +18,7 @@ public class User {
     LocalDate dateOfBirth;
     boolean online;
     private final Profile profile;
+    private ContentManager contentManager;
 
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
@@ -52,7 +52,9 @@ public class User {
         profile.setProfilePhoto(profile_img_path);
         profile.setCoverPhoto(cover_img_path);
 
-        // TODO: profile management: posts, stories
+        JSONArray postJsonArray = userData.getJSONArray("posts");
+        JSONArray storiesJsonArray = userData.getJSONArray("stories");
+        contentManager = new ContentManager(this, postJsonArray, storiesJsonArray);
 
         Database database = Database.getInstance();
         // friends
@@ -143,20 +145,9 @@ public class User {
         /* suggestions */
         loadSuggestions(data);
         /* posts */
-        JSONArray posts = new JSONArray();
-        // TODO: posts
-//        for(Post post: ){
-//            posts.put(post.toJSONObject());
-//        }
-        data.put("posts", posts);
-
+        data.put("posts", contentManager.postsToJsonArray());
         /* stories */
-        JSONArray stories = new JSONArray();
-        // TODO: stories
-//        for (Story story: ){
-//            stories.put(story.toJSONObject());
-//        }
-        data.put("stories", stories);
+        data.put("stories", contentManager.storiesToJsonArray());
 
         return data;
     }
@@ -247,5 +238,4 @@ public class User {
         data.put("suggestions", suggestions);
 
     }
-
 }
