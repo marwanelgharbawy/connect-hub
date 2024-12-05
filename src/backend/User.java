@@ -1,5 +1,6 @@
 package backend;
-
+import content.Post;
+import content.Story;
 import friendManager.*;
 
 import utils.Utilities;
@@ -17,13 +18,12 @@ public class User {
     String password;
     LocalDate dateOfBirth;
     boolean online;
-    String profile_img_path;
-    String cover_img_path;
+    private final Profile profile;
 
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
+        this.profile = new Profile(this, "", "", "");
     }
-
     public User(String username, String email, String password, LocalDate dateOfBirth) throws IOException {
         this.userId = Utilities.generateId();
         this.email = email;
@@ -32,6 +32,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
+        this.profile = new Profile(this, "", "", "");
     }
 
     public User(JSONObject credentials) throws IOException {
@@ -40,13 +41,17 @@ public class User {
         email = credentials.getString("email");
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
+        this.profile = new Profile(this, "", "", "");
     }
 
     public void setUserData(JSONObject userData) throws IOException {
         dateOfBirth = Utilities.y_M_dToDate(userData.getString("dateOfBirth"));
         online = userData.getBoolean("online");
-//        profile_img_path = userData.getString("profile-photo");
-//        cover_img_path = userData.getString("cover-photo");
+        String profile_img_path = userData.getString("profile-photo");
+        String cover_img_path = userData.getString("cover-photo");
+        profile.setProfilePhoto(profile_img_path);
+        profile.setCoverPhoto(cover_img_path);
+
         // TODO: profile management: posts, stories
 
         Database database = Database.getInstance();
@@ -100,7 +105,7 @@ public class User {
         this.username = username;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password){
         this.password = Utilities.hashPassword(password);
     }
 
@@ -108,7 +113,11 @@ public class User {
         return friendManager;
     }
 
-    public JSONObject getCredentials() {
+    public Profile getProfile(){
+        return profile;
+    }
+
+    public JSONObject getCredentials(){
         JSONObject credentials = new JSONObject();
         credentials.put("id", userId);
         credentials.put("username", username);
@@ -117,12 +126,14 @@ public class User {
         return credentials;
     }
 
-    public JSONObject getUserData() {
+    public JSONObject getUserData(){
         JSONObject data = new JSONObject();
         data.put("dateOfBirth", Utilities.DateTo_y_M_d(dateOfBirth));
         data.put("online", online);
-        data.put("profile-photo", profile_img_path);
-        data.put("cover-photo", cover_img_path);
+        data.put("profile-photo", profile.getProfile_img_path());
+        data.put("cover-photo", profile.getCover_img_path());
+
+
         /* friends */
         loadFriends(data);
         /* blocked */
@@ -149,27 +160,27 @@ public class User {
 
         return data;
     }
-    public void setFriends(Database database,JSONObject userData) {
+    public void setFriends(Database database,JSONObject userData){
         JSONArray friends = userData.getJSONArray("friends");
         for (Object friend : friends) {
             String friend_id = (String) friend;
             User friend_ = database.getUser(friend_id);
             if (friend_ != null) {
                 if (!FriendUtils.isDuplicate(friend_, friendManager.getFriends())) {
-                    friendManager.addFriend(this,friend_);
+                    friendManager.addFriend(friend_);
                 }
             }
         }
 
     }
-    public void setBlocked(Database database,JSONObject userData)  {
+    public void setBlocked(Database database,JSONObject userData){
         JSONArray blocked = userData.getJSONArray("blocked");
         for (Object blockedUser : blocked) {
             String blockedUserId = (String) blockedUser;
             User blockedUser_ = database.getUser(blockedUserId);
             if (blockedUser_ != null) {
                 if (!FriendUtils.isDuplicate(blockedUser_, friendManager.getBlockManager().getBlockedUsers())) {
-                    friendManager.getBlockManager().appendBlock(this, blockedUser_);
+                    friendManager.getBlockManager().blockUser(this, blockedUser_);
                 }
             }
         }
@@ -183,7 +194,7 @@ public class User {
                 if (sender != null) {
                     FriendRequest friendRequest = friendManager.getRequestManager().getReceivedRequest(senderId);
                     if (friendRequest == null) {
-                        friendManager.getRequestManager().addFriendRequest(new FriendRequest(sender, this));
+                        friendManager.getRequestManager().addReceivedRequest(new FriendRequest(sender, this));
                     }
                 }
             }
@@ -223,7 +234,7 @@ public class User {
     public void loadRequests(JSONObject data){
         JSONArray friendRequests = new JSONArray();
         for (FriendRequest friendRequest : friendManager.getRequestManager().getReceivedRequests()) {
-            friendRequests.put(friendRequest.getSender().userId); // Each friend request is linked to its sender
+            friendRequests.put(friendRequest.getReceiver().userId); // Each friend request is linked to its sender
         }
         data.put("requests", friendRequests);
 

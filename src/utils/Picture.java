@@ -12,7 +12,16 @@ public class Picture {
     BufferedImage image;
 
     public Picture(String imagePath) throws IOException {
-        this.image = constructImage(imagePath);
+        if(imagePath.equals("")){
+            BufferedImage grayImage = new BufferedImage(500, 300, BufferedImage.TYPE_INT_RGB);
+            Graphics2D graphics = grayImage.createGraphics();
+            graphics.setColor(Color.LIGHT_GRAY);
+            graphics.fillRect(0, 0, 500, 300);
+            graphics.dispose();
+            this.image = grayImage;
+        }
+        else
+            this.image = constructImage(imagePath);
     }
 
     public Picture(BufferedImage image){
