@@ -45,6 +45,7 @@ public class SuggestionManagerC implements SuggestionManagerI {
     @Override
     public void refuseSuggestion(User mainUser, User user) throws IOException {
         removeSuggestion(user);
+        hiddenSuggestions.add(user);
         database.saveUser(mainUser);
     }
 }
