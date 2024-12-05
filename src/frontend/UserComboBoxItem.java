@@ -10,7 +10,7 @@ public class UserComboBoxItem {
         this.user = user;
     }
 
-    // Getters
+    // Getter
     public User getUser() {
         return user;
     }
