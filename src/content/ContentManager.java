@@ -26,6 +26,22 @@ public class ContentManager {
         }
     }
 
+    public ArrayList<Post> getPosts(){
+        return posts;
+    }
+
+    public ArrayList<Story> getStories(){
+        return stories;
+    }
+
+    public void addPost(Post post){
+        posts.add(post);
+    }
+
+    public void addStory(Story story){
+        stories.add(story);
+    }
+
     public JSONArray postsToJsonArray(){
         JSONArray jsonArray = new JSONArray();
         for(Post post: posts){
