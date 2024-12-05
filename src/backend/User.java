@@ -20,11 +20,11 @@ public class User {
     String profile_img_path;
     String cover_img_path;
 
-    public User() {
+    public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
     }
 
-    public User(String username, String email, String password, LocalDate dateOfBirth) {
+    public User(String username, String email, String password, LocalDate dateOfBirth) throws IOException {
         this.userId = Utilities.generateId();
         this.email = email;
         this.username = username;
@@ -34,7 +34,7 @@ public class User {
         this.friendManager = FriendManagerFactory.createFriendManager();
     }
 
-    public User(JSONObject credentials) {
+    public User(JSONObject credentials) throws IOException {
         userId = credentials.getString("id");
         username = credentials.getString("username");
         email = credentials.getString("email");
@@ -149,27 +149,27 @@ public class User {
 
         return data;
     }
-    public void setFriends(Database database,JSONObject userData){
+    public void setFriends(Database database,JSONObject userData) {
         JSONArray friends = userData.getJSONArray("friends");
         for (Object friend : friends) {
             String friend_id = (String) friend;
             User friend_ = database.getUser(friend_id);
             if (friend_ != null) {
                 if (!FriendUtils.isDuplicate(friend_, friendManager.getFriends())) {
-                    friendManager.addFriend(friend_);
+                    friendManager.addFriend(this,friend_);
                 }
             }
         }
 
     }
-    public void setBlocked(Database database,JSONObject userData){
+    public void setBlocked(Database database,JSONObject userData)  {
         JSONArray blocked = userData.getJSONArray("blocked");
         for (Object blockedUser : blocked) {
             String blockedUserId = (String) blockedUser;
             User blockedUser_ = database.getUser(blockedUserId);
             if (blockedUser_ != null) {
                 if (!FriendUtils.isDuplicate(blockedUser_, friendManager.getBlockManager().getBlockedUsers())) {
-                    friendManager.getBlockManager().blockUser(this, blockedUser_);
+                    friendManager.getBlockManager().appendBlock(this, blockedUser_);
                 }
             }
         }
@@ -183,7 +183,7 @@ public class User {
                 if (sender != null) {
                     FriendRequest friendRequest = friendManager.getRequestManager().getReceivedRequest(senderId);
                     if (friendRequest == null) {
-                        friendManager.getRequestManager().addReceivedRequest(new FriendRequest(sender, this));
+                        friendManager.getRequestManager().addFriendRequest(new FriendRequest(sender, this));
                     }
                 }
             }
@@ -223,7 +223,7 @@ public class User {
     public void loadRequests(JSONObject data){
         JSONArray friendRequests = new JSONArray();
         for (FriendRequest friendRequest : friendManager.getRequestManager().getReceivedRequests()) {
-            friendRequests.put(friendRequest.getReceiver().userId); // Each friend request is linked to its sender
+            friendRequests.put(friendRequest.getSender().userId); // Each friend request is linked to its sender
         }
         data.put("requests", friendRequests);
 
