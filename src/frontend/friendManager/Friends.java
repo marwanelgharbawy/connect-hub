@@ -1,4 +1,4 @@
-package frontend;
+package frontend.friendManager;
 
 import backend.User;
 import utils.UIUtils;

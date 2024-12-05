@@ -1,4 +1,4 @@
-package frontend;
+package frontend.friendManager;
 
 import backend.User;
 import utils.UIUtils;
@@ -29,7 +29,7 @@ public class FriendManagerWindow extends JFrame {
 
     }
 
-    void showFriends(User user) {
+    private void showFriends(User user) {
         Friends friends = new Friends(user);
         // Hide Friend Manager window
         setVisible(false);
@@ -44,7 +44,7 @@ public class FriendManagerWindow extends JFrame {
 
     }
 
-    void showFriendRequests(User user) {
+    private void showFriendRequests(User user) {
         FriendRequests friendRequests = new FriendRequests(user);
         // Hide Friend Manager window
         setVisible(false);
@@ -59,7 +59,7 @@ public class FriendManagerWindow extends JFrame {
 
     }
 
-    void showSuggestions(User user) {
+    private void showSuggestions(User user) {
         Suggestions suggestions = new Suggestions(user);
         setVisible(false); // Hide Friend Manager window
         suggestions.addWindowListener(new WindowAdapter() {
