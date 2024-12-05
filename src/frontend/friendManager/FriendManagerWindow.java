@@ -90,7 +90,7 @@ public class FriendManagerWindow extends JFrame {
 
     public static void main(String[] args) throws IOException {
         Database database = Database.getInstance();
-        User user = database.getUser("u102");
+        User user = database.getUser("u101");
         FriendManagerWindow friendManagerWindow = new FriendManagerWindow(user);
     }
 }
