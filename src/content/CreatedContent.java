@@ -3,12 +3,7 @@ package content;
 import org.json.JSONObject;
 import utils.Utilities;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.util.Date;
 
 public abstract class CreatedContent {
     String contentId;// Unique ID for each content

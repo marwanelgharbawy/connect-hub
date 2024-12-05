@@ -1,4 +1,4 @@
-package frontend;
+package frontend.friendManager;
 
 import backend.User;
 
@@ -10,7 +10,7 @@ public class UserComboBoxItem {
         this.user = user;
     }
 
-    // Getters
+    // Getter
     public User getUser() {
         return user;
     }
