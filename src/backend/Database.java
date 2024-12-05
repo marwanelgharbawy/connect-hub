@@ -97,7 +97,7 @@ public class Database {
         // Create a file for the user with its id
         try {
             FileWriter file = new FileWriter(users_folder + "/" + newUser.getUserId() + ".json");
-            file.write(newUser.getUserData().toString());
+            file.write(newUser.getUserData().toString(2));
             file.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -115,7 +115,7 @@ public class Database {
         // Write to file
         try {
             FileWriter file = new FileWriter(users_json_file);
-            file.write(users.toString());
+            file.write(users.toString(2));
             file.close();
         } catch (IOException e) {
             e.printStackTrace();
