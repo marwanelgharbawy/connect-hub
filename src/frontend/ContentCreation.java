@@ -6,36 +6,34 @@ import content.Story;
 import utils.UIUtils;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 
 public class ContentCreation extends JFrame {
     private JButton addStoryButton;
     private JPanel mainPanel;
     private JButton addPostButton;
+    private final String authorId;
 
     public ContentCreation(String authorId) {
         UIUtils.initializeWindow(this, mainPanel, "Creating Content", 400, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        addStoryButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createContent(authorId,true);
-            }
-        });
-        addPostButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createContent(authorId,false);
-            }
-        });
-
+        this.authorId = authorId;
+        // Set up the button action listeners for content creation
+        setupButtonListeners();
+    }
+    // Set up the button action listeners
+    private void setupButtonListeners(){
+        addStoryButton.addActionListener(_ -> createContent(authorId,true));
+        addPostButton.addActionListener(_ -> createContent(authorId,false));
     }
     private void createContent(String authorId, boolean isStory){
+        // Create an instance for content fields
         ContentFields contentFields = new ContentFields(null, null);
+        // Pass content fields to GetContentFieldsWindow to handle them
         GetContentFieldsWindow getContentFieldsWindow = new GetContentFieldsWindow(contentFields,isStory);
-        setVisible(false); // Hide content creation window
+        // Hide content creation window
+        setVisible(false);
+        // Control the visibility of the current window based on the next window
         getContentFieldsWindow.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
@@ -48,7 +46,8 @@ public class ContentCreation extends JFrame {
                         // TODO: Add to user and database lists of posts
                     }
                 }
-                setVisible(true); // Show content creation window again
+                // Show content creation window again
+                setVisible(true);
             }
         });
         getContentFieldsWindow.setVisible(true);
