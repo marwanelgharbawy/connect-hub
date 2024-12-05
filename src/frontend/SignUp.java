@@ -71,7 +71,7 @@ public class SignUp extends JFrame {
                 if (errorMessage == null) {
                     JOptionPane.showMessageDialog(this, "New user created", "User Created", JOptionPane.INFORMATION_MESSAGE);
 
-                    // TODO: Open profile
+                    // TODO: Open new user's profile
                     // dispose();
                     // Window pending
                 } else {

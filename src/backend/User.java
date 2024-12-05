@@ -100,7 +100,7 @@ public class User {
     }
 
     public void setPassword(String password){
-        this.password = hashPassword(password);
+        this.password = Utilities.hashPassword(password);
     }
 
     public FriendManagerI getFriendManager() {
