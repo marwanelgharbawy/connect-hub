@@ -9,8 +9,6 @@ import java.io.IOException;
 
 public class Suggestions extends JFrame {
     private JComboBox<UserComboBoxItem> suggestionsComboBox;
-    private JComboBox<UserComboBoxItem> friendsOfFriendsComboBox;
-    private JButton sendFriendRequestButton;
     private JButton sendFriendRequestButton1;
     private JButton deleteButton1;
     private JPanel mainPanel;
@@ -20,8 +18,7 @@ public class Suggestions extends JFrame {
         this.user = user;
         UIUtils.initializeWindow(this, mainPanel, "Suggestions", 800, 400);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        // Update the combo boxes with user suggestions and friends of friends
-        updateComboBoxes();
+        updateComboBox();
         // Setup button listeners for friend request actions
         setupButtonListeners();
     }
@@ -30,64 +27,47 @@ public class Suggestions extends JFrame {
     private void setupButtonListeners() {
         // Ignore suggestions
         deleteButton1.addActionListener(_ -> {
-            try {
-                implementButtonAction(suggestionsComboBox, true);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (suggestionsComboBox.getSelectedItem() != null) {
+                UserComboBoxItem userComboBoxItem = (UserComboBoxItem) suggestionsComboBox.getSelectedItem();
+                // Remove the suggestion from the suggestion manager
+                try {
+                    user.getFriendManager().getSuggestionManager().refuseSuggestion(user, userComboBoxItem.getUser());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                // After action, update the combo box to reflect the changes
+                updateComboBox();
+            } else {
+                // If no item is selected, show an error message
+                JOptionPane.showMessageDialog(null, "No suggestion selected!", "Empty Field Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         // Send friend request to suggestions
         sendFriendRequestButton1.addActionListener(_ -> {
-            try {
-                implementButtonAction(suggestionsComboBox, false);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        // Send friend request to friends of friends
-        sendFriendRequestButton.addActionListener(_ -> {
-            try {
-                implementButtonAction(friendsOfFriendsComboBox, false);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    // Handle the button actions for sending friend requests or deleting suggestions
-    private void implementButtonAction(JComboBox<UserComboBoxItem> comboBox, boolean isDeleteAction) throws IOException {
-        // Get the selected item from the combo box
-        UserComboBoxItem selectedItem = (UserComboBoxItem) comboBox.getSelectedItem();
-        if (selectedItem != null) {
-            // If delete action, remove the suggestion from the suggestion manager
-            if (isDeleteAction) {
-                user.getFriendManager().getSuggestionManager().refuseSuggestion(user,selectedItem.getUser());
+            if (suggestionsComboBox.getSelectedItem() != null) {
+                UserComboBoxItem userComboBoxItem = (UserComboBoxItem) suggestionsComboBox.getSelectedItem();
+                try {
+                    user.getFriendManager().getRequestManager().sendFriendRequest(user, userComboBoxItem.getUser());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                // After action, update the combo box to reflect the changes
+                updateComboBox();
             } else {
-                // If sending friend request, send the request to the selected user
-                user.getFriendManager().getRequestManager().sendFriendRequest(user, selectedItem.getUser());
+                // If no item is selected, show an error message
+                JOptionPane.showMessageDialog(null, "No suggestion selected!", "Empty Field Error", JOptionPane.ERROR_MESSAGE);
             }
-            // After action, update the combo boxes to reflect the changes
-            updateComboBoxes();
-        } else {
-            // If no item is selected, show an error message
-            JOptionPane.showMessageDialog(null, "No suggestion selected!", "Empty Field Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    // Update both the suggested and friends of friends combo boxes
-    private void updateComboBoxes() {
-        // Update the combo box for suggestions
-        updateComboBox(suggestionsComboBox, user.getFriendManager().getSuggestionManager().getSuggestions());
-        // Update the combo box for friends of friends
-        updateComboBox(friendsOfFriendsComboBox, user.getFriendManager().getSuggestionManager().getFriendsOfFriends(user));
+        });
+
     }
 
     // Update combo box with a list of users
-    private void updateComboBox(JComboBox<UserComboBoxItem> comboBox, Iterable<User> users) {
+    private void updateComboBox() {
         // Clear all items in the combo box
-        comboBox.removeAllItems();
+        suggestionsComboBox.removeAllItems();
         // Add each user to the combo box
-        for (User suggested : users) {
-            comboBox.addItem(new UserComboBoxItem(suggested));
+        for (User suggested : user.getFriendManager().getSuggestionManager().getFriendsOfFriends(user)) {
+            suggestionsComboBox.addItem(new UserComboBoxItem(suggested));
         }
     }
 }
