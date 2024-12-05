@@ -9,17 +9,17 @@ public class Profile {
     Picture profilePhoto;
     Picture coverPhoto;
     private String bio;
+    private String profile_img_path;
+    private String cover_img_path;
     private final User user;
 
-    public Profile(User user) throws IOException {
+    public Profile(User user, String bio, String profile_img_path, String cover_img_path) throws IOException {
         this.user = user;
-        BufferedImage grayImage = new BufferedImage(500, 300, BufferedImage.TYPE_INT_RGB);
-        Graphics2D graphics = grayImage.createGraphics();
-        graphics.setColor(Color.LIGHT_GRAY);
-        graphics.fillRect(0, 0, 500, 300);
-        graphics.dispose();
-        this.profilePhoto = new Picture(grayImage);
-        this.coverPhoto = new Picture(grayImage);
+        this.bio = bio;
+        this.profile_img_path = profile_img_path;
+        this.cover_img_path = cover_img_path;
+        this.profilePhoto = new Picture(profile_img_path);
+        this.coverPhoto = new Picture(cover_img_path);
     }
 
     public void setBio(String bio) {
@@ -27,10 +27,12 @@ public class Profile {
     }
 
     public void setProfilePhoto(String profilePhotoPath) throws IOException {
+        this.profile_img_path = profilePhotoPath;
         this.profilePhoto = new Picture(profilePhotoPath);
     }
 
     public void setCoverPhoto(String coverPhotoPath) throws IOException {
+        this.cover_img_path = coverPhotoPath;
         this.coverPhoto = new Picture(coverPhotoPath);
     }
 
@@ -43,7 +45,6 @@ public class Profile {
     }
 
     public Picture getCoverPhoto() {
-
         return this.coverPhoto;
     }
 
@@ -53,6 +54,14 @@ public class Profile {
 
     public String getBio() {
         return this.bio;
+    }
+
+    public String getProfile_img_path() {
+        return profile_img_path;
+    }
+
+    public String getCover_img_path() {
+        return cover_img_path;
     }
 
     public void changePassword(String newPassword) {

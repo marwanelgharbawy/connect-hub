@@ -19,13 +19,13 @@ public class User {
     String password;
     LocalDate dateOfBirth;
     boolean online;
-    String profile_img_path;
-    String cover_img_path;
+    private final Profile profile;
 
-    public User(){
+    public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
+        this.profile = new Profile(this, "", "", "");
     }
-    public User(String username, String email, String password, LocalDate dateOfBirth){
+    public User(String username, String email, String password, LocalDate dateOfBirth) throws IOException {
         this.userId = Utilities.generateId();
         this.email = email;
         this.username = username;
@@ -33,21 +33,26 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
+        this.profile = new Profile(this, "", "", "");
     }
 
-    public User(JSONObject credentials){
+    public User(JSONObject credentials) throws IOException {
         userId = credentials.getString("id");
         username = credentials.getString("username");
         email = credentials.getString("email");
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
+        this.profile = new Profile(this, "", "", "");
     }
 
     public void setUserData(JSONObject userData) throws IOException {
         dateOfBirth = Utilities.y_M_dToDate(userData.getString("dateOfBirth"));
         online = userData.getBoolean("online");
-//        profile_img_path = userData.getString("profile-photo");
-//        cover_img_path = userData.getString("cover-photo");
+        String profile_img_path = userData.getString("profile-photo");
+        String cover_img_path = userData.getString("cover-photo");
+        profile.setProfilePhoto(profile_img_path);
+        profile.setCoverPhoto(cover_img_path);
+
         // TODO: profile management: posts, stories
 
         Database database = Database.getInstance();
@@ -107,6 +112,10 @@ public class User {
         return friendManager;
     }
 
+    public Profile getProfile(){
+        return profile;
+    }
+
     public JSONObject getCredentials(){
         JSONObject credentials = new JSONObject();
         credentials.put("id", userId);
@@ -120,8 +129,8 @@ public class User {
         JSONObject data = new JSONObject();
         data.put("dateOfBirth", Utilities.DateTo_y_M_d(dateOfBirth));
         data.put("online", online);
-        data.put("profile-photo", profile_img_path);
-        data.put("cover-photo", cover_img_path);
+        data.put("profile-photo", profile.getProfile_img_path());
+        data.put("cover-photo", profile.getCover_img_path());
 
 
         /* friends */
