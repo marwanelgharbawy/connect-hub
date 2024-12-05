@@ -37,7 +37,21 @@ public class Login extends JFrame {
                 return;
             }
 
-            // TODO: Implement login logic
+            String errorMessage;
+            try {
+                errorMessage = Database.getInstance().loginUser(username, password);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            if (errorMessage == null) {
+                JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                // TODO: Open the user's profile
+                // dispose();
+                // Window pending
+            } else {
+                JOptionPane.showMessageDialog(this, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         backButton.addActionListener(e -> {
