@@ -1,7 +1,12 @@
 package backend;
+import friendManager.FriendManagerC;
+import friendManager.FriendManagerFactory;
+import friendManager.FriendManagerI;
+
 import content.Post;
 import content.Story;
 import friendManager.*;
+
 
 import utils.Utilities;
 
@@ -22,7 +27,7 @@ public class User {
 
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile(this, "", "", "");
+        this.profile = new Profile("", "", "");
     }
     public User(String username, String email, String password, LocalDate dateOfBirth) throws IOException {
         this.userId = Utilities.generateId();
@@ -32,7 +37,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile(this, "", "", "");
+        this.profile = new Profile("", "", "");
     }
 
     public User(JSONObject credentials) throws IOException {
@@ -41,7 +46,7 @@ public class User {
         email = credentials.getString("email");
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile(this, "", "", "");
+        this.profile = new Profile("", "", "");
     }
 
     public void setUserData(JSONObject userData) throws IOException {
