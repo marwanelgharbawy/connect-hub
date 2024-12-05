@@ -4,6 +4,9 @@
   "profile-photo": "",
   "cover-photo": "",
   "friends": ["", "", ""],
+  "blocked": ["", "", ""],
+  "requests": ["", "", ""],
+  "suggestions": ["", "", ""],
   "posts": [
     {
       "id":"",
