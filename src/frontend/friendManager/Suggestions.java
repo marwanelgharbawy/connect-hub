@@ -1,15 +1,16 @@
 package frontend.friendManager;
 
 import backend.User;
+import friendManager.FriendUtils;
 import utils.UIUtils;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class Suggestions extends JFrame {
     private JComboBox<UserComboBoxItem> suggestionsComboBox;
     private JComboBox<UserComboBoxItem> friendsOfFriendsComboBox;
     private JButton sendFriendRequestButton;
-    private JButton deleteButton;
     private JButton sendFriendRequestButton1;
     private JButton deleteButton1;
     private JPanel mainPanel;
@@ -28,23 +29,39 @@ public class Suggestions extends JFrame {
     // Set up the button action listeners
     private void setupButtonListeners() {
         // Ignore suggestions
-        deleteButton1.addActionListener(_ -> implementButtonAction(suggestionsComboBox, true));
+        deleteButton1.addActionListener(_ -> {
+            try {
+                implementButtonAction(suggestionsComboBox, true);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         // Send friend request to suggestions
-        sendFriendRequestButton1.addActionListener(_ -> implementButtonAction(suggestionsComboBox, false));
-        // Ignore friends of friends
-        deleteButton.addActionListener(_ -> implementButtonAction(friendsOfFriendsComboBox, true));
+        sendFriendRequestButton1.addActionListener(_ -> {
+            try {
+                implementButtonAction(suggestionsComboBox, false);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         // Send friend request to friends of friends
-        sendFriendRequestButton.addActionListener(_ -> implementButtonAction(friendsOfFriendsComboBox, false));
+        sendFriendRequestButton.addActionListener(_ -> {
+            try {
+                implementButtonAction(friendsOfFriendsComboBox, false);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     // Handle the button actions for sending friend requests or deleting suggestions
-    private void implementButtonAction(JComboBox<UserComboBoxItem> comboBox, boolean isDeleteAction) {
+    private void implementButtonAction(JComboBox<UserComboBoxItem> comboBox, boolean isDeleteAction) throws IOException {
         // Get the selected item from the combo box
         UserComboBoxItem selectedItem = (UserComboBoxItem) comboBox.getSelectedItem();
         if (selectedItem != null) {
             // If delete action, remove the suggestion from the suggestion manager
             if (isDeleteAction) {
-                user.getFriendManager().getSuggestionManager().removeSuggestion(selectedItem.getUser());
+                user.getFriendManager().getSuggestionManager().refuseSuggestion(user,selectedItem.getUser());
             } else {
                 // If sending friend request, send the request to the selected user
                 user.getFriendManager().getRequestManager().sendFriendRequest(user, selectedItem.getUser());
@@ -56,13 +73,12 @@ public class Suggestions extends JFrame {
             JOptionPane.showMessageDialog(null, "No suggestion selected!", "Empty Field Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
     // Update both the suggested and friends of friends combo boxes
     private void updateComboBoxes() {
         // Update the combo box for suggestions
         updateComboBox(suggestionsComboBox, user.getFriendManager().getSuggestionManager().getSuggestions());
         // Update the combo box for friends of friends
-        updateComboBox(friendsOfFriendsComboBox, user.getFriendManager().getSuggestionManager().getFriendsOfFriends());
+        updateComboBox(friendsOfFriendsComboBox, user.getFriendManager().getSuggestionManager().getFriendsOfFriends(user));
     }
 
     // Update combo box with a list of users

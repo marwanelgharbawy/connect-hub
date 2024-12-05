@@ -1,8 +1,10 @@
 package friendManager;
 
+import java.io.IOException;
+
 public class FriendManagerFactory {
 
-    public static FriendManagerC createFriendManager() {
+    public static FriendManagerC createFriendManager() throws IOException {
         // Initialize request and suggestion managers
         RequestManagerC requestManager = new RequestManagerC();
         SuggestionManagerC suggestionManager = new SuggestionManagerC();

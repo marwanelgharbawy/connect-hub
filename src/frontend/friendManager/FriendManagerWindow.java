@@ -1,5 +1,6 @@
 package frontend.friendManager;
 
+import backend.Database;
 import backend.User;
 import utils.UIUtils;
 
@@ -13,6 +14,7 @@ public class FriendManagerWindow extends JFrame {
     private JButton viewFriendRequestsButton;
     private JButton viewSuggestionsButton;
     private JPanel mainPanel;
+    private JButton viewBlockedButton;
     private final User user;
 
     FriendManagerWindow(User user) {
@@ -27,6 +29,7 @@ public class FriendManagerWindow extends JFrame {
         viewFriendsButton.addActionListener(_ -> showFriends(user));
         viewFriendRequestsButton.addActionListener(_ -> showFriendRequests(user));
         viewSuggestionsButton.addActionListener(_ -> showSuggestions(user));
+        viewBlockedButton.addActionListener(_->showBlocked(user));
 
     }
 
@@ -72,9 +75,22 @@ public class FriendManagerWindow extends JFrame {
         suggestions.setVisible(true);
 
     }
+    private void showBlocked(User user) {
+        Blocked blocked = new Blocked(user);
+        setVisible(false); // Hide Friend Manager window
+        blocked.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                setVisible(true); // Show Friend Manager window again
+            }
+        });
+        blocked.setVisible(true);
+
+    }
 
     public static void main(String[] args) throws IOException {
-        User user = new User();
+        Database database = Database.getInstance();
+        User user = database.getUser("u102");
         FriendManagerWindow friendManagerWindow = new FriendManagerWindow(user);
     }
 }

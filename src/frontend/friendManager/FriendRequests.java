@@ -1,13 +1,15 @@
 package frontend.friendManager;
 
+import backend.Database;
 import backend.User;
 import friendManager.FriendRequest;
 import utils.UIUtils;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class FriendRequests extends JFrame {
-    private JComboBox<FriendRequest> requestsComboBox;
+    private JComboBox<RequestComboBoxItem> requestsComboBox;
     private JPanel mainPanel;
     private JButton declineButton;
     private JButton acceptButton;
@@ -30,7 +32,11 @@ public class FriendRequests extends JFrame {
         acceptButton.addActionListener(_ -> {
             if (requestsComboBox.getSelectedItem() != null) {
                 // Call the friend manager and the request manager respectively to accept the request
-                user.getFriendManager().getRequestManager().acceptFriendRequest(((RequestComboBoxItem) requestsComboBox.getSelectedItem()).getFriendRequest());
+                try {
+                    user.getFriendManager().getRequestManager().acceptFriendRequest(((RequestComboBoxItem) requestsComboBox.getSelectedItem()).getFriendRequest());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 // Update combo box after each addition
                 updateComboBox();
             } else {
@@ -43,7 +49,11 @@ public class FriendRequests extends JFrame {
         declineButton.addActionListener(_ -> {
             if (requestsComboBox.getSelectedItem() != null) {
                 // Call the friend manager and the request manager respectively to decline the request
-                user.getFriendManager().getRequestManager().cancelRequest(((RequestComboBoxItem) requestsComboBox.getSelectedItem()).getFriendRequest());
+                try {
+                    user.getFriendManager().getRequestManager().cancelRequest(((RequestComboBoxItem) requestsComboBox.getSelectedItem()).getFriendRequest());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 // Update combo box after each deletion
                 updateComboBox();
             } else {
@@ -54,14 +64,13 @@ public class FriendRequests extends JFrame {
         });
 
     }
-
     // Update the friend requests combo box
     void updateComboBox() {
         // Clear all items in the combo box
         requestsComboBox.removeAllItems();
         // Add each request to the combo box
         for (FriendRequest friendRequest : user.getFriendManager().getRequestManager().getReceivedRequests()) {
-            requestsComboBox.addItem(friendRequest);
+            requestsComboBox.addItem(new RequestComboBoxItem(friendRequest));
         }
 
     }
