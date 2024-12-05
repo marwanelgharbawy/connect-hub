@@ -112,6 +112,10 @@ public class User {
         return friendManager;
     }
 
+    public Profile getProfile(){
+        return profile;
+    }
+
     public JSONObject getCredentials(){
         JSONObject credentials = new JSONObject();
         credentials.put("id", userId);

@@ -2,6 +2,9 @@ package frontend;
 
 import backend.Profile;
 import backend.User;
+import content.ContentFields;
+import content.Post;
+import frontend.newsFeed.PostCard;
 import utils.Utilities;
 
 import javax.swing.*;
@@ -29,10 +32,10 @@ public class CurrentUserProfile extends JFrame {
     JPanel postsPanel;
     JScrollPane scrollPane;
 
-    public CurrentUserProfile(Profile profile) {
+    public CurrentUserProfile(Profile profile) throws IOException {
         // Window setup
         setTitle(profile.getUser().getUsername() + "'s Profile");
-        setSize(1000, 800);
+        setSize(700, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -55,8 +58,7 @@ public class CurrentUserProfile extends JFrame {
         profilePhotoLabel.setBounds(0, 0, 180, 180);
         profilePhotoLabel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
 
-        usernameLabel = new JLabel(profile.getUser().getUsername(), SwingConstants
-                .CENTER);
+        usernameLabel = new JLabel(profile.getUser().getUsername(), SwingConstants.CENTER);
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 18));
         usernameLabel.setBounds(0, 180, 180, 20);
 
@@ -91,15 +93,21 @@ public class CurrentUserProfile extends JFrame {
         // Add dummy "Posts" section
         postsPanel = new JPanel();
         postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
+        postsPanel.setBorder(BorderFactory.createEmptyBorder(10, 80, 10, 80));
         for (int i = 1; i <= 100; i++) {
-            JLabel post = new JLabel("Post " + i + ": This is a dummy post.");
-            post.setFont(new Font("Arial", Font.PLAIN, 14));
-            post.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            post.setBackground(Color.LIGHT_GRAY);
-            post.setOpaque(true);
-            post.setAlignmentX(Component.CENTER_ALIGNMENT);
-            postsPanel.add(post);
-            postsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+//            JLabel post = new JLabel("Post " + i + ": This is a dummy post.");
+//            post.setFont(new Font("Arial", Font.PLAIN, 14));
+//            post.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+//            post.setBackground(Color.LIGHT_GRAY);
+//            post.setOpaque(true);
+//            post.setAlignmentX(Component.CENTER_ALIGNMENT);
+            ContentFields contentFields = new ContentFields("hello omar how you doing\nhbfhdsfh\njbskafd\njfjbgerbg\sbkgbsjfg\nbgfhkbsfd", "C:/Users/Omar Hekal/Desktop/img.jpg");
+            Post post1 = new Post("fdsdfs", contentFields);
+
+            JFrame frame = new JFrame();
+            PostCard postCard = new PostCard(post1);
+            postsPanel.add(postCard);
+            postsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         }
 
         scrollPane = new JScrollPane(postsPanel);
