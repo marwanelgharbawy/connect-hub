@@ -1,27 +1,23 @@
 {
-  "dateOfBirth": "2003-04-19",
-  "online": false,
+  "stories": [{
+    "date": "2003-04-19-00-00",
+    "expired": true,
+    "photo": "",
+    "id": "",
+    "text": ""
+  }],
+  "blocked": ["u102"],
   "profile-photo": "",
-  "cover-photo": "",
-  "friends": ["u103", "", ""],
-  "blocked": ["", "", ""],
-  "requests": ["", "", ""],
+  "online": false,
   "bio": "",
-  "posts": [
-    {
-      "id":"",
-      "text": "",
-      "photo": "",
-      "date": ""
-    }
-  ],
-  "stories": [
-    {
-      "id": "",
-      "text": "",
-      "photo": "",
-      "date": "",
-      "expired": false
-    }
-  ]
+  "dateOfBirth": "2003-04-19",
+  "cover-photo": "",
+  "requests": [],
+  "posts": [{
+    "date": "2003-04-19-00-00",
+    "photo": "",
+    "id": "",
+    "text": ""
+  }],
+  "friends": ["u103"]
 }
