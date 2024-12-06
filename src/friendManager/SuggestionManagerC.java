@@ -25,6 +25,10 @@ public class SuggestionManagerC implements SuggestionManagerI {
 
     @Override
     public ArrayList<User> getFriendsOfFriends(User user) {
+        // Handle the case if the user has no friends yet
+        if(user.getFriendManager().getFriends().isEmpty()){
+            //return database.getUser()
+        }
         // Suggest friends of friends, handle the case if the friends are mutual or finding the main user
         for (User friend : user.getFriendManager().getFriends()) {
             for (User friendOfFriend : friend.getFriendManager().getFriends()) {
