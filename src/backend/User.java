@@ -19,11 +19,11 @@ import org.json.*;
 
 public class User {
     private final FriendManagerC friendManager;
-    String userId;
-    String email;
-    String username;
-    String password;
-    LocalDate dateOfBirth;
+    private String userId;
+    private String email;
+    private String username;
+    private String password;
+    private LocalDate dateOfBirth;
     boolean online;
     private final Profile profile;
     private ContentManager contentManager;
