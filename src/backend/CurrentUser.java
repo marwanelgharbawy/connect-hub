@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class CurrentUser extends User{
-    ArrayList<Post> newsFeedPosts;
-    ArrayList<Story> newsFeedStories;
+    private ArrayList<Post> newsFeedPosts;
+    private ArrayList<Story> newsFeedStories;
     public CurrentUser() throws IOException {
         super();
     }
