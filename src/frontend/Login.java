@@ -1,6 +1,7 @@
 package frontend;
 
 import backend.Database;
+import frontend.newsFeed.NewsFeed;
 import utils.*;
 
 import javax.swing.*;
@@ -51,9 +52,13 @@ public class Login extends JFrame {
 
             if (errorMessage == null) {
                 JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                // TODO: Open the user's profile
-                // dispose();
+                 dispose();
                 // Window pending
+                try {
+                    new NewsFeed(parent);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             } else {
                 JOptionPane.showMessageDialog(this, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
             }

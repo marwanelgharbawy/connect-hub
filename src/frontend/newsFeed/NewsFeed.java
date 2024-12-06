@@ -1,26 +1,32 @@
 package frontend.newsFeed;
 
+import backend.CurrentUser;
+import backend.Database;
 import backend.User;
+import frontend.MainMenu;
+import frontend.UserProfile;
 import utils.Utilities;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class NewsFeed extends JFrame {
     JPanel mainPanel;
     JPanel sidePanel;
     JPanel contentPanel;
-    User current_user;
+    CurrentUser current_user;
+    MainMenu parent;
 
-    public NewsFeed(User current_user){
-        this.current_user = current_user;
+    public NewsFeed(MainMenu parent) throws IOException {
+        this.current_user = Database.getInstance().getCurrentUser();
         initUI();
         setVisible(true);
     }
 
-    private void initUI(){
+    private void initUI() throws IOException {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 700);
+        setSize(1400, 700);
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         setContentPane(mainPanel);
@@ -73,8 +79,11 @@ public class NewsFeed extends JFrame {
         top_panel.add(top_btn_panel, BorderLayout.EAST);
 
         contentPanel = new JPanel();
-        contentPanel.setLayout(new CardLayout());
+        CardLayout cardLayout = new CardLayout();
+        contentPanel.setLayout(cardLayout);
         initPages();
+        home_btn.addActionListener(e-> cardLayout.show(contentPanel, home_btn.getText()));
+        my_profile_btn.addActionListener(e-> cardLayout.show(contentPanel, my_profile_btn.getText()));
 
         rightPanel.add(top_panel, BorderLayout.NORTH);
         rightPanel.add(contentPanel, BorderLayout.CENTER);
@@ -86,8 +95,14 @@ public class NewsFeed extends JFrame {
 
     }
 
-    private void initPages(){
+    private void initPages() throws IOException {
+        /*Home*/
+        PostsNewsFeed postsNewsFeed = new PostsNewsFeed();
+        contentPanel.add(postsNewsFeed, "Home");
 
+        /*My Profile*/
+        UserProfile current_user_profile = new UserProfile(current_user.getUser());
+        contentPanel.add(current_user_profile, "My Profile");
     }
 
     private JButton createIconButton(String icon_path, String tool_tip){
@@ -145,7 +160,7 @@ public class NewsFeed extends JFrame {
         return button;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new NewsFeed(null);
     }
 }
