@@ -2,6 +2,7 @@ package frontend.newsFeed;
 
 import backend.CurrentUser;
 import backend.Database;
+import backend.User;
 import frontend.MainMenu;
 import frontend.UserProfile;
 import frontend.contentCreation.ContentCreation;
@@ -9,8 +10,7 @@ import utils.Utilities;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.IOException;
 
 public class NewsFeed extends JFrame {
@@ -21,13 +21,13 @@ public class NewsFeed extends JFrame {
     MainMenu parent;
 
     public NewsFeed(MainMenu parent) throws IOException {
+        this.parent = parent;
         this.current_user = Database.getInstance().getCurrentUser();
         initUI();
         setVisible(true);
     }
 
     private void initUI() throws IOException {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1400, 700);
         mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -94,6 +94,8 @@ public class NewsFeed extends JFrame {
         home_btn.addActionListener(e-> cardLayout.show(contentPanel, home_btn.getText()));
         stories_btn.addActionListener(e-> cardLayout.show(contentPanel, stories_btn.getText()));
         my_profile_btn.addActionListener(e-> cardLayout.show(contentPanel, my_profile_btn.getText()));
+        log_out_btn.addActionListener(log_out_btn_evt());
+        this.addWindowListener(close_evt());
 
         rightPanel.add(top_panel, BorderLayout.NORTH);
         rightPanel.add(contentPanel, BorderLayout.CENTER);
@@ -146,7 +148,11 @@ public class NewsFeed extends JFrame {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                User user = current_user.getUser();
+                user.setOnline(false);
 
+                dispose();
+                parent.setVisible(true);
             }
         };
     }
@@ -156,6 +162,19 @@ public class NewsFeed extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+            }
+        };
+    }
+
+    WindowAdapter close_evt(){
+        return new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                User user = current_user.getUser();
+                user.setOnline(false);
+
+                dispose();
+                parent.setVisible(true);
             }
         };
     }
