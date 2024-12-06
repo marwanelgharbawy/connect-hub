@@ -7,7 +7,7 @@ public class Post extends CreatedContent{
         super(authorId, contentFields);
     }
 
-    Post(String authorId,JSONObject data){
+    public Post(String authorId,JSONObject data){
         super(authorId,data);
     }
 }

@@ -40,13 +40,15 @@ public class FriendManagerC implements FriendManagerI {
     public ArrayList<User> getFriends() {
         return friends;
     }
+
+    // Add friend to list
     @Override
     public void addFriend(User mainUser ,User user) {
         if(!friends.contains(user)){
             friends.add(user);
         }
-
     }
+
     @Override
     public void removeFriend(User mainUser, User userToRemove) {
         friends.remove(userToRemove);
