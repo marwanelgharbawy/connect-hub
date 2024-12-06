@@ -152,8 +152,12 @@ public class Database {
             file.write(users.toString(2));
             file.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Database error.");
         }
+    }
+
+    public void updateCredentials() throws IOException {
+            writeDataToFiles();
     }
 
 //    public static void main(String[] args) throws IOException {
