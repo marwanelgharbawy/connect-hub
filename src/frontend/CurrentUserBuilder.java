@@ -14,19 +14,23 @@ import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class CurrentUserBuilder extends Component {
+public class CurrentUserBuilder extends Component implements ProfileBuilder{
     private final User currentUser;
+    private final UserProfile userProfile;
     private final JPanel mainPanel;
 
-    public CurrentUserBuilder(User currentUser) {
+    public CurrentUserBuilder(UserProfile userProfile, User currentUser) {
         this.currentUser = currentUser;
+        this.userProfile = userProfile;
         this.mainPanel = new JPanel(new BorderLayout());
     }
 
-    public JPanel buildCoverPhoto() throws IOException {
+
+    public JPanel buildCoverPhoto(){
         JPanel coverPhotoPanel = new JPanel(null);
         coverPhotoPanel.setPreferredSize(new Dimension(1000, 350));
         JLabel coverPhotoLabel = new JLabel();
@@ -48,6 +52,10 @@ public class CurrentUserBuilder extends Component {
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 18));
         usernameLabel.setBounds(0, 180, 180, 20);
 
+        userProfile.coverPhotoLabel = coverPhotoLabel;
+        userProfile.profilePhotoLabel = profilePhotoLabel;
+        userProfile.usernameLabel = usernameLabel;
+
         profilePhotoPanel.add(profilePhotoLabel);
         profilePhotoPanel.add(usernameLabel);
 
@@ -68,6 +76,8 @@ public class CurrentUserBuilder extends Component {
         JButton settingsButton = new JButton("Settings");
         settingsButton.setPreferredSize(new Dimension(100, 30));
         settingsButton.addActionListener(_ -> showProfileSettings(currentUser));
+
+        userProfile.bioPanel = bioPanel;
 
         bioPanel.add(bioLabel, BorderLayout.CENTER);
         bioPanel.add(settingsButton, BorderLayout.EAST);
@@ -131,7 +141,7 @@ public class CurrentUserBuilder extends Component {
             }
             else{
                 profile.setBio(newBio);
-                //bioLabel.setText(newBio);
+                userProfile.setBioLabel(newBio);
             }
         }
     }
@@ -149,7 +159,7 @@ public class CurrentUserBuilder extends Component {
         if (result == JFileChooser.APPROVE_OPTION) {
             path = coverPhotoChooser.getSelectedFile().getAbsolutePath();
             profile.setCoverPhoto(path);
-            //coverPhotoLabel.setIcon(profile.getCoverPhoto().toIcon());
+            userProfile.setCoverPhotoLabel(profile.getCoverPhoto().toIcon());
         }
     }
 
@@ -166,7 +176,7 @@ public class CurrentUserBuilder extends Component {
         if (result == JFileChooser.APPROVE_OPTION) {
             path = profilePictureChooser.getSelectedFile().getAbsolutePath();
             profile.setProfilePhoto(path);
-            //profilePhotoLabel.setIcon(profile.getProfilePhoto().toIcon());
+            userProfile.setProfilePhotoLabel(profile.getProfilePhoto().toIcon());
         }
     }
 
@@ -245,7 +255,7 @@ public class CurrentUserBuilder extends Component {
             }
             else{
                 user.setUsername(newUsername);
-                //usernameLabel.setText(newUsername);
+                userProfile.usernameLabel.setText(newUsername);
             }
         }
     }
@@ -255,13 +265,28 @@ public class CurrentUserBuilder extends Component {
         postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
         postsPanel.setBorder(BorderFactory.createEmptyBorder(10, 80, 10, 80));
 
-        for (int i = 1; i <= 10; i++) { // Add 10 sample posts for testing
-            ContentFields contentFields = new ContentFields("Sample post content", "C:/path/to/image.jpg");
-            Post post = new Post("Post title " + i, contentFields);
-
-            PostCard postCard = new PostCard(post);
-            postsPanel.add(postCard);
-            postsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+//        for (int i = 1; i <= 10; i++) { // Add 10 sample posts for testing
+//            ContentFields contentFields = new ContentFields("Sample post content", "C:/path/to/image.jpg");
+//            Post post = new Post("Post title " + i, contentFields);
+//
+//            PostCard postCard = new PostCard(post);
+//            postsPanel.add(postCard);
+//            postsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+//        }
+        ArrayList<Post> posts = currentUser.getContentManager().getPosts();
+        if(posts.isEmpty()){
+            postsPanel.add(Box.createRigidArea(new Dimension(0, 200)));
+            JLabel no_posts_label = new JLabel("No posts available yet");
+            no_posts_label.setFont(new Font("Arial", Font.BOLD, 48));
+            no_posts_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+            postsPanel.add(no_posts_label);
+        }
+        else {
+            for(Post post: posts){
+                PostCard postCard = new PostCard(post);
+                postsPanel.add(postCard);
+                postsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+            }
         }
 
         return postsPanel;

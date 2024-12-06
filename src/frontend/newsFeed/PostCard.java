@@ -16,7 +16,9 @@ public class PostCard extends JPanel{
 
     public PostCard(Post post) throws IOException {
         this.post = post;
-//        selected_user = Database.getInstance().getUser(post.getAuthorId());
+        System.out.println(post.getAuthorId());
+        System.out.println(Database.getInstance());
+        selected_user = Database.getInstance().getUser(post.getAuthorId());
         initUI();
     }
 
@@ -27,11 +29,11 @@ public class PostCard extends JPanel{
 
         /* user info*/
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-//        ImageIcon profileImage = resizeIcon(selected_user.getProfile().getProfilePhoto().toIcon(), 50, 50);
-        ImageIcon profileImage = resizeIcon(new ImageIcon("C:/Users/Omar Hekal/Desktop/profiel.jpg"), 50, 50);
+        ImageIcon profileImage = resizeIcon(selected_user.getProfile().getProfilePhoto().toIcon(), 50, 50);
+//        ImageIcon profileImage = resizeIcon(new ImageIcon("C:/Users/Omar Hekal/Desktop/profiel.jpg"), 50, 50);
         JLabel photoLabel = new JLabel(profileImage);
-//        JLabel usernameLabel = new JLabel(selected_user.getUsername());
-        JLabel usernameLabel = new JLabel("Mina Reda");
+        JLabel usernameLabel = new JLabel(selected_user.getUsername());
+//        JLabel usernameLabel = new JLabel("Mina Reda");
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 16));
         infoPanel.add(photoLabel);
         infoPanel.add(usernameLabel);

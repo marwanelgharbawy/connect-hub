@@ -11,15 +11,20 @@ public class ContentManager {
     private ArrayList<Story> stories;
     User user;
 
-    public ContentManager(User user, JSONArray postsJson, JSONArray storiesJson) {
+    public ContentManager(User user){
         this.user = user;
         this.posts = new ArrayList<>();
         this.stories = new ArrayList<>();
+    }
+
+    public void setPosts(JSONArray postsJson){
         for(Object post: postsJson){
             Post post_ = new Post(user.getUserId(), (JSONObject) post);
             posts.add(post_);
         }
+    }
 
+    public void setStories(JSONArray storiesJson){
         for(Object story: storiesJson){
             Story story_ = new Story(user.getUserId(), (JSONObject)story);
             stories.add(story_);

@@ -26,11 +26,12 @@ public class User {
     private LocalDate dateOfBirth;
     boolean online;
     private final Profile profile;
-    private ContentManager contentManager;
+    private final ContentManager contentManager;
 
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.profile = new Profile("", "", "");
+        this.contentManager = new ContentManager(this);
     }
     public User(String username, String email, String password, LocalDate dateOfBirth) throws IOException {
         this.userId = Utilities.generateId();
@@ -41,6 +42,7 @@ public class User {
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.profile = new Profile("", "", "");
+        this.contentManager = new ContentManager(this);
     }
 
     public User(JSONObject credentials) throws IOException {
@@ -50,6 +52,7 @@ public class User {
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.profile = new Profile("", "", "");
+        this.contentManager = new ContentManager(this);
     }
 
     public void setUserData(JSONObject userData) throws IOException {
@@ -62,7 +65,8 @@ public class User {
 
         JSONArray postJsonArray = userData.getJSONArray("posts");
         JSONArray storiesJsonArray = userData.getJSONArray("stories");
-        contentManager = new ContentManager(this, postJsonArray, storiesJsonArray);
+        contentManager.setPosts(postJsonArray);
+        contentManager.setStories(storiesJsonArray);
 
         Database database = Database.getInstance();
         // friends
@@ -225,6 +229,17 @@ public class User {
         }
         data.put("requests", friendRequests);
 
+    }
+
+    public boolean isRequestSent(User desiredUser){
+        for(FriendRequest request: friendManager.getRequestManager().getSentRequests())
+            if (request.getReceiver() == desiredUser)
+                return true;
+        return false;
+    }
+
+    public boolean isRequestReceived(User desiredUser){
+        return desiredUser.isRequestSent(this);
     }
 
 }
