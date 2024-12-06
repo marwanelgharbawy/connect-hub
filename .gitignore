@@ -1,3 +1,11 @@
 /.idea/
 connect-hub.iml
 pom.xml
+
+# Ignore the whole database
+database/*
+
+# Except for the example users
+!database/users/u101.json
+!database/users/u102.json
+!database/users/u103.json
