@@ -5,10 +5,13 @@ import backend.Database;
 import backend.User;
 import frontend.MainMenu;
 import frontend.UserProfile;
+import frontend.contentCreation.ContentCreation;
 import utils.Utilities;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class NewsFeed extends JFrame {
@@ -65,7 +68,9 @@ public class NewsFeed extends JFrame {
         top_panel.setBackground(Color.WHITE);
 
         JButton share_content_btn = createIconButton("icons/plus.png", "Share");
+        share_content_btn.addActionListener(share_content_btn_evt());
         JButton refresh_btn = createIconButton("icons/refresh.png", "Refresh");
+        refresh_btn.addActionListener(refresh_btn_evt());
         JButton log_out_btn = createIconButton("icons/logout.png", "Log Out");
 
         JPanel top_btn_panel = new JPanel();
@@ -103,6 +108,24 @@ public class NewsFeed extends JFrame {
         /*My Profile*/
         UserProfile current_user_profile = new UserProfile(current_user.getUser());
         contentPanel.add(current_user_profile, "My Profile");
+    }
+
+    private ActionListener refresh_btn_evt(){
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        };
+    }
+
+    ActionListener share_content_btn_evt(){
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ContentCreation(current_user.getUser().getUserId());
+            }
+        };
     }
 
     private JButton createIconButton(String icon_path, String tool_tip){
