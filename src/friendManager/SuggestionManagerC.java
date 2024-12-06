@@ -5,6 +5,7 @@ import backend.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SuggestionManagerC implements SuggestionManagerI {
     private final ArrayList<User> friendsOfFriends; //List of friends based on mutual friends
@@ -24,10 +25,10 @@ public class SuggestionManagerC implements SuggestionManagerI {
     }
 
     @Override
-    public ArrayList<User> getFriendsOfFriends(User user) {
+    public User[] getFriendsOfFriends(User user) {
         // Handle the case if the user has no friends yet
         if(user.getFriendManager().getFriends().isEmpty()){
-            //return database.getUser()
+            return database.getUsers();
         }
         // Suggest friends of friends, handle the case if the friends are mutual or finding the main user
         for (User friend : user.getFriendManager().getFriends()) {
@@ -36,13 +37,24 @@ public class SuggestionManagerC implements SuggestionManagerI {
                         && !friendOfFriend.equals(user)
                         && !friendsOfFriends.contains(friendOfFriend)
                         && !FriendUtils.havePendingRequest(user,friendOfFriend)
-                        && !hiddenSuggestions.contains(friendOfFriend)) {
+                        && !hiddenSuggestions.contains(friendOfFriend)
+                        && !FriendUtils.isBlocked(user,friendOfFriend)) {
                     friendsOfFriends.add(friendOfFriend);
                     System.out.println("FOF:"+friendOfFriend.getUsername());
                 }
             }
         }
-        return friendsOfFriends;
+        return friendsOfFriends.toArray(new User[0]);
+    }
+
+    @Override
+    public boolean suggestionsContain(User user) {
+        for(User suggestion : getFriendsOfFriends(user)){
+            if(user.getUserId().equals(suggestion.getUserId())){
+                return true;
+            }
+        }
+        return false;
     }
 
 
