@@ -18,10 +18,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class CurrentUserBuilder extends Component implements ProfileBuilder{
+public class CurrentUserBuilder extends Component {
     private final User currentUser;
     private final UserProfile userProfile;
     private final JPanel mainPanel;
+    JPanel postsPanel;
+    JLabel coverPhotoLabel;
 
     public CurrentUserBuilder(UserProfile userProfile, User currentUser) {
         this.currentUser = currentUser;
@@ -33,7 +35,7 @@ public class CurrentUserBuilder extends Component implements ProfileBuilder{
     public JPanel buildCoverPhoto(){
         JPanel coverPhotoPanel = new JPanel(null);
         coverPhotoPanel.setPreferredSize(new Dimension(1000, 350));
-        JLabel coverPhotoLabel = new JLabel();
+        coverPhotoLabel = new JLabel();
         coverPhotoLabel.setBounds(0, 0, 1000, 270);
         coverPhotoLabel.setIcon(new ImageIcon(currentUser.getProfile().getCoverPhoto().toIcon().getImage().getScaledInstance(
                 1000, 300, Image.SCALE_DEFAULT)));
@@ -81,6 +83,8 @@ public class CurrentUserBuilder extends Component implements ProfileBuilder{
 
         bioPanel.add(bioLabel, BorderLayout.CENTER);
         bioPanel.add(settingsButton, BorderLayout.EAST);
+
+        userProfile.bioLabel = bioLabel;
 
         return bioPanel;
     }
@@ -159,7 +163,8 @@ public class CurrentUserBuilder extends Component implements ProfileBuilder{
         if (result == JFileChooser.APPROVE_OPTION) {
             path = coverPhotoChooser.getSelectedFile().getAbsolutePath();
             profile.setCoverPhoto(path);
-            userProfile.setCoverPhotoLabel(profile.getCoverPhoto().toIcon());
+            userProfile.setCoverPhotoLabel(new ImageIcon(currentUser.getProfile().getCoverPhoto().toIcon().getImage().getScaledInstance(
+                    1000, 300, Image.SCALE_DEFAULT)));
         }
     }
 
@@ -176,7 +181,9 @@ public class CurrentUserBuilder extends Component implements ProfileBuilder{
         if (result == JFileChooser.APPROVE_OPTION) {
             path = profilePictureChooser.getSelectedFile().getAbsolutePath();
             profile.setProfilePhoto(path);
-            userProfile.setProfilePhotoLabel(profile.getProfilePhoto().toIcon());
+            userProfile.setProfilePhotoLabel(new ImageIcon(currentUser.getProfile().getProfilePhoto().getImage().getScaledInstance(
+                    180, 180, Image.SCALE_SMOOTH)));
+            populatePostPanel();
         }
     }
 
@@ -261,18 +268,15 @@ public class CurrentUserBuilder extends Component implements ProfileBuilder{
     }
 
     public JPanel buildPostsPanel() throws IOException {
-        JPanel postsPanel = new JPanel();
+        postsPanel = new JPanel();
         postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
-        postsPanel.setBorder(BorderFactory.createEmptyBorder(10, 80, 10, 80));
+        populatePostPanel();
+        return postsPanel;
+    }
 
-//        for (int i = 1; i <= 10; i++) { // Add 10 sample posts for testing
-//            ContentFields contentFields = new ContentFields("Sample post content", "C:/path/to/image.jpg");
-//            Post post = new Post("Post title " + i, contentFields);
-//
-//            PostCard postCard = new PostCard(post);
-//            postsPanel.add(postCard);
-//            postsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
-//        }
+    public void populatePostPanel() throws IOException {
+        postsPanel.removeAll();
+        postsPanel.setBorder(BorderFactory.createEmptyBorder(10, 80, 10, 80));
         ArrayList<Post> posts = currentUser.getContentManager().getPosts();
         if(posts.isEmpty()){
             postsPanel.add(Box.createRigidArea(new Dimension(0, 200)));
@@ -288,8 +292,6 @@ public class CurrentUserBuilder extends Component implements ProfileBuilder{
                 postsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
             }
         }
-
-        return postsPanel;
     }
 
     public JPanel build() throws IOException {

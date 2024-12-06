@@ -6,6 +6,7 @@
   "friends": ["u103", "", ""],
   "blocked": ["", "", ""],
   "requests": ["", "", ""],
+  "bio": "",
   "posts": [
     {
       "id":"",

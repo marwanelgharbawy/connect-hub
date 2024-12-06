@@ -28,11 +28,17 @@ public class User {
     private final Profile profile;
     private final ContentManager contentManager;
 
+    // Constructors
+
+    // Empty constructor for creating a new user
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile("", "", "");
+        this.profile = new Profile(this, "", "", "");
         this.contentManager = new ContentManager(this);
     }
+
+    // Constructor for creating a new user
+    // This comes from the registration form (Frontend Constructor)
     public User(String username, String email, String password, LocalDate dateOfBirth) throws IOException {
         this.userId = Utilities.generateId();
         this.email = email;
@@ -41,27 +47,32 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile("", "", "");
+        this.profile = new Profile(this,"", "", "");
         this.contentManager = new ContentManager(this);
     }
 
+    // Constructor for creating a user from the database's JSON object containing CREDENTIALS
+    // This comes from the users.json file (Backend Constructor)
     public User(JSONObject credentials) throws IOException {
         userId = credentials.getString("id");
         username = credentials.getString("username");
         email = credentials.getString("email");
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile("", "", "");
+        this.profile = new Profile(this, "", "", "");
         this.contentManager = new ContentManager(this);
     }
 
+    // Set user's data from the database's JSON object
     public void setUserData(JSONObject userData) throws IOException {
         dateOfBirth = Utilities.y_M_dToDate(userData.getString("dateOfBirth"));
         online = userData.getBoolean("online");
         String profile_img_path = userData.getString("profile-photo");
         String cover_img_path = userData.getString("cover-photo");
-        profile.setProfilePhoto(profile_img_path);
-        profile.setCoverPhoto(cover_img_path);
+        String bio = userData.getString("bio");
+        profile.loadProfile(profile_img_path, cover_img_path, bio);
+
+        // Removed setters since they update the database, we don't want that while loading
 
         JSONArray postJsonArray = userData.getJSONArray("posts");
         JSONArray storiesJsonArray = userData.getJSONArray("stories");
@@ -103,22 +114,35 @@ public class User {
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+        saveUser();
     }
 
     public void setOnline(boolean online) {
         this.online = online;
+        saveUser();
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if (Utilities.validateUsername(email)) {
+            this.email = email;
+            saveUser();
+        } else {
+            System.out.println("Invalid email, operation canceled.");
+        }
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        if (Utilities.validateUsername(username)) {
+            this.username = username;
+            saveUser();
+        } else {
+            System.out.println("Invalid username, operation canceled.");
+        }
     }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = Utilities.hashPassword(password);
+        saveUser();
     }
 
     public FriendManagerI getFriendManager() {
@@ -142,14 +166,16 @@ public class User {
         return credentials;
     }
 
+    // This method gets user's data in program to be saved in the database
     public JSONObject getUserData(){
         JSONObject data = new JSONObject();
         data.put("dateOfBirth", Utilities.DateTo_y_M_d(dateOfBirth));
         data.put("online", online);
         data.put("profile-photo", profile.getProfile_img_path());
         data.put("cover-photo", profile.getCover_img_path());
+        data.put("bio", profile.getBio());
 
-
+        // Fill JSON object with user's data from the current running program
         /* friends */
         loadFriends(data);
         /* blocked */
@@ -163,6 +189,8 @@ public class User {
 
         return data;
     }
+
+    // This method sets the user's friends after loading it from the database
     public void setFriends(Database database,JSONObject userData){
         JSONArray friends = userData.getJSONArray("friends");
         for (Object friend : friends) {
@@ -174,8 +202,9 @@ public class User {
                 }
             }
         }
-
     }
+
+    // This method set the user's blocked users after loading it from the database
     public void setBlocked(Database database,JSONObject userData){
         JSONArray blocked = userData.getJSONArray("blocked");
         for (Object blockedUser : blocked) {
@@ -188,6 +217,8 @@ public class User {
             }
         }
     }
+
+    // This method set the user's friend requests after loading it from the database
     public void setRequests(Database database,JSONObject userData){
         JSONArray requests = userData.getJSONArray("requests");
         for (Object request : requests) {
@@ -229,6 +260,25 @@ public class User {
         }
         data.put("requests", friendRequests);
 
+    }
+
+    // If dateOfBirth, online, profile-photo, cover-photo, friends, blocked,
+    // requests, posts, stories are updated, save to file immediately
+    public void saveUser() {
+        try {
+            Database.getInstance().saveUser(this);
+        } catch (IOException e) {
+            System.out.println("Database error");
+        }
+    }
+
+    // If email, username, or password is changed, update the credentials in the database
+    private void updateCredentials() {
+        try {
+            Database.getInstance().updateCredentials();
+        } catch (IOException e) {
+            System.out.println("Database error.");
+        }
     }
 
     public boolean isRequestSent(User desiredUser){

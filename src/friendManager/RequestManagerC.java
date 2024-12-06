@@ -52,6 +52,8 @@ public class RequestManagerC implements RequestManagerI { // Friends list
         receiver.getFriendManager().addFriend(receiver,sender);
         sender.getFriendManager().addFriend(sender,receiver);
         removeFriendRequest(friendRequest);
+        database.saveUser(sender);
+        database.saveUser(receiver);
     }
 
     // Delete (or cancel) friend request;

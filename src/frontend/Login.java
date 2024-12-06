@@ -51,7 +51,7 @@ public class Login extends JFrame {
             }
 
             if (errorMessage == null) {
-                JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+//                JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                  dispose();
                 // Window pending
                 try {

@@ -61,10 +61,12 @@ public class Database {
         email_to_user.clear();
         username_to_user.clear();
 
+        // Read users.json
         String data = Files.readString(Path.of(users_json_file));
         JSONArray array = new JSONArray(data);
         System.out.println("Users data loaded successfully from file");
 
+        // Load users' credentials
         for (Object obj : array) {
             JSONObject jsonObject = (JSONObject) obj;
             User user = new User(jsonObject);
@@ -75,6 +77,7 @@ public class Database {
             users.add(user);
         }
 
+        // Load users' data from each user file
         for (String id : id_to_user.keySet()) {
             String user_file = users_folder + "/" + id + ".json";
             String user_data = Files.readString(Path.of(user_file));
@@ -158,7 +161,11 @@ public class Database {
     }
 
     public void saveUser(User user) throws IOException {
+        id_to_user.put(user.getUserId(), user);
+        email_to_user.put(user.getEmail(), user);
+        username_to_user.put(user.getUsername(), user);
         writeUserData(user);
+        writeDataToFiles();
     }
 
     // Write all users credentials to users.json
@@ -175,8 +182,12 @@ public class Database {
             file.write(users.toString(2));
             file.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Database error.");
         }
+    }
+
+    public void updateCredentials() throws IOException {
+            writeDataToFiles();
     }
 
 }

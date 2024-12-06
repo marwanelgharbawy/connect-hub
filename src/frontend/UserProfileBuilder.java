@@ -10,7 +10,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class UserProfileBuilder implements ProfileBuilder{
+public class UserProfileBuilder {
     private final User currentUser;
     private final User desiredUser;
     private final JPanel mainPanel;
