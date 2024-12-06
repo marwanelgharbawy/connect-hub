@@ -136,6 +136,7 @@ public class Database {
 
     public void saveUser(User user) throws IOException {
         writeUserData(user);
+        writeDataToFiles();
     }
 
     // Write all users credentials to users.json
