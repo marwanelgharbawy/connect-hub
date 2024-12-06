@@ -16,9 +16,10 @@ public class Database {
     private final String users_folder = database_folder + "/users";
     private final String users_json_file = database_folder + "/users.json";
 
-    private User currentUser;
-    private final Map<String, User> id_to_user = new HashMap<>();
-    private final Map<String, User> email_to_user = new HashMap<>();
+    private Map<String, User> id_to_user = new HashMap<>();
+    private Map<String, User> email_to_user = new HashMap<>();
+    private Map<String, User> username_to_user = new HashMap<>();
+    private CurrentUser currentUser;
 
     private Database() throws IOException {
         checkExistenceOfDatabase();
@@ -50,6 +51,11 @@ public class Database {
     }
 
     private void parseUsersData() throws IOException {
+        // delete all the previous accounts
+        id_to_user.clear();
+        email_to_user.clear();
+        username_to_user.clear();
+
         String data = Files.readString(Path.of(users_json_file));
         JSONArray array = new JSONArray(data);
         System.out.println("Users data loaded successfully from file");
@@ -59,6 +65,7 @@ public class Database {
             User user = new User(jsonObject);
             id_to_user.put(user.getUserId(), user);
             email_to_user.put(user.getEmail(), user);
+            username_to_user.put(user.getEmail(), user);
             System.out.println("Successfully added user: " + user.getUsername());
         }
 
@@ -70,6 +77,10 @@ public class Database {
             getUser(id).setUserData(userData);
             System.out.println("Successfully added user data: " + getUser(id).getUsername());
         }
+    }
+
+    public CurrentUser getCurrentUser(){
+        return this.currentUser;
     }
 
     // Login user method, returns a string with the error message, or null if it's successful
@@ -91,6 +102,10 @@ public class Database {
         if (!user.getPassword().equals(password)) {
             return "Incorrect password";
         }
+        // put in database that the user is online
+        user.setOnline(true);
+        writeUserData(user);
+        currentUser = new CurrentUser(user);
 
         return null;
     }
@@ -115,6 +130,7 @@ public class Database {
         // Add user info to maps
         id_to_user.put(newUser.getUserId(), newUser);
         email_to_user.put(email, newUser);
+        username_to_user.put(username, newUser);
 
         try {
             writeUserData(newUser); // Create a file for the user with its id in the users directory
@@ -123,6 +139,7 @@ public class Database {
             e.printStackTrace();
             return "Error writing to file";
         }
+        currentUser = new CurrentUser(newUser);
 
         return null;
     }

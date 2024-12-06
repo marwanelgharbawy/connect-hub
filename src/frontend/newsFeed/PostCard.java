@@ -27,6 +27,7 @@ public class PostCard extends JPanel{
 
         /* user info*/
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+
         ImageIcon profileImage = resizeIcon(user.getProfile().getProfilePhoto().toIcon(), 50, 50);
         JLabel photoLabel = new JLabel(profileImage);
         JLabel usernameLabel = new JLabel(user.getUsername());

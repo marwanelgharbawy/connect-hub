@@ -19,6 +19,7 @@ public abstract class CreatedContent {
     }
 
     CreatedContent(String authorId, JSONObject data){
+        this.authorId = authorId;
         contentId = data.getString("id");
         timestamp = Utilities.y_M_d_hh_mmToDate(data.getString("date"));
 

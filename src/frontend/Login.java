@@ -1,9 +1,13 @@
 package frontend;
 
 import backend.Database;
+import frontend.newsFeed.NewsFeed;
 import utils.*;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 
 public class Login extends JFrame {
@@ -12,8 +16,10 @@ public class Login extends JFrame {
     private JTextField textField1;
     private JButton backButton;
     private JButton loginButton;
+    private MainMenu parent;
 
-    public Login() {
+    public Login(MainMenu parent) {
+        this.parent = parent;
         UIUtils.initializeWindow(this, contentPane, "Login", 400, 400);
         addEventListeners();
     }
@@ -46,21 +52,33 @@ public class Login extends JFrame {
 
             if (errorMessage == null) {
                 JOptionPane.showMessageDialog(this, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                // TODO: Open the user's profile
-                // dispose();
+                 dispose();
                 // Window pending
+                try {
+                    new NewsFeed(parent);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             } else {
                 JOptionPane.showMessageDialog(this, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
         backButton.addActionListener(e -> {
-            new MainMenu();
             dispose();
+            parent.setVisible(true);
+        });
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dispose();
+                parent.setVisible(true);
+            }
         });
     }
 
     public static void main(String[] args) {
-        new Login();
+//        new Login();
     }
 }

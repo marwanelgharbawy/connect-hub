@@ -9,26 +9,25 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class CurrentUser extends User{
+public class CurrentUser{
     private ArrayList<Post> newsFeedPosts;
     private ArrayList<Story> newsFeedStories;
-    public CurrentUser() throws IOException {
-        super();
+    private User user;
+
+
+    public CurrentUser(User user){
+        this.user = user;
     }
 
-    public CurrentUser(String username, String email, String password, LocalDate dateOfBirth) throws IOException {
-        super(username, email, password, dateOfBirth);
-    }
-
-    public CurrentUser(JSONObject credentials) throws IOException {
-        super(credentials);
+    public User getUser() {
+        return user;
     }
 
     public ArrayList<Post> getNewsFeedPosts(){
         newsFeedPosts = new ArrayList<>();
-        newsFeedPosts.addAll(this.getContentManager().getPosts());
+        newsFeedPosts.addAll(user.getContentManager().getPosts());
 
-        for(User friend: this.getFriendManager().getFriends()){
+        for(User friend: user.getFriendManager().getFriends()){
             newsFeedPosts.addAll(friend.getContentManager().getPosts());
         }
 
@@ -40,13 +39,13 @@ public class CurrentUser extends User{
     public ArrayList<Story> getNewsFeedStories(){
         newsFeedStories = new ArrayList<>();
 
-        for(Story story: this.getContentManager().getStories()){
+        for(Story story: user.getContentManager().getStories()){
             if(!story.isDue()){
                 newsFeedStories.add(story);
             }
         }
 
-        for (User friend: this.getFriendManager().getFriends()){
+        for (User friend: user.getFriendManager().getFriends()){
             for(Story story: friend.getContentManager().getStories()){
                 if(!story.isDue()){
                     newsFeedStories.add(story);
