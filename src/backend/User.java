@@ -227,12 +227,4 @@ public class User {
 
     }
 
-    public void loadSuggestions(JSONObject data){
-        JSONArray suggestions = new JSONArray();
-        for (User user : friendManager.getSuggestionManager().getSuggestions()) {
-            suggestions.put(user.getUserId());
-        }
-        data.put("suggestions", suggestions);
-
-    }
 }
