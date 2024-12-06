@@ -1,5 +1,6 @@
 package content;
 
+import backend.Database;
 import backend.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,10 +42,12 @@ public class ContentManager {
 
     public void addPost(Post post){
         posts.add(post);
+        user.saveUser();
     }
 
     public void addStory(Story story){
         stories.add(story);
+        user.saveUser();
     }
 
     public JSONArray postsToJsonArray(){

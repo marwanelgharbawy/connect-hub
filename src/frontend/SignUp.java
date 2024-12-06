@@ -1,12 +1,14 @@
 package frontend;
 
 import backend.Database;
+import frontend.newsFeed.NewsFeed;
 import utils.Utilities;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -75,8 +77,12 @@ public class SignUp extends JFrame {
                 if (errorMessage == null) {
                     JOptionPane.showMessageDialog(this, "New user created", "User Created", JOptionPane.INFORMATION_MESSAGE);
 
-                    // TODO: Open new user's profile
-                    // dispose();
+                     dispose();
+                    try {
+                        new NewsFeed(parent);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     // Window pending
                 } else {
                     JOptionPane.showMessageDialog(this, errorMessage, "User Creation Error", JOptionPane.ERROR_MESSAGE);
@@ -104,7 +110,6 @@ public class SignUp extends JFrame {
 
     private void initializeUI() {
         setTitle("Sign up");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 400);
         JPanel window = new JPanel(new GridLayout(7, 2, 10, 10));
         window.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));

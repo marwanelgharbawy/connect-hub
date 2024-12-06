@@ -3,12 +3,14 @@ package frontend;
 import backend.User;
 import content.ContentFields;
 import content.Post;
+import content.Story;
 import frontend.newsFeed.PostCard;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class UserProfileBuilder {
     private final User currentUser;
@@ -117,6 +119,7 @@ public class UserProfileBuilder {
             postsPanel.add(no_posts_label);
         }
         else {
+            posts.sort(Comparator.comparing(Post::getTimestamp).reversed());
             for(Post post: posts){
                 PostCard postCard = new PostCard(post);
                 postsPanel.add(postCard);
