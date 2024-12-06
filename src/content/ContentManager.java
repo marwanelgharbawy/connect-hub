@@ -11,6 +11,12 @@ public class ContentManager {
     private ArrayList<Story> stories;
     User user;
 
+    public ContentManager(User user){
+        this.user = user;
+        this.posts = new ArrayList<>();
+        this.stories = new ArrayList<>();
+    }
+
     public ContentManager(User user, JSONArray postsJson, JSONArray storiesJson) {
         this.user = user;
         this.posts = new ArrayList<>();
