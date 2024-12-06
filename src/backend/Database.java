@@ -61,6 +61,7 @@ public class Database {
         id_to_user.clear();
         email_to_user.clear();
         username_to_user.clear();
+        users.clear();
 
         // Read users.json
         String data = Files.readString(Path.of(users_json_file));
