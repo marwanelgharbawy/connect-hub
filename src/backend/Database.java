@@ -127,23 +127,6 @@ public class Database {
         return null;
     }
 
-    public void getUserData(String user_id){}
-
-    public void getUserContent(String user_id) {
-    }
-
-    public void getUserPosts(String user_id) {
-    }
-
-    public void getUserPost(String user_id, String post_id) {
-    }
-
-    public void getUserStories(String user_id) {
-    }
-
-    public void getUserStory(String user_id, String story_id) {
-    }
-
     // Write user data to a file, can overwrite existing files or add a new user
     private void writeUserData(User user) throws IOException {
         FileWriter file = new FileWriter(users_folder + "/" + user.getUserId() + ".json");

@@ -8,10 +8,8 @@ import java.util.ArrayList;
 
 public class BlockManagerC implements BlockManagerI{
     private final ArrayList<User> blockedUsers;// Blocked users
-    private final FriendManagerI friendManager;
     private final Database database;
     public BlockManagerC(FriendManagerI friendManager) throws IOException {
-        this.friendManager = friendManager;
         blockedUsers = new ArrayList<>();
         database = Database.getInstance();
     }
@@ -21,7 +19,7 @@ public class BlockManagerC implements BlockManagerI{
         // Check for duplicates and remove user from friend list if they are friends
         if(!FriendUtils.isDuplicate(userToBlock,blockedUsers)){
             blockedUsers.add(userToBlock);
-            friendManager.removeFriend(mainUser,userToBlock);
+            mainUser.getFriendManager().removeFriend(mainUser,userToBlock);
         }
     }
 
@@ -44,10 +42,6 @@ public class BlockManagerC implements BlockManagerI{
         database.saveUser(mainUser);
     }
 
-    @Override
-    public boolean isBlocked(User user) {
-        return blockedUsers.contains(user);
-    }
     @Override
     public ArrayList<User> getBlockedUsers() {
         return blockedUsers;

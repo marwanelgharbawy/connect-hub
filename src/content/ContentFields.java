@@ -1,8 +1,8 @@
 package content;
 
 public class ContentFields {
-    String text; // Text field
-    String imagePath;// Image path
+    private String text; // Text field
+    private String imagePath;// Image path
     public ContentFields(String text, String imagePath){
         this.text = text;
         this.imagePath = imagePath;

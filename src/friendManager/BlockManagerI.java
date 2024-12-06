@@ -10,6 +10,5 @@ public interface BlockManagerI {
     void removeBlock(User mainUser, User userToUnblock) ;
     void blockUser(User mainUser, User userToBlock) throws IOException;
     void unblockUser(User mainUser, User userToBlock) throws IOException;
-    boolean isBlocked(User user);
     ArrayList<User> getBlockedUsers();
 }
