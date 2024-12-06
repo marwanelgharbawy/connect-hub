@@ -34,7 +34,7 @@ public class RequestManagerC implements RequestManagerI { // Friends list
             FriendRequest request = new FriendRequest(sender, receiver);
             sentRequests.add(request);
             receiver.getFriendManager().getRequestManager().addFriendRequest(request);
-            if(sender.getFriendManager().getSuggestionManager().getFriendsOfFriends(sender).contains(receiver)){
+            if(sender.getFriendManager().getSuggestionManager().suggestionsContain(receiver)){
                 sender.getFriendManager().getSuggestionManager().removeSuggestion(receiver);
             }
             database.saveUser(receiver);
