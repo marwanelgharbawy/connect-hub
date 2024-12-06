@@ -72,21 +72,28 @@ public class Utilities {
     }
 
     public static LocalDateTime y_M_d_hh_mmToDate(String date_str){
-        String[] date = date_str.split("-");
-        int year = Integer.parseInt(date[0]);
-        int month = Integer.parseInt(date[1]);
-        int day = Integer.parseInt(date[2]);
-        int hour = Integer.parseInt(date[3]);
-        int min = Integer.parseInt(date[4]);
-        return LocalDateTime.of(year, month, day, hour, min);
+        if(!date_str.isEmpty()){
+            String[] date = date_str.split("-");
+            int year = Integer.parseInt(date[0]);
+            int month = Integer.parseInt(date[1]);
+            int day = Integer.parseInt(date[2]);
+            int hour = Integer.parseInt(date[3]);
+            int min = Integer.parseInt(date[4]);
+            return LocalDateTime.of(year, month, day, hour, min);
+        }
+        return null;
     }
 
     public static LocalDate y_M_dToDate(String date_str){
-        String[] date = date_str.split("-");
-        int year = Integer.parseInt(date[0]);
-        int month = Integer.parseInt(date[1]);
-        int day = Integer.parseInt(date[2]);
-        return LocalDate.of(year, month, day);
+        if(!date_str.isEmpty()){
+            String[] date = date_str.split("-");
+            int year = Integer.parseInt(date[0]);
+            int month = Integer.parseInt(date[1]);
+            int day = Integer.parseInt(date[2]);
+            return LocalDate.of(year, month, day);
+        }
+        return null;
+
     }
 
     public static String hashPassword(String password){
