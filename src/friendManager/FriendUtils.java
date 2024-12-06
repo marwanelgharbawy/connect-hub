@@ -32,7 +32,7 @@ public class FriendUtils {
         // CHeck for duplicate requests
     public  static boolean havePendingRequest(User firstUser, User secondUser){
         return firstUser.getFriendManager().getRequestManager().getReceivedRequest(secondUser.getUserId()) != null
-                && secondUser.getFriendManager().getRequestManager().getReceivedRequest(firstUser.getUserId()) != null;
+                || secondUser.getFriendManager().getRequestManager().getReceivedRequest(firstUser.getUserId()) != null;
     }
 
 
