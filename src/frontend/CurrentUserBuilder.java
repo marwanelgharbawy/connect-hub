@@ -4,6 +4,7 @@ import backend.Profile;
 import backend.User;
 import content.ContentFields;
 import content.Post;
+import content.Story;
 import frontend.newsFeed.PostCard;
 import utils.Utilities;
 
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 
 public class CurrentUserBuilder extends Component {
@@ -286,6 +288,7 @@ public class CurrentUserBuilder extends Component {
             postsPanel.add(no_posts_label);
         }
         else {
+            posts.sort(Comparator.comparing(Post::getTimestamp).reversed());
             for(Post post: posts){
                 PostCard postCard = new PostCard(post);
                 postsPanel.add(postCard);
