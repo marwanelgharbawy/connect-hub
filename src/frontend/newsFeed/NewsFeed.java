@@ -2,7 +2,6 @@ package frontend.newsFeed;
 
 import backend.CurrentUser;
 import backend.Database;
-import backend.User;
 import frontend.MainMenu;
 import frontend.UserProfile;
 import frontend.contentCreation.ContentCreation;
@@ -91,7 +90,7 @@ public class NewsFeed extends JFrame {
         contentPanel = new JPanel();
         CardLayout cardLayout = new CardLayout();
         contentPanel.setLayout(cardLayout);
-        initPages();
+        refreshPages();
         home_btn.addActionListener(e-> cardLayout.show(contentPanel, home_btn.getText()));
         stories_btn.addActionListener(e-> cardLayout.show(contentPanel, stories_btn.getText()));
         my_profile_btn.addActionListener(e-> cardLayout.show(contentPanel, my_profile_btn.getText()));
@@ -106,7 +105,8 @@ public class NewsFeed extends JFrame {
 
     }
 
-    private void initPages() throws IOException {
+    private void refreshPages() throws IOException {
+        contentPanel.removeAll();
         /*Home*/
         PostsNewsFeed postsNewsFeed = new PostsNewsFeed();
         contentPanel.add(postsNewsFeed, "Home");
@@ -124,7 +124,11 @@ public class NewsFeed extends JFrame {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    refreshPages();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         };
     }
