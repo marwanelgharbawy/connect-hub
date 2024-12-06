@@ -14,6 +14,7 @@ public abstract class CreatedContent {
         contentId = Utilities.generateId(); // Generate unique ID for content
         this.authorId = authorId; // Assign userID
         this.contentFields = contentFields;
+        //this.timestamp =  LocalDateTime.now();
         // TODO: In the GUI, the user picks the image using file chooser, send the image path as argument
     }
 

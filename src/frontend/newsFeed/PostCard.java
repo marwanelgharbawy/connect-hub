@@ -11,12 +11,12 @@ import java.awt.*;
 import java.io.IOException;
 
 public class PostCard extends JPanel{
-    private Post post;
-    private User selected_user;
+    private final Post post;
+    private final User user;
 
     public PostCard(Post post) throws IOException {
         this.post = post;
-//        selected_user = Database.getInstance().getUser(post.getAuthorId());
+        this.user = Database.getInstance().getUser(post.getAuthorId());
         initUI();
     }
 
@@ -27,19 +27,15 @@ public class PostCard extends JPanel{
 
         /* user info*/
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-//        ImageIcon profileImage = resizeIcon(selected_user.getProfile().getProfilePhoto().toIcon(), 50, 50);
-        ImageIcon profileImage = resizeIcon(new ImageIcon("C:/Users/Omar Hekal/Desktop/profiel.jpg"), 50, 50);
+        ImageIcon profileImage = resizeIcon(user.getProfile().getProfilePhoto().toIcon(), 50, 50);
         JLabel photoLabel = new JLabel(profileImage);
-//        JLabel usernameLabel = new JLabel(selected_user.getUsername());
-        JLabel usernameLabel = new JLabel("Mina Reda");
+        JLabel usernameLabel = new JLabel(user.getUsername());
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 16));
         infoPanel.add(photoLabel);
         infoPanel.add(usernameLabel);
 
 
-        /* post text*/
         JTextArea postTextArea = new JTextArea(post.getContentFields().getText());
-//        postTextArea.setWrapStyleWord();
         postTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
         postTextArea.setLineWrap(true);
         postTextArea.setWrapStyleWord(true);
@@ -52,7 +48,7 @@ public class PostCard extends JPanel{
         add(infoPanel, BorderLayout.NORTH);
         add(textScrollPanel, BorderLayout.CENTER);
 
-        if(!post.getContentFields().getImagePath().equals("")){
+        if(!post.getContentFields().getImagePath().isEmpty()){
             /* post image*/
             ImageIcon postImage = new ImageIcon(post.getContentFields().getImagePath());
             postImage = resizeIcon(postImage, 400, 200);
@@ -70,12 +66,11 @@ public class PostCard extends JPanel{
 
     private ImageIcon resizeIcon(ImageIcon originalIcon, int width, int height){
         Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(scaledImage);
-        return scaledIcon;
+        return new ImageIcon(scaledImage);
     }
 
     public static void main(String[] args) throws IOException {
-        ContentFields contentFields = new ContentFields("hello omar how you doing\nhbfhdsfh\njbskafd\njfjbgerbg\sbkgbsjfg\nbgfhkbsfd", "C:/Users/Omar Hekal/Desktop/img.jpg");
+        ContentFields contentFields = new ContentFields("hello omar how you doing\nhbfhdsfh\njbskafd\njfjbgerbg bkgbsjfg\nbgfhkbsfd", "C:/Users/Omar Hekal/Desktop/img.jpg");
         Post post1 = new Post("fdsdfs", contentFields);
 
         JFrame frame = new JFrame();

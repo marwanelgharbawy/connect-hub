@@ -17,8 +17,8 @@ public class Database {
     private final String users_json_file = database_folder + "/users.json";
 
     private User currentUser;
-    private Map<String, User> id_to_user = new HashMap<>();
-    private Map<String, User> email_to_user = new HashMap<>();
+    private final Map<String, User> id_to_user = new HashMap<>();
+    private final Map<String, User> email_to_user = new HashMap<>();
 
     private Database() throws IOException {
         checkExistenceOfDatabase();
