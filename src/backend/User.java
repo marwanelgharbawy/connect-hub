@@ -46,6 +46,8 @@ public class User {
         this.contentManager = new ContentManager(this);
     }
 
+    // Constructor for creating a user from the database's JSON object containing CREDENTIALS
+    // This comes from the users.json file
     public User(JSONObject credentials) throws IOException {
         userId = credentials.getString("id");
         username = credentials.getString("username");
@@ -62,8 +64,10 @@ public class User {
         online = userData.getBoolean("online");
         String profile_img_path = userData.getString("profile-photo");
         String cover_img_path = userData.getString("cover-photo");
+        String bio = userData.getString("bio");
         profile.setProfilePhoto(profile_img_path);
         profile.setCoverPhoto(cover_img_path);
+        profile.setBio(bio);
 
         JSONArray postJsonArray = userData.getJSONArray("posts");
         JSONArray storiesJsonArray = userData.getJSONArray("stories");
