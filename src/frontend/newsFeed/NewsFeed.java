@@ -43,19 +43,19 @@ public class NewsFeed extends JFrame {
 
         JButton home_btn = createSideButton("Home");
         JButton stories_btn = createSideButton("Stories");
-        JButton friends_btn = createSideButton("My Friends");
-        JButton suggestions_btn = createSideButton("Suggestions");
+//        JButton friends_btn = createSideButton("My Friends");
+//        JButton suggestions_btn = createSideButton("Suggestions");
         JButton my_profile_btn = createSideButton("My Profile");
-        JButton blocked_users_btn = createSideButton("Blocked Users");
-        JButton friend_requests_btn = createSideButton("Friend requests");
+//        JButton blocked_users_btn = createSideButton("Blocked Users");
+//        JButton friend_requests_btn = createSideButton("Friend requests");
 
         sidePanel.add(home_btn);
         sidePanel.add(stories_btn);
-        sidePanel.add(friends_btn);
-        sidePanel.add(suggestions_btn);
+//        sidePanel.add(friends_btn);
+//        sidePanel.add(suggestions_btn);
         sidePanel.add(my_profile_btn);
-        sidePanel.add(blocked_users_btn);
-        sidePanel.add(friend_requests_btn);
+//        sidePanel.add(blocked_users_btn);
+//        sidePanel.add(friend_requests_btn);
 
 
         JPanel rightPanel = new JPanel();
@@ -72,12 +72,17 @@ public class NewsFeed extends JFrame {
         JButton refresh_btn = createIconButton("icons/refresh.png", "Refresh");
         refresh_btn.addActionListener(refresh_btn_evt());
         JButton log_out_btn = createIconButton("icons/logout.png", "Log Out");
+        log_out_btn.addActionListener(log_out_btn_evt());
+        JButton friend_manager_btn = createIconButton("icons/friends.png", "Friend Manager");
+        friend_manager_btn.addActionListener(friend_manager_btn_evt());
+
 
         JPanel top_btn_panel = new JPanel();
-        top_btn_panel.setLayout(new GridLayout(1, 2, 4, 4));
+        top_btn_panel.setLayout(new GridLayout(1, 4, 4, 4));
         top_btn_panel.setBackground(Color.white);
 
         top_btn_panel.add(share_content_btn);
+        top_btn_panel.add(friend_manager_btn);
         top_btn_panel.add(refresh_btn);
         top_btn_panel.add(log_out_btn);
 
@@ -127,6 +132,26 @@ public class NewsFeed extends JFrame {
             }
         };
     }
+
+    ActionListener log_out_btn_evt(){
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        };
+    }
+
+    ActionListener friend_manager_btn_evt(){
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        };
+    }
+
+
 
     private JButton createIconButton(String icon_path, String tool_tip){
         JButton button = new JButton(){
