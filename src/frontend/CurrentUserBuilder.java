@@ -17,16 +17,19 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 
-public class CurrentUserBuilder extends Component {
+public class CurrentUserBuilder extends Component implements ProfileBuilder{
     private final User currentUser;
+    private final UserProfile userProfile;
     private final JPanel mainPanel;
 
-    public CurrentUserBuilder(User currentUser) {
+    public CurrentUserBuilder(UserProfile userProfile, User currentUser) {
         this.currentUser = currentUser;
+        this.userProfile = userProfile;
         this.mainPanel = new JPanel(new BorderLayout());
     }
 
-    public JPanel buildCoverPhoto() throws IOException {
+
+    public JPanel buildCoverPhoto(){
         JPanel coverPhotoPanel = new JPanel(null);
         coverPhotoPanel.setPreferredSize(new Dimension(1000, 350));
         JLabel coverPhotoLabel = new JLabel();
@@ -48,6 +51,10 @@ public class CurrentUserBuilder extends Component {
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 18));
         usernameLabel.setBounds(0, 180, 180, 20);
 
+        userProfile.coverPhotoLabel = coverPhotoLabel;
+        userProfile.profilePhotoLabel = profilePhotoLabel;
+        userProfile.usernameLabel = usernameLabel;
+
         profilePhotoPanel.add(profilePhotoLabel);
         profilePhotoPanel.add(usernameLabel);
 
@@ -68,6 +75,8 @@ public class CurrentUserBuilder extends Component {
         JButton settingsButton = new JButton("Settings");
         settingsButton.setPreferredSize(new Dimension(100, 30));
         settingsButton.addActionListener(_ -> showProfileSettings(currentUser));
+
+        userProfile.bioPanel = bioPanel;
 
         bioPanel.add(bioLabel, BorderLayout.CENTER);
         bioPanel.add(settingsButton, BorderLayout.EAST);
@@ -131,7 +140,7 @@ public class CurrentUserBuilder extends Component {
             }
             else{
                 profile.setBio(newBio);
-                //bioLabel.setText(newBio);
+                userProfile.setBioLabel(newBio);
             }
         }
     }
@@ -149,7 +158,7 @@ public class CurrentUserBuilder extends Component {
         if (result == JFileChooser.APPROVE_OPTION) {
             path = coverPhotoChooser.getSelectedFile().getAbsolutePath();
             profile.setCoverPhoto(path);
-            //coverPhotoLabel.setIcon(profile.getCoverPhoto().toIcon());
+            userProfile.setCoverPhotoLabel(profile.getCoverPhoto().toIcon());
         }
     }
 
@@ -166,7 +175,7 @@ public class CurrentUserBuilder extends Component {
         if (result == JFileChooser.APPROVE_OPTION) {
             path = profilePictureChooser.getSelectedFile().getAbsolutePath();
             profile.setProfilePhoto(path);
-            //profilePhotoLabel.setIcon(profile.getProfilePhoto().toIcon());
+            userProfile.setProfilePhotoLabel(profile.getProfilePhoto().toIcon());
         }
     }
 
@@ -245,7 +254,7 @@ public class CurrentUserBuilder extends Component {
             }
             else{
                 user.setUsername(newUsername);
-                //usernameLabel.setText(newUsername);
+                userProfile.usernameLabel.setText(newUsername);
             }
         }
     }
