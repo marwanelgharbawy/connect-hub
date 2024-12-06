@@ -160,19 +160,4 @@ public class Database {
             writeDataToFiles();
     }
 
-//    public static void main(String[] args) throws IOException {
-//        System.out.println(LocalDate.now());
-//        Database database = Database.getInstance();
-//        System.out.println("Database loaded successfully");
-//        database.parseUsersData();
-//        System.out.println("Users loaded successfully");
-//
-//        // Test sign up user
-//        String errorMessage = database.signUpUser("u104", "u104@gmail.com", "password", LocalDate.now());
-//        if (errorMessage == null) {
-//            System.out.println("User created successfully");
-//        } else {
-//            System.out.println(errorMessage);
-//        }
-//    }
 }

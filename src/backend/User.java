@@ -266,4 +266,16 @@ public class User {
             System.out.println("Database error.");
         }
     }
+
+    public boolean isRequestSent(User desiredUser){
+        for(FriendRequest request: friendManager.getRequestManager().getSentRequests())
+            if (request.getReceiver() == desiredUser)
+                return true;
+        return false;
+    }
+
+    public boolean isRequestReceived(User desiredUser){
+        return desiredUser.isRequestSent(this);
+    }
+
 }
