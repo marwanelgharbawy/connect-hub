@@ -52,8 +52,8 @@ public class UserProfile extends JPanel {
 
     public static void main(String[] args) throws IOException {
         User user1 = new User("minareda", "minareda03@gmail.com", "mnr12345", LocalDate.of(2003, 3, 17));
-        //User user2 = new User("omarHekal", "omarhekal@gmail.com", "oma12345", LocalDate.of(2003, 10, 6));
-        UserProfile currentUserProfile = new UserProfile(user1);
+        User user2 = new User("omarHekal", "omarhekal@gmail.com", "oma12345", LocalDate.of(2003, 10, 6));
+        UserProfile currentUserProfile = new UserProfile(user1, user2);
         JFrame frame = new JFrame();
         frame.add(currentUserProfile);
         frame.setVisible(true);
