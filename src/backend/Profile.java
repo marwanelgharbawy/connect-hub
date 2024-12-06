@@ -6,8 +6,8 @@ import utils.Picture;
 
 public class Profile {
 
-    Picture profilePhoto;
-    Picture coverPhoto;
+    private Picture profilePhoto;
+    private Picture coverPhoto;
     private String bio;
     private String profile_img_path;
     private String cover_img_path;
