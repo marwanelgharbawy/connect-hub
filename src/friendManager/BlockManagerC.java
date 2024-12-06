@@ -43,10 +43,6 @@ public class BlockManagerC implements BlockManagerI{
     }
 
     @Override
-    public boolean isBlocked(User user) {
-        return blockedUsers.contains(user);
-    }
-    @Override
     public ArrayList<User> getBlockedUsers() {
         return blockedUsers;
     }
