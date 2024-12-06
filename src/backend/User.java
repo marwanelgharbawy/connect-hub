@@ -33,7 +33,7 @@ public class User {
     // Empty constructor for creating a new user
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile("", "", "");
+        this.profile = new Profile(this, "", "", "");
         this.contentManager = new ContentManager(this);
     }
 
@@ -47,7 +47,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile("", "", "");
+        this.profile = new Profile(this,"", "", "");
         this.contentManager = new ContentManager(this);
     }
 
@@ -59,7 +59,7 @@ public class User {
         email = credentials.getString("email");
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile("", "", "");
+        this.profile = new Profile(this, "", "", "");
         this.contentManager = new ContentManager(this);
     }
 
@@ -70,9 +70,9 @@ public class User {
         String profile_img_path = userData.getString("profile-photo");
         String cover_img_path = userData.getString("cover-photo");
         String bio = userData.getString("bio");
-        profile.setProfilePhoto(profile_img_path);
-        profile.setCoverPhoto(cover_img_path);
-        profile.setBio(bio);
+        profile.loadProfile(profile_img_path, cover_img_path, bio);
+
+        // Removed setters since they update the database, we don't want that while loading
 
         JSONArray postJsonArray = userData.getJSONArray("posts");
         JSONArray storiesJsonArray = userData.getJSONArray("stories");
@@ -264,7 +264,7 @@ public class User {
 
     // If dateOfBirth, online, profile-photo, cover-photo, friends, blocked,
     // requests, posts, stories are updated, save to file immediately
-    private void saveUser() {
+    public void saveUser() {
         try {
             Database.getInstance().saveUser(this);
         } catch (IOException e) {
