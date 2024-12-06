@@ -152,6 +152,9 @@ public class Database {
     }
 
     public void saveUser(User user) throws IOException {
+        id_to_user.put(user.getUserId(), user);
+        email_to_user.put(user.getEmail(), user);
+        username_to_user.put(user.getUsername(), user);
         writeUserData(user);
         writeDataToFiles();
     }
