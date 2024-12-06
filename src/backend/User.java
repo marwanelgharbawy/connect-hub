@@ -29,11 +29,16 @@ public class User {
     private final ContentManager contentManager;
 
     // Constructors
+
+    // Empty constructor for creating a new user
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.profile = new Profile("", "", "");
         this.contentManager = new ContentManager(this);
     }
+
+    // Constructor for creating a new user
+    // This comes from the registration form (Frontend Constructor)
     public User(String username, String email, String password, LocalDate dateOfBirth) throws IOException {
         this.userId = Utilities.generateId();
         this.email = email;
@@ -47,7 +52,7 @@ public class User {
     }
 
     // Constructor for creating a user from the database's JSON object containing CREDENTIALS
-    // This comes from the users.json file
+    // This comes from the users.json file (Backend Constructor)
     public User(JSONObject credentials) throws IOException {
         userId = credentials.getString("id");
         username = credentials.getString("username");
@@ -168,6 +173,7 @@ public class User {
         data.put("online", online);
         data.put("profile-photo", profile.getProfile_img_path());
         data.put("cover-photo", profile.getCover_img_path());
+        data.put("bio", profile.getBio());
 
         // Fill JSON object with user's data from the current running program
         /* friends */
