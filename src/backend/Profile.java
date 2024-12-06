@@ -22,9 +22,11 @@ public class Profile {
         this.user = user;
     }
 
-    public void loadProfile(String profileImgPath, String coverImgPath, String bio) {
+    public void loadProfile(String profileImgPath, String coverImgPath, String bio) throws IOException {
         this.profile_img_path = profileImgPath;
+        this.profilePhoto = new Picture(profileImgPath);
         this.cover_img_path = coverImgPath;
+        this.coverPhoto = new Picture(coverImgPath);
         this.bio = bio;
     }
 
