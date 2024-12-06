@@ -93,6 +93,7 @@ public class NewsFeed extends JFrame {
         contentPanel.setLayout(cardLayout);
         initPages();
         home_btn.addActionListener(e-> cardLayout.show(contentPanel, home_btn.getText()));
+        stories_btn.addActionListener(e-> cardLayout.show(contentPanel, stories_btn.getText()));
         my_profile_btn.addActionListener(e-> cardLayout.show(contentPanel, my_profile_btn.getText()));
 
         rightPanel.add(top_panel, BorderLayout.NORTH);
@@ -109,6 +110,10 @@ public class NewsFeed extends JFrame {
         /*Home*/
         PostsNewsFeed postsNewsFeed = new PostsNewsFeed();
         contentPanel.add(postsNewsFeed, "Home");
+
+        /*Stories*/
+        StoryNewsFeed storyNewsFeed = new StoryNewsFeed();
+        contentPanel.add(storyNewsFeed, "Stories");
 
         /*My Profile*/
         UserProfile current_user_profile = new UserProfile(current_user.getUser());
