@@ -6,6 +6,7 @@ import backend.User;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class SuggestionManagerC implements SuggestionManagerI {
     private final ArrayList<User> friendsOfFriends; //List of friends based on mutual friends
@@ -25,10 +26,16 @@ public class SuggestionManagerC implements SuggestionManagerI {
     }
 
     @Override
-    public User[] getFriendsOfFriends(User user) {
+    public ArrayList<User> getFriendsOfFriends(User user) {
+        friendsOfFriends.clear();
         // Handle the case if the user has no friends yet
         if(user.getFriendManager().getFriends().isEmpty()){
-            return database.getUsers();
+            HashSet<User> userSet = new HashSet<>(Arrays.asList(database.getUsers()));
+            userSet.remove(user);
+            userSet.removeIf(suggestion -> FriendUtils.havePendingRequest(user, suggestion)
+                    || hiddenSuggestions.contains(suggestion)
+                    || FriendUtils.isBlocked(user, suggestion));
+            return new ArrayList<>(userSet);
         }
         // Suggest friends of friends, handle the case if the friends are mutual or finding the main user
         for (User friend : user.getFriendManager().getFriends()) {
@@ -46,7 +53,7 @@ public class SuggestionManagerC implements SuggestionManagerI {
                 }
             }
         }
-        return friendsOfFriends.toArray(new User[0]);
+        return friendsOfFriends;
     }
 
     @Override

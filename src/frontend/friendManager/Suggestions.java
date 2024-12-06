@@ -61,7 +61,6 @@ public class Suggestions extends JFrame {
 
     }
 
-    // Update combo box with a list of users
     private void updateComboBox() {
         // Clear all items in the combo box
         suggestionsComboBox.removeAllItems();

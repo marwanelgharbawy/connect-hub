@@ -20,7 +20,7 @@ public class FriendManagerWindow extends JFrame {
     private JButton viewBlockedButton;
     private final User user;
 
-    FriendManagerWindow(User user) {
+    public FriendManagerWindow(User user) {
         UIUtils.initializeWindow(this, mainPanel, "Friend Manager", 400, 400);
         this.user = user;
         // Setup button listeners for friend manager menu
@@ -93,9 +93,10 @@ public class FriendManagerWindow extends JFrame {
 
     public static void main(String[] args) throws IOException {
         Database database = Database.getInstance();
-        FriendManagerWindow friendManagerWindow = new FriendManagerWindow(database.getUser("u102"));
+        FriendManagerWindow friendManagerWindow = new FriendManagerWindow(database.getUser("220194ee-e1d5-45aa-afa8-857a9a5ddd94.json"));
         System.out.println("u103 received"+database.getUser("u103").getFriendManager().getRequestManager().getReceivedRequests());
         System.out.println(FriendUtils.havePendingRequest(database.getUser("u103"),database.getUser("u101")));
         System.out.println(FriendUtils.isAlreadyFriends(database.getUser("u103"),database.getUser("u102")));
+        System.out.println(database.getUsers().length);
     }
 }
