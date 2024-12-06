@@ -1,7 +1,14 @@
 package backend;
+import content.ContentManager;
+import friendManager.FriendManagerC;
+import friendManager.FriendManagerFactory;
+import friendManager.FriendManagerI;
+
 import content.Post;
 import content.Story;
+
 import friendManager.*;
+
 
 import utils.Utilities;
 
@@ -19,10 +26,11 @@ public class User {
     LocalDate dateOfBirth;
     boolean online;
     private final Profile profile;
+    private ContentManager contentManager;
 
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile(this, "", "", "");
+        this.profile = new Profile("", "", "");
     }
     public User(String username, String email, String password, LocalDate dateOfBirth) throws IOException {
         this.userId = Utilities.generateId();
@@ -32,7 +40,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile(this, "", "", "");
+        this.profile = new Profile("", "", "");
     }
 
     public User(JSONObject credentials) throws IOException {
@@ -41,7 +49,7 @@ public class User {
         email = credentials.getString("email");
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile(this, "", "", "");
+        this.profile = new Profile("", "", "");
     }
 
     public void setUserData(JSONObject userData) throws IOException {
@@ -52,7 +60,9 @@ public class User {
         profile.setProfilePhoto(profile_img_path);
         profile.setCoverPhoto(cover_img_path);
 
-        // TODO: profile management: posts, stories
+        JSONArray postJsonArray = userData.getJSONArray("posts");
+        JSONArray storiesJsonArray = userData.getJSONArray("stories");
+        contentManager = new ContentManager(this, postJsonArray, storiesJsonArray);
 
         Database database = Database.getInstance();
         // friends
@@ -111,6 +121,10 @@ public class User {
         return friendManager;
     }
 
+    public ContentManager getContentManager(){
+        return contentManager;
+    }
+
     public Profile getProfile(){
         return profile;
     }
@@ -139,20 +153,9 @@ public class User {
         /* friend requests */
         loadRequests(data);
         /* posts */
-        JSONArray posts = new JSONArray();
-        // TODO: posts
-//        for(Post post: ){
-//            posts.put(post.toJSONObject());
-//        }
-        data.put("posts", posts);
-
+        data.put("posts", contentManager.postsToJsonArray());
         /* stories */
-        JSONArray stories = new JSONArray();
-        // TODO: stories
-//        for (Story story: ){
-//            stories.put(story.toJSONObject());
-//        }
-        data.put("stories", stories);
+        data.put("stories", contentManager.storiesToJsonArray());
 
         return data;
     }
@@ -224,4 +227,12 @@ public class User {
 
     }
 
+    public void loadSuggestions(JSONObject data){
+        JSONArray suggestions = new JSONArray();
+        for (User user : friendManager.getSuggestionManager().getSuggestions()) {
+            suggestions.put(user.getUserId());
+        }
+        data.put("suggestions", suggestions);
+
+    }
 }

@@ -12,7 +12,7 @@ public class Picture {
     BufferedImage image;
 
     public Picture(String imagePath) throws IOException {
-        if(imagePath.equals("")){
+        if(imagePath.isEmpty()){
             BufferedImage grayImage = new BufferedImage(500, 300, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics = grayImage.createGraphics();
             graphics.setColor(Color.LIGHT_GRAY);

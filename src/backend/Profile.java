@@ -11,10 +11,8 @@ public class Profile {
     private String bio;
     private String profile_img_path;
     private String cover_img_path;
-    private final User user;
 
-    public Profile(User user, String bio, String profile_img_path, String cover_img_path) throws IOException {
-        this.user = user;
+    public Profile(String bio, String profile_img_path, String cover_img_path) throws IOException {
         this.bio = bio;
         this.profile_img_path = profile_img_path;
         this.cover_img_path = cover_img_path;
@@ -64,11 +62,4 @@ public class Profile {
         return cover_img_path;
     }
 
-    public void changePassword(String newPassword) {
-        this.user.setPassword(newPassword);
-    }
-
-    public User getUser() {
-        return user;
-    }
 }
