@@ -4,7 +4,9 @@ import content.ContentFields;
 import utils.UIUtils;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
+import java.nio.file.Path;
 
 public class GetContentFieldsWindow extends JFrame {
     private JTextField textField1; //Input text field
@@ -51,7 +53,11 @@ public class GetContentFieldsWindow extends JFrame {
 
     private String addPicture() {
         // Get file via file chooser
-        JFileChooser fileChooser = new JFileChooser();
+        String cwd = Path.of("").toAbsolutePath().toString();
+        JFileChooser fileChooser = new JFileChooser(cwd);
+        FileNameExtensionFilter restrict = new FileNameExtensionFilter("Only .png , .jpeg or .jpg", "png", "jpeg", "jpg");
+        fileChooser.setFileFilter(restrict);
+
         fileChooser.setDialogTitle("Upload Image");
 
         int userSelection;
@@ -61,17 +67,18 @@ public class GetContentFieldsWindow extends JFrame {
             File file = fileChooser.getSelectedFile();
 
             // Check if the file is in the correct format : ".png",".jpg",".jpeg"
-            if (!file.getName().toLowerCase().endsWith(".png") && !file.getName().toLowerCase().endsWith(".jpg")
-                    && !file.getName().toLowerCase().endsWith(".jpeg")) {
-                // Display error message if format is invalid
-                JOptionPane.showMessageDialog(null, "Invalid file format! Please an image file.", "Error", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
+//            if (!file.getName().toLowerCase().endsWith(".png") && !file.getName().toLowerCase().endsWith(".jpg")
+//                    && !file.getName().toLowerCase().endsWith(".jpeg")) {
+//                // Display error message if format is invalid
+//                JOptionPane.showMessageDialog(null, "Invalid file format! Please an image file.", "Error", JOptionPane.ERROR_MESSAGE);
+//                return null;
+//            }
             // Return image path
             System.out.println(file.getPath());
             return file.getPath();
         }
-        // Return null if no image is selected
-        return null;
+        else {
+            return "";
+        }
     }
 }
