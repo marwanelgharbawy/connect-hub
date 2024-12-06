@@ -8,6 +8,7 @@ import frontend.newsFeed.PostCard;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class UserProfileBuilder implements ProfileBuilder{
     private final User currentUser;
@@ -99,13 +100,28 @@ public class UserProfileBuilder implements ProfileBuilder{
         postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
         postsPanel.setBorder(BorderFactory.createEmptyBorder(10, 80, 10, 80));
 
-        for (int i = 1; i <= 10; i++) { // Add 10 sample posts for testing
-            ContentFields contentFields = new ContentFields("Sample post content", "C:/path/to/image.jpg");
-            Post post = new Post("Post title " + i, contentFields);
-
-            PostCard postCard = new PostCard(post);
-            postsPanel.add(postCard);
-            postsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+//        for (int i = 1; i <= 10; i++) { // Add 10 sample posts for testing
+//            ContentFields contentFields = new ContentFields("Sample post content", "C:/path/to/image.jpg");
+//            Post post = new Post("Post title " + i, contentFields);
+//
+//            PostCard postCard = new PostCard(post);
+//            postsPanel.add(postCard);
+//            postsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+//        }
+        ArrayList<Post> posts = desiredUser.getContentManager().getPosts();
+        if(posts.isEmpty()){
+            postsPanel.add(Box.createRigidArea(new Dimension(0, 200)));
+            JLabel no_posts_label = new JLabel("No posts available yet");
+            no_posts_label.setFont(new Font("Arial", Font.BOLD, 48));
+            no_posts_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+            postsPanel.add(no_posts_label);
+        }
+        else {
+            for(Post post: posts){
+                PostCard postCard = new PostCard(post);
+                postsPanel.add(postCard);
+                postsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+            }
         }
 
         return postsPanel;
