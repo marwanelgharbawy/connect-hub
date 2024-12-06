@@ -32,15 +32,17 @@ public class SuggestionManagerC implements SuggestionManagerI {
         }
         // Suggest friends of friends, handle the case if the friends are mutual or finding the main user
         for (User friend : user.getFriendManager().getFriends()) {
+            System.out.println("Friend:"+friend.getUsername());
             for (User friendOfFriend : friend.getFriendManager().getFriends()) {
-                if (!user.getFriendManager().getFriends().contains(friendOfFriend)
+                System.out.println("FOF:"+friendOfFriend.getUsername());
+                if (!FriendUtils.isAlreadyFriends(user,friendOfFriend)
                         && !friendOfFriend.equals(user)
                         && !friendsOfFriends.contains(friendOfFriend)
                         && !FriendUtils.havePendingRequest(user,friendOfFriend)
                         && !hiddenSuggestions.contains(friendOfFriend)
                         && !FriendUtils.isBlocked(user,friendOfFriend)) {
                     friendsOfFriends.add(friendOfFriend);
-                    System.out.println("FOF:"+friendOfFriend.getUsername());
+                    System.out.println("FOF added:"+friendOfFriend.getUsername());
                 }
             }
         }
