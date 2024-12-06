@@ -42,6 +42,7 @@ public class Database {
     public User[] getUsers(){
         return users.toArray(new User[0]);
     }
+
     /**
      * check the existence of database folder, users folder and users.json
      */
