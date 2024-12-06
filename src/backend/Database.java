@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,9 +21,11 @@ public class Database {
     private Map<String, User> email_to_user = new HashMap<>();
     private Map<String, User> username_to_user = new HashMap<>();
     private CurrentUser currentUser;
+    private final ArrayList<User> users;
 
     private Database() throws IOException {
         checkExistenceOfDatabase();
+        users = new ArrayList<>();
     }
 
     public static Database getInstance() throws IOException {
@@ -35,6 +38,9 @@ public class Database {
 
     public User getUser(String user_id) {
         return id_to_user.get(user_id);
+    }
+    public User[] getUsers(){
+        return users.toArray(new User[0]);
     }
 
     /**
@@ -69,6 +75,7 @@ public class Database {
             email_to_user.put(user.getEmail(), user);
             username_to_user.put(user.getEmail(), user);
             System.out.println("Successfully added user: " + user.getUsername());
+            users.add(user);
         }
 
         // Load users' data from each user file

@@ -2,11 +2,14 @@ package frontend.friendManager;
 
 import backend.Database;
 import backend.User;
+import friendManager.FriendUtils;
+import org.json.JSONObject;
 import utils.UIUtils;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class FriendManagerWindow extends JFrame {
 
@@ -90,7 +93,9 @@ public class FriendManagerWindow extends JFrame {
 
     public static void main(String[] args) throws IOException {
         Database database = Database.getInstance();
-        User user = database.getUser("u101");
-        FriendManagerWindow friendManagerWindow = new FriendManagerWindow(user);
+        FriendManagerWindow friendManagerWindow = new FriendManagerWindow(database.getUser("u102"));
+        System.out.println("u103 received"+database.getUser("u103").getFriendManager().getRequestManager().getReceivedRequests());
+        System.out.println(FriendUtils.havePendingRequest(database.getUser("u103"),database.getUser("u101")));
+        System.out.println(FriendUtils.isAlreadyFriends(database.getUser("u103"),database.getUser("u102")));
     }
 }

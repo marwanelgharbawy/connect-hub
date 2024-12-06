@@ -14,6 +14,7 @@ public class Blocked extends JFrame{
 
     public Blocked(User user) {
         UIUtils.initializeWindow(this, mainPanel, "Blocked Users", 400, 400);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.user = user;
         updateComboBox();
         unblockButton.addActionListener(_ -> {
