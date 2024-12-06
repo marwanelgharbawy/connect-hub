@@ -99,22 +99,35 @@ public class User {
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+        saveUser();
     }
 
     public void setOnline(boolean online) {
         this.online = online;
+        saveUser();
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if (Utilities.validateUsername(email)) {
+            this.email = email;
+            saveUser();
+        } else {
+            System.out.println("Invalid email, operation canceled.");
+        }
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        if (Utilities.validateUsername(username)) {
+            this.username = username;
+            saveUser();
+        } else {
+            System.out.println("Invalid username, operation canceled.");
+        }
     }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = Utilities.hashPassword(password);
+        saveUser();
     }
 
     public FriendManagerI getFriendManager() {
@@ -227,4 +240,22 @@ public class User {
 
     }
 
+    // If dateOfBirth, online, profile-photo, cover-photo, friends, blocked,
+    // requests, posts, stories are updated, save to file immediately
+    private void saveUser() {
+        try {
+            Database.getInstance().saveUser(this);
+        } catch (IOException e) {
+            System.out.println("Database error");
+        }
+    }
+
+    // If email, username, or password is changed, update the credentials in the database
+    private void updateCredentials() {
+        try {
+            Database.getInstance().updateCredentials();
+        } catch (IOException e) {
+            System.out.println("Database error.");
+        }
+    }
 }
