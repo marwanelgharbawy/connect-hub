@@ -246,7 +246,7 @@ public class User {
     public void loadRequests(JSONObject data){
         JSONArray friendRequests = new JSONArray();
         for (FriendRequest friendRequest : friendManager.getRequestManager().getReceivedRequests()) {
-            friendRequests.put(friendRequest.getReceiver().userId); // Each friend request is linked to its sender
+            friendRequests.put(friendRequest.getSender().userId); // Each friend request is linked to its sender
         }
         data.put("requests", friendRequests);
 
