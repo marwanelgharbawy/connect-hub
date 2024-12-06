@@ -28,6 +28,7 @@ public class User {
     private final Profile profile;
     private ContentManager contentManager;
 
+    // Constructors
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.profile = new Profile("", "", "");
@@ -52,6 +53,7 @@ public class User {
         this.profile = new Profile("", "", "");
     }
 
+    // Set user's data from the database's JSON object
     public void setUserData(JSONObject userData) throws IOException {
         dateOfBirth = Utilities.y_M_dToDate(userData.getString("dateOfBirth"));
         online = userData.getBoolean("online");
@@ -151,6 +153,7 @@ public class User {
         return credentials;
     }
 
+    // This method gets user's data in program to be saved in the database
     public JSONObject getUserData(){
         JSONObject data = new JSONObject();
         data.put("dateOfBirth", Utilities.DateTo_y_M_d(dateOfBirth));
@@ -158,7 +161,7 @@ public class User {
         data.put("profile-photo", profile.getProfile_img_path());
         data.put("cover-photo", profile.getCover_img_path());
 
-
+        // Fill JSON object with user's data from the current running program
         /* friends */
         loadFriends(data);
         /* blocked */
@@ -172,6 +175,8 @@ public class User {
 
         return data;
     }
+
+    // This method sets the user's friends after loading it from the database
     public void setFriends(Database database,JSONObject userData){
         JSONArray friends = userData.getJSONArray("friends");
         for (Object friend : friends) {
@@ -183,8 +188,9 @@ public class User {
                 }
             }
         }
-
     }
+
+    // This method set the user's blocked users after loading it from the database
     public void setBlocked(Database database,JSONObject userData){
         JSONArray blocked = userData.getJSONArray("blocked");
         for (Object blockedUser : blocked) {
@@ -197,6 +203,8 @@ public class User {
             }
         }
     }
+
+    // This method set the user's friend requests after loading it from the database
     public void setRequests(Database database,JSONObject userData){
         JSONArray requests = userData.getJSONArray("requests");
         for (Object request : requests) {
