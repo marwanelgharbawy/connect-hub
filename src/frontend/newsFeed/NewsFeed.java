@@ -5,6 +5,7 @@ import backend.Database;
 import frontend.MainMenu;
 import frontend.UserProfile;
 import frontend.contentCreation.ContentCreation;
+import frontend.friendManager.FriendManagerWindow;
 import utils.Utilities;
 
 import javax.swing.*;
@@ -155,6 +156,7 @@ public class NewsFeed extends JFrame {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                FriendManagerWindow friendManagerWindow = new FriendManagerWindow(current_user.getUser());
 
             }
         };
