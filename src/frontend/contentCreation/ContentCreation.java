@@ -1,5 +1,7 @@
 package frontend.contentCreation;
 
+import backend.Database;
+import backend.User;
 import content.ContentFields;
 import content.Post;
 import content.Story;
@@ -7,6 +9,7 @@ import utils.UIUtils;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
+import java.io.IOException;
 
 public class ContentCreation extends JFrame {
     private JButton addStoryButton;
@@ -16,7 +19,7 @@ public class ContentCreation extends JFrame {
 
     public ContentCreation(String authorId) {
         UIUtils.initializeWindow(this, mainPanel, "Creating Content", 400, 400);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+//        setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.authorId = authorId;
         // Set up the button action listeners for content creation
         setupButtonListeners();
@@ -28,7 +31,7 @@ public class ContentCreation extends JFrame {
     }
     private void createContent(String authorId, boolean isStory){
         // Create an instance for content fields
-        ContentFields contentFields = new ContentFields(null, null);
+        ContentFields contentFields = new ContentFields(null, "");
         // Pass content fields to GetContentFieldsWindow to handle them
         GetContentFieldsWindow getContentFieldsWindow = new GetContentFieldsWindow(contentFields,isStory);
         // Hide content creation window
@@ -37,13 +40,25 @@ public class ContentCreation extends JFrame {
         getContentFieldsWindow.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
+                if(contentFields.getImagePath() == null)
+                    contentFields.setImagePath("");
                 if (contentFields.getText() != null) {
                     if (isStory) {
                         Story story = new Story(authorId, contentFields);
-                        // TODO: Add to user and database lists of stories
+                        try {
+                            User current_user = Database.getInstance().getCurrentUser().getUser();
+                            current_user.getContentManager().addStory(story);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     } else {
                         Post post = new Post(authorId, contentFields);
-                        // TODO: Add to user and database lists of posts
+                        try {
+                            User current_user = Database.getInstance().getCurrentUser().getUser();
+                            current_user.getContentManager().addPost(post);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }
                 }
                 // Show content creation window again
