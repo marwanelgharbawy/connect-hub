@@ -5,6 +5,8 @@ import utils.Utilities;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -18,8 +20,10 @@ public class SignUp extends JFrame {
     JPasswordField passwordField;
     JPasswordField checkPasswordField;
     JSpinner dateSpinner;
+    private MainMenu parent;
 
-    public SignUp(){
+    public SignUp(MainMenu parent){
+        this.parent = parent;
         initializeUI();
         addListeners();
     }
@@ -86,7 +90,15 @@ public class SignUp extends JFrame {
 
         backButton.addActionListener(_ -> {
             dispose();
-            new MainMenu();
+            parent.setVisible(true);
+        });
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dispose();
+                parent.setVisible(true);
+            }
         });
     }
 
@@ -124,6 +136,6 @@ public class SignUp extends JFrame {
     }
 
     public static void main(String[] args) {
-        new SignUp();
+//        new SignUp();
     }
 }

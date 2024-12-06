@@ -4,6 +4,9 @@ import backend.Database;
 import utils.*;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 
 public class Login extends JFrame {
@@ -12,8 +15,10 @@ public class Login extends JFrame {
     private JTextField textField1;
     private JButton backButton;
     private JButton loginButton;
+    private MainMenu parent;
 
-    public Login() {
+    public Login(MainMenu parent) {
+        this.parent = parent;
         UIUtils.initializeWindow(this, contentPane, "Login", 400, 400);
         addEventListeners();
     }
@@ -55,12 +60,20 @@ public class Login extends JFrame {
         });
 
         backButton.addActionListener(e -> {
-            new MainMenu();
             dispose();
+            parent.setVisible(true);
+        });
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dispose();
+                parent.setVisible(true);
+            }
         });
     }
 
     public static void main(String[] args) {
-        new Login();
+//        new Login();
     }
 }
