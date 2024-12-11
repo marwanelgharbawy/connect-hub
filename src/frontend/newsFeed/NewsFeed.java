@@ -10,6 +10,7 @@ import frontend.friendManager.FriendManagerWindow;
 import utils.Utilities;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -47,6 +48,7 @@ public class NewsFeed extends JFrame {
         JButton stories_btn = createSideButton("Stories");
 //        JButton friends_btn = createSideButton("My Friends");
 //        JButton suggestions_btn = createSideButton("Suggestions");
+        JButton groups_btn = createSideButton("Groups");
         JButton my_profile_btn = createSideButton("My Profile");
 //        JButton blocked_users_btn = createSideButton("Blocked Users");
 //        JButton friend_requests_btn = createSideButton("Friend requests");
@@ -55,6 +57,7 @@ public class NewsFeed extends JFrame {
         sidePanel.add(stories_btn);
 //        sidePanel.add(friends_btn);
 //        sidePanel.add(suggestions_btn);
+        sidePanel.add(groups_btn);
         sidePanel.add(my_profile_btn);
 //        sidePanel.add(blocked_users_btn);
 //        sidePanel.add(friend_requests_btn);
@@ -77,6 +80,7 @@ public class NewsFeed extends JFrame {
         log_out_btn.addActionListener(log_out_btn_evt());
         JButton friend_manager_btn = createIconButton("icons/friends.png", "Friend Manager");
         friend_manager_btn.addActionListener(friend_manager_btn_evt());
+        JButton notification_btn = createIconButton("icons/notification.png", "notifications");
 
 
         JPanel top_btn_panel = new JPanel();
@@ -84,10 +88,28 @@ public class NewsFeed extends JFrame {
         top_btn_panel.setBackground(Color.white);
 
         top_btn_panel.add(share_content_btn);
+        top_btn_panel.add(notification_btn);
         top_btn_panel.add(friend_manager_btn);
         top_btn_panel.add(refresh_btn);
         top_btn_panel.add(log_out_btn);
 
+        JPanel search_panel = new JPanel();
+//        search_panel.setLayout(new BoxLayout(search_panel, BoxLayout.X_AXIS));
+        search_panel.setLayout(new BorderLayout());
+        search_panel.setBackground(Color.white);
+        Border lineBorder = BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0, 102, 204));
+        JTextField search_textEdit = new JTextField(25);
+        search_textEdit.setBorder(lineBorder);
+        search_textEdit.setBackground(Color.white);
+        search_textEdit.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        JButton search_btn = createIconButton("icons/search.png", "Search");
+
+
+        search_panel.add(search_textEdit, BorderLayout.WEST);
+        search_panel.add(search_btn, BorderLayout.CENTER);
+
+        top_panel.add(search_panel, BorderLayout.WEST);
         top_panel.add(top_btn_panel, BorderLayout.EAST);
 
         contentPanel = new JPanel();
