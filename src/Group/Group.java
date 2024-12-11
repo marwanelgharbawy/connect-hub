@@ -2,21 +2,28 @@ package Group;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import org.json.JSONObject;
 import utils.*;
 
 public class Group {
+    String groupId;
     String name;
     String description;
     Picture groupPhoto;
+    Member primaryAdmin;
+    ArrayList<Member> admins;
     ArrayList<Member> members;
-    String groupId;
-
 
     public Group(String name, String description, String groupPhotoPath) throws IOException {
         this.name = name;
         this.description = description;
         this.groupPhoto = new Picture(groupPhotoPath);
         this.groupId = Utilities.generateId();
+    }
+
+    public Group(String groupId) {
+        this.groupId = groupId;
     }
 
     public String getName() {
@@ -51,4 +58,7 @@ public class Group {
         return members.contains(member);
     }
 
+    public String getGroupId() {
+        return groupId;
+    }
 }
