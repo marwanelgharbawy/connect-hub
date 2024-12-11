@@ -48,6 +48,7 @@ public class Database {
     public User getUser(String user_id) {
         return id_to_user.get(user_id);
     }
+
     public User[] getUsers(){
         return users.toArray(new User[0]);
     }
@@ -58,10 +59,14 @@ public class Database {
     private void checkExistenceOfDatabase() throws IOException {
         if (!new File(database_folder).exists()) {
             new File(users_folder).mkdirs();
+            new File(groups_folder).mkdirs();
 
-            FileWriter file = new FileWriter(users_json_file);
-            file.write(new JSONArray().toString());
-            file.close();
+            FileWriter users_file = new FileWriter(users_json_file);
+            FileWriter groups_file = new FileWriter(groups_json_file);
+            users_file.write(new JSONArray().toString());
+            users_file.close();
+            groups_file.write(new JSONArray().toString());
+            groups_file.close();
         }
     }
 
@@ -106,13 +111,14 @@ public class Database {
 
         // Read groups.json
         String data = Files.readString(Path.of(groups_json_file));
-        JSONArray array = new JSONArray(data);
+        JSONArray array = new JSONArray(data); // Array of JSON objects representing groups IDs
         System.out.println("Groups data loaded successfully from file");
 
         // Load groups' credentials
         for (Object obj : array) {
             JSONObject jsonObject = (JSONObject) obj;
-            String groupID = jsonObject.getString("group_id");
+            // No need to send the whole object since it's just group ID
+            String groupID = jsonObject.getString("group-id");
             Group group = new Group(groupID);
             id_to_group.put(group.getGroupId(), group);
             System.out.println("Successfully added group: " + group.getName());
@@ -122,6 +128,7 @@ public class Database {
         for (String id : id_to_group.keySet()) {
             String group_file = groups_folder + "/" + id + ".json";
             String group_data = Files.readString(Path.of(group_file));
+            // JSON object representing group data, handled in Group class
             JSONObject groupData = new JSONObject(group_data);
             System.out.println("Setting group data: " + getGroup(id).getName());
             getGroup(id).setGroupData(groupData);
