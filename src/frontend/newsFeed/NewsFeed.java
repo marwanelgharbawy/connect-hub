@@ -3,10 +3,13 @@ package frontend.newsFeed;
 import backend.CurrentUser;
 import backend.Database;
 import backend.User;
+
 import frontend.MainMenu;
 import frontend.UserProfile;
 import frontend.contentCreation.ContentCreation;
 import frontend.friendManager.FriendManagerWindow;
+import frontend.searchManager.SearchWindow;
+import utils.UIUtils;
 import utils.Utilities;
 
 import javax.swing.*;
@@ -38,18 +41,18 @@ public class NewsFeed extends JFrame {
 
         sidePanel = new JPanel();
         sidePanel.setLayout(new GridLayout(10, 1, 4, 8));
-        sidePanel.setBackground(Utilities.HEX2Color("1a4586"));
+        sidePanel.setBackground(UIUtils.HEX2Color("1a4586"));
         sidePanel.setPreferredSize(new Dimension(200, 0));
 
         sidePanel.setBorder(BorderFactory.createEmptyBorder(80, 20, 20, 20));
 
-        JButton home_btn = createSideButton("Home");
-        JButton stories_btn = createSideButton("Stories");
-//        JButton friends_btn = createSideButton("My Friends");
-//        JButton suggestions_btn = createSideButton("Suggestions");
-        JButton my_profile_btn = createSideButton("My Profile");
-//        JButton blocked_users_btn = createSideButton("Blocked Users");
-//        JButton friend_requests_btn = createSideButton("Friend requests");
+        JButton home_btn = UIUtils.createSideButton("Home");
+        JButton stories_btn = UIUtils.createSideButton("Stories");
+//        JButton friends_btn = UIUtils.createSideButton("My Friends");
+//        JButton suggestions_btn = UIUtils.createSideButton("Suggestions");
+        JButton my_profile_btn = UIUtils.createSideButton("My Profile");
+//        JButton blocked_users_btn = UIUtils.createSideButton("Blocked Users");
+//        JButton friend_requests_btn = UIUtils.createSideButton("Friend requests");
 
         sidePanel.add(home_btn);
         sidePanel.add(stories_btn);
@@ -69,14 +72,16 @@ public class NewsFeed extends JFrame {
         top_panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         top_panel.setBackground(Color.WHITE);
 
-        JButton share_content_btn = createIconButton("icons/plus.png", "Share");
+        JButton share_content_btn = UIUtils.createIconButton("icons/plus.png", "Share");
         share_content_btn.addActionListener(share_content_btn_evt());
-        JButton refresh_btn = createIconButton("icons/refresh.png", "Refresh");
+        JButton refresh_btn = UIUtils.createIconButton("icons/refresh.png", "Refresh");
         refresh_btn.addActionListener(refresh_btn_evt());
-        JButton log_out_btn = createIconButton("icons/logout.png", "Log Out");
+        JButton log_out_btn = UIUtils.createIconButton("icons/logout.png", "Log Out");
         log_out_btn.addActionListener(log_out_btn_evt());
-        JButton friend_manager_btn = createIconButton("icons/friends.png", "Friend Manager");
+        JButton friend_manager_btn = UIUtils.createIconButton("icons/friends.png", "Friend Manager");
         friend_manager_btn.addActionListener(friend_manager_btn_evt());
+        JButton search_btn = UIUtils.createIconButton("icons/search.png", "Search");
+        search_btn.addActionListener(search_btn_evt());
 
 
         JPanel top_btn_panel = new JPanel();
@@ -87,6 +92,7 @@ public class NewsFeed extends JFrame {
         top_btn_panel.add(friend_manager_btn);
         top_btn_panel.add(refresh_btn);
         top_btn_panel.add(log_out_btn);
+        top_btn_panel.add(search_btn);
 
         top_panel.add(top_btn_panel, BorderLayout.EAST);
 
@@ -106,7 +112,7 @@ public class NewsFeed extends JFrame {
 
         onlinePanel = new JPanel();
         onlinePanel.setLayout(new GridLayout(10, 1, 4, 8));
-        onlinePanel.setBackground(Utilities.HEX2Color("1a4586"));
+        onlinePanel.setBackground(UIUtils.HEX2Color("1a4586"));
         onlinePanel.setPreferredSize(new Dimension(200, 0));
         onlinePanel.setBorder(BorderFactory.createEmptyBorder(40, 20, 20, 20));
 
@@ -166,6 +172,14 @@ public class NewsFeed extends JFrame {
             }
         };
     }
+    ActionListener search_btn_evt(){
+        return new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                new SearchWindow(current_user.getUser());
+            }
+        };
+    }
 
     ActionListener friend_manager_btn_evt(){
         return new ActionListener() {
@@ -202,86 +216,8 @@ public class NewsFeed extends JFrame {
             }
         }
     }
-
-    private JButton createIconButton(String icon_path, String tool_tip){
-        JButton button = new JButton(){
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2d = (Graphics2D) g.create();
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2d.setColor(getModel().isPressed() ? new Color(56, 151, 139) : new Color(70, 179, 165));
-                g2d.fillOval(0, 0, getWidth(), getHeight());
-
-                g2d.dispose();
-                super.paintComponent(g);
-            }
-        };
-
-        ImageIcon originalIcon = new ImageIcon(icon_path);
-        Image scaledImage = originalIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(scaledImage);
-        button.setIcon(scaledIcon);
-
-        button.setToolTipText(tool_tip);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setContentAreaFilled(false); // Prevent default button background
-        button.setPreferredSize(new Dimension(40, 40)); // Set button size
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        return button;
-    }
-
-    private JButton createSideButton(String text) {
-        JButton button = new JButton(text) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2d = (Graphics2D) g.create();
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                g2d.setColor(getModel().isPressed() ? new Color(56, 151, 139) : new Color(70, 179, 165));
-                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 40, 40);
-                g2d.dispose();
-                super.paintComponent(g);
-            }
-
-
-        };
-
-        button.setForeground(Color.WHITE); // Set text color
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setFont(new Font("Arial", Font.BOLD, 14)); // Set font style and size
-        button.setPreferredSize(new Dimension(120, 40)); // Set button size
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setContentAreaFilled(false); // Prevent default button background
-
-        return button;
-    }
-
     private JButton createOnlineUserButton(User user){
-        JButton button = new JButton(user.getUsername()) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2d = (Graphics2D) g.create();
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                g2d.setColor(getModel().isPressed() ? new Color(56, 151, 139) : new Color(70, 179, 165));
-                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 40, 40);
-                g2d.dispose();
-                super.paintComponent(g);
-            }
-
-
-        };
-
-        button.setForeground(Color.WHITE); // Set text color
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setFont(new Font("Arial", Font.BOLD, 14)); // Set font style and size
-        button.setPreferredSize(new Dimension(120, 40)); // Set button size
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setContentAreaFilled(false); // Prevent default button background
-
+        JButton button = UIUtils.createUserButton(user);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
