@@ -1,5 +1,7 @@
 package backend;
 
+import Group.Group;
+import Group.Member;
 import content.Post;
 import content.Story;
 import org.json.JSONObject;
@@ -8,15 +10,18 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class CurrentUser{
     private ArrayList<Post> newsFeedPosts;
     private ArrayList<Story> newsFeedStories;
     private User user;
+    private HashMap<String, String> groups;
 
 
     public CurrentUser(User user){
         this.user = user;
+        this.groups = new HashMap<>();
     }
 
     public User getUser() {
@@ -56,6 +61,18 @@ public class CurrentUser{
         //sort stories
         newsFeedStories.sort(Comparator.comparing(Story::getTimestamp).reversed());
         return newsFeedStories;
+    }
+
+    public void addGroup(Group group, String role){
+        groups.put(group.getGroupId(), role);
+    }
+
+    public void removeGroup(Group group){
+        groups.remove(group.getGroupId());
+    }
+
+    public void changeRole(Group group, String newRole){
+        groups.put(group.getGroupId(), newRole);
     }
 
 }
