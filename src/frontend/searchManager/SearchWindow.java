@@ -11,11 +11,8 @@ import java.io.IOException;
 public class SearchWindow extends JFrame {
 
     private JTextField searchField;
-    private JPanel usersPanel;
-    private JPanel groupsPanel;
-    private JButton searchButton;
     private JPanel resultsPanel;
-    private User user;
+    private final User user;
 
     public SearchWindow(User user) {
         this.user = user;
@@ -40,7 +37,7 @@ public class SearchWindow extends JFrame {
         searchField.setToolTipText("Enter search term...");
         searchBarPanel.add(searchField, BorderLayout.CENTER);
 
-        searchButton = UIUtils.createSideButton("Search");
+        JButton searchButton = UIUtils.createSideButton("Search");
         searchBarPanel.add(searchButton, BorderLayout.EAST);
         add(searchBarPanel, BorderLayout.NORTH);
 
@@ -88,7 +85,7 @@ public class SearchWindow extends JFrame {
         // Display user results
         if (userResults.length > 0) {
             resultsFound = true;
-            JLabel usersLabel = new JLabel("Users");
+            JLabel usersLabel = new JLabel("People");
             usersLabel.setFont(new Font("Arial", Font.BOLD, 18));
             usersLabel.setBorder(new EmptyBorder(10, 0, 10, 0));
             resultsPanel.add(usersLabel);
