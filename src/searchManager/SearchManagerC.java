@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class SearchManagerC implements SearchManagerI{
-    private ArrayList<User> searchedUsers;
+    private final ArrayList<User> searchedUsers;
 //    private ArrayList<Group> searchedGroups;
     public SearchManagerC(){
         this.searchedUsers = new ArrayList<>();
@@ -28,8 +28,9 @@ public class SearchManagerC implements SearchManagerI{
 //        Group[] groups = database.getGroups();
         // Add users to the list if they are not blocked
         for(User searchedUser: users){
+            System.out.println(searchedUser.getUsername());
             if (!FriendUtils.isBlocked(user,searchedUser)){
-                if(searchedUser.getUsername().equalsIgnoreCase(searchKey)){
+                if(searchedUser.getUsername().toLowerCase().contains(searchKey.toLowerCase())){
                     searchedUsers.add(searchedUser);
                 }
             }
@@ -37,7 +38,7 @@ public class SearchManagerC implements SearchManagerI{
         // Add searched groups to the list
         /*
         for(Group searchedGroup : groups){
-        if(searchedGroup.getName().equalsIgnoreCase(searchKey)){
+        if(searchedGroup.getName().toLowerCase().contains(searchKey.toLowerCase())){
                     searchedGroups.add(searchedGroup);
                 }
         }
