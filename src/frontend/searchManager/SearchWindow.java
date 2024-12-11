@@ -1,6 +1,7 @@
 package frontend.searchManager;
 
 import backend.User;
+import frontend.UserProfile;
 import utils.UIUtils;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -8,6 +9,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Objects;
+
 public class SearchWindow extends JFrame {
 
     private JTextField searchField;
@@ -92,6 +95,26 @@ public class SearchWindow extends JFrame {
 
             for (User searchedUser : userResults) {
                 JButton button = UIUtils.createUserButton(searchedUser);
+                button.addActionListener(e -> {
+                    JFrame userProfileWindow = new JFrame();
+                    UserProfile userProfile;
+                    try {
+                        if(!user.getUserId().equals(searchedUser.getUserId())){
+                            userProfile = new UserProfile(user,searchedUser);
+                        }
+                        else{
+                            userProfile = new UserProfile(user);
+                        }
+                        userProfileWindow.setContentPane(userProfile);
+
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    userProfileWindow.pack();
+                    userProfileWindow.setVisible(true);
+                });
+
+                resultsPanel.add(button);
                 resultsPanel.add(button);
             }
         }
