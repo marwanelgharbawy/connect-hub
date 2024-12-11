@@ -54,6 +54,16 @@ public class Group {
         this.groupPhoto = groupPhoto.setImage(groupPhotoPath);
     }
 
+    public void setGroupData(JSONObject data) throws IOException {
+        this.name = (String) data.get("name");
+        this.description = (String) data.get("description");
+        this.groupPhoto = new Picture((String) data.get("group-photo")); // Takes the path of the image
+        // TODO: Parse JSON for the following attributes
+//        this.primaryAdmin = new Member();
+//        this.admins = new ArrayList<>();
+//        this.members = new ArrayList<>();
+    }
+
     public boolean includeUser(Member member){
         return members.contains(member);
     }
