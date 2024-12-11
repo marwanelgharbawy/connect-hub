@@ -8,20 +8,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import Group.Group;
 import org.json.*;
 import utils.Utilities;
+
+
 
 public class Database {
     private static Database instance;
     private final String database_folder = "database";
     private final String users_folder = database_folder + "/users";
     private final String users_json_file = database_folder + "/users.json";
+    private final String groups_folder = database_folder + "/groups";
+    private final String groups_json_file = database_folder + "/groups.json";
 
+    // Group maps
+    private Map<String, Group> id_to_group = new HashMap<>();
+
+    // User maps
     private Map<String, User> id_to_user = new HashMap<>();
     private Map<String, User> email_to_user = new HashMap<>();
     private Map<String, User> username_to_user = new HashMap<>();
-    private CurrentUser currentUser;
     private final ArrayList<User> users;
+    private CurrentUser currentUser;
 
     private Database() throws IOException {
         checkExistenceOfDatabase();
@@ -56,8 +65,9 @@ public class Database {
         }
     }
 
+    // TODO: Heavy refactoring for the following 2 methods
     private void parseUsersData() throws IOException {
-        // delete all the previous accounts
+        // Clear maps
         id_to_user.clear();
         email_to_user.clear();
         username_to_user.clear();
@@ -88,6 +98,39 @@ public class Database {
             getUser(id).setUserData(userData);
             System.out.println("Successfully added user data: " + getUser(id).getUsername());
         }
+    }
+
+    private void parseGroupsData() throws IOException {
+        // Clear maps
+        id_to_group.clear();
+
+        // Read groups.json
+        String data = Files.readString(Path.of(groups_json_file));
+        JSONArray array = new JSONArray(data);
+        System.out.println("Groups data loaded successfully from file");
+
+        // Load groups' credentials
+        for (Object obj : array) {
+            JSONObject jsonObject = (JSONObject) obj;
+            String groupID = jsonObject.getString("group_id");
+            Group group = new Group(groupID);
+            id_to_group.put(group.getGroupId(), group);
+            System.out.println("Successfully added group: " + group.getName());
+        }
+
+        // Load groups' data from each group file
+        for (String id : id_to_group.keySet()) {
+            String group_file = groups_folder + "/" + id + ".json";
+            String group_data = Files.readString(Path.of(group_file));
+            JSONObject groupData = new JSONObject(group_data);
+            System.out.println("Setting group data: " + getGroup(id).getName());
+            getGroup(id).setGroupData(groupData);
+            System.out.println("Successfully added group data: " + getGroup(id).getName());
+        }
+    }
+
+    private Group getGroup(String id) {
+        return id_to_group.get(id);
     }
 
     public CurrentUser getCurrentUser(){
