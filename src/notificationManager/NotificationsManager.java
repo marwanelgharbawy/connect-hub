@@ -33,4 +33,12 @@ public class NotificationsManager {
             friendRequestNotifs.add(notif);
         }
     }
+
+    public ArrayList<Notification> getAllNotifications(){
+        ArrayList<Notification> notifs = new ArrayList<>();
+        notifs.addAll(friendRequestNotifs);
+        for(GroupNotifManager group: group_NotifManager.values())
+            notifs.addAll(group.getAllNotifications());
+        return notifs;
+    }
 }
