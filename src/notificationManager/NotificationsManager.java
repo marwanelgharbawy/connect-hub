@@ -27,9 +27,9 @@ public class NotificationsManager {
     * call it only when the user is the current user
     */
     public void populateFriendRequests(){
+        friendRequestNotifs.clear();
         for (FriendRequest friendRequest : user.getFriendManager().getRequestManager().getReceivedRequests()) {
-            User sender_user = friendRequest.getSender();
-            FriendRequestNotif notif = new FriendRequestNotif(sender_user);
+            FriendRequestNotif notif = new FriendRequestNotif(friendRequest);
             friendRequestNotifs.add(notif);
         }
     }

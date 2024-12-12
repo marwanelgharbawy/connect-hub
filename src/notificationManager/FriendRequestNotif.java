@@ -34,7 +34,7 @@ public class FriendRequestNotif implements Notification{
     @Override
     public ImageIcon getNotifImage() {
         ImageIcon originalIcon = friendRequest.getSender().getProfile().getProfilePhoto().toIcon();
-        Image scaledImage = originalIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image scaledImage = originalIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
         return new ImageIcon(scaledImage);
     }
 
@@ -95,6 +95,8 @@ public class FriendRequestNotif implements Notification{
             }
         });
 
+        btns.add(acceptFriend_btn);
+        btns.add(declineFriend_btn);
         return btns;
     }
 }
