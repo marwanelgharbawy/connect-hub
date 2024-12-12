@@ -4,7 +4,7 @@ import backend.User;
 import content.ContentFields;
 import content.Post;
 
-public class Member {
+public class Member implements GroupRole{
     User user;
     Group group;
 

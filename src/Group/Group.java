@@ -3,6 +3,7 @@ package Group;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import backend.CurrentUser;
 import backend.User;
 import content.Post;
 import utils.*;
@@ -14,8 +15,8 @@ public class Group {
     private String description;
     private Picture groupPhoto;
     private final GroupContent groupContent;
-    private ArrayList<Member> members;
-    private ArrayList<Admin> admins;
+    private ArrayList<User> members;
+    private ArrayList<User> admins;
     private final PrimaryAdmin primaryAdmin;
     private final String groupId;
 
@@ -41,7 +42,7 @@ public class Group {
         return groupPhoto;
     }
 
-    public ArrayList<Member> getMembers() {
+    public ArrayList<User> getMembers() {
         return members;
     }
 
@@ -57,42 +58,40 @@ public class Group {
         this.groupPhoto = groupPhoto.setImage(groupPhotoPath);
     }
 
-    public boolean isMember(Member member){
-        return members.contains(member);
-    }
-
     public boolean isMember(User user){
-        for (Member member: members)
-            if (member.getUser() == user)
-                return true;
-        return false;
-    }
-
-    public boolean isAdmin(Member member){
-        return admins.contains(member);
+        return members.contains(user);
     }
 
     public boolean isAdmin(User user){
-        for (Admin admin: admins)
-            if (admin.getUser() == user)
-                return true;
-        return false;
-    }
-
-    public boolean isPrimaryAdmin(Member member){
-        return member == getInstance(this, primaryAdmin.getUser());
+        return admins.contains(user);
     }
 
     public boolean isPrimaryAdmin(User user){
-        return user == getInstance(this, primaryAdmin.getUser()).getUser();
+        return user == primaryAdmin.getUser();
+    }
+
+    private void addGroupToCurrentUser(CurrentUser user, GroupRole role){
+        user.addGroup(this, role);
+    }
+
+    private void removeGroupFromCurrentUser(CurrentUser user){
+        user.removeGroup(this);
     }
 
     public void removeMember(Member member){
-        this.members.remove(member);
+        this.members.remove(member.getUser());
+    }
+
+    public void removeMember(User user){
+        this.members.remove(user);
     }
 
     public void addMember(Member member){
-        this.members.add(member);
+        this.members.add(member.getUser());
+    }
+
+    public void addMember(User user){
+        this.members.add(user);
     }
 
     public GroupContent getGroupContent() {
@@ -103,18 +102,28 @@ public class Group {
         this.groupContent.addPost(post);
     }
 
-    public ArrayList<Admin> getAdmins() {
+    public ArrayList<User> getAdmins() {
         return admins;
     }
 
     public void addAdmin(Member member){
-        members.remove(member);
-        admins.add((Admin) member);
+        members.remove(member.getUser());
+        admins.add(member.getUser());
+    }
+
+    public void addAdmin(User user){
+        members.remove(user);
+        admins.add(user);
     }
 
     public void removeAdmin(Admin admin){
-        members.add((Member) admin);
-        admins.remove(admin);
+        members.add(admin.getUser());
+        admins.remove(admin.getUser());
+    }
+
+    public void removeAdmin(User user){
+        members.add(user);
+        admins.remove(user);
     }
 
     public String getGroupId() {
