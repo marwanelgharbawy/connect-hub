@@ -4,12 +4,10 @@ import friendManager.FriendManagerC;
 import friendManager.FriendManagerFactory;
 import friendManager.FriendManagerI;
 
-import content.Post;
-import content.Story;
-
 import friendManager.*;
 
 
+import notificationManager.NotificationsManager;
 import searchManager.SearchManagerC;
 import utils.Utilities;
 
@@ -30,6 +28,7 @@ public class User {
     boolean online;
     private final Profile profile;
     private final ContentManager contentManager;
+    private final NotificationsManager notifsManager;
 
     // Constructors
 
@@ -39,6 +38,7 @@ public class User {
         this.searchManager = new SearchManagerC();
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
+        this.notifsManager = new NotificationsManager(this);
     }
 
     // Constructor for creating a new user
@@ -54,6 +54,7 @@ public class User {
         this.searchManager = new SearchManagerC();
         this.profile = new Profile(this,"", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
+        this.notifsManager = new NotificationsManager(this);
     }
 
     // Constructor for creating a user from the database's JSON object containing CREDENTIALS
@@ -67,6 +68,7 @@ public class User {
         this.searchManager = new SearchManagerC();
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
+        this.notifsManager = new NotificationsManager(this);
     }
 
     // Set user's data from the database's JSON object

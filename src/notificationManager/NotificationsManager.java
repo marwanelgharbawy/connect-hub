@@ -6,7 +6,7 @@ import friendManager.FriendRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class NotifsManager {
+public class NotificationsManager {
     private User user;
     private final ArrayList<FriendRequestNotif> friendRequestNotifs;
     
@@ -16,7 +16,7 @@ public class NotifsManager {
     private final HashMap<String, GroupNotifManager> group_NotifManager;
 
 
-    public NotifsManager(User user) {
+    public NotificationsManager(User user) {
         this.user = user;
         this.friendRequestNotifs = new ArrayList<>();
         this.group_NotifManager = new HashMap<>();

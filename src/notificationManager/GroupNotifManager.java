@@ -3,7 +3,7 @@ package notificationManager;
 import java.util.ArrayList;
 
 public class GroupNotifManager {
-    private final ArrayList<GroupStatusChangedNotif> groupStatusChangedNotifs;
+    private final ArrayList<GroupStatusNotif> groupStatusChangedNotifs;
     private final ArrayList<NewGroupPostNotif> groupPostNotifs;
     private final ArrayList<NewGroupUserNotif> groupUserNotifs;
 

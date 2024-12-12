@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import java.time.LocalDateTime;
 
-public class GroupStatusChangedNotif implements Notification{
+public class GroupStatusNotif implements Notification{
     private String group_id;
 
     @Override
