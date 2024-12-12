@@ -69,6 +69,32 @@ public class UIUtils {
         button.setContentAreaFilled(false);
         return button;
     }
+    public static JButton createNotifButton(String text) {
+        JButton button = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                g2d.setColor(getModel().isPressed() ? new Color(100, 100, 100) : new Color(150, 150, 150));
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20); // Rounded corners
+                g2d.dispose();
+                super.paintComponent(g);
+            }
+        };
+
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setFont(new Font("Arial", Font.PLAIN, 12));
+        button.setPreferredSize(new Dimension(80, 25));
+        button.setMaximumSize(new Dimension(80, 25));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setContentAreaFilled(false); // Transparent content area for custom painting
+
+        return button;
+    }
+
     public static Color HEX2Color(String hex){
         if(hex.length() > 6) throw new IllegalArgumentException("Wrong Color format : " + hex);
 

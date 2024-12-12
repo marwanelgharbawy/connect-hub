@@ -5,6 +5,7 @@ import backend.User;
 import friendManager.FriendRequest;
 import frontend.UserProfile;
 import org.json.JSONObject;
+import utils.UIUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,7 +67,7 @@ public class FriendRequestNotif implements Notification{
 //        });
 
         /* accept request */
-        JButton acceptFriend_btn = new JButton("Accept");
+        JButton acceptFriend_btn = UIUtils.createNotifButton("Accept");
         acceptFriend_btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,7 +82,7 @@ public class FriendRequestNotif implements Notification{
         });
 
         /* decline request */
-        JButton declineFriend_btn = new JButton("Cancel");
+        JButton declineFriend_btn = UIUtils.createNotifButton("Cancel");
         declineFriend_btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

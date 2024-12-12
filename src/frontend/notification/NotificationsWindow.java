@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class NotificationsWindow extends JFrame {
     public NotificationsWindow() throws IOException {
         initUI();
+        setTitle("Notifications");
         setSize(800, 600);
         setVisible(true);
     }

@@ -29,9 +29,9 @@ public class NotifCardBuilder {
         btnPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
         for (JButton btn: btns) {
-            btn.setPreferredSize(new Dimension(100, 20));
-            btn.setMaximumSize(new Dimension(100, 20));
-            btn.setFont(new Font("Arial", Font.PLAIN, 12));
+//            btn.setPreferredSize(new Dimension(100, 20));
+//            btn.setMaximumSize(new Dimension(100, 20));
+//            btn.setFont(new Font("Arial", Font.PLAIN, 12));
             btnPanel.add(btn);
         }
 
