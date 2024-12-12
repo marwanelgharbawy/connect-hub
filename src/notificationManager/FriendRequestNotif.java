@@ -29,7 +29,7 @@ public class FriendRequestNotif implements Notification{
 
     @Override
     public LocalDateTime getNotifDate() {
-        return null;
+        return friendRequest.getTimestamp();
     }
 
     @Override
