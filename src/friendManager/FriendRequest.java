@@ -10,28 +10,28 @@ import java.time.LocalDateTime;
 public class FriendRequest {
     private final User sender; // user.User who sent the friend request
     private final User receiver; // user.User who is receiving the friend request
-    private String status; // Status of the friend request : pending, accepted, declined
+    private FriendRequestEnum status; // Status of the friend request : pending, accepted, declined
     private final LocalDateTime timestamp; // The date on which the friend request was sent
 
     public FriendRequest(User sender, User receiver) {
         this.sender = sender;
         this.receiver = receiver;
-        this.status = "pending";
+        this.status = FriendRequestEnum.Pending;
         this.timestamp = LocalDateTime.now();
     }
     public FriendRequest(User sender, User receiver, LocalDateTime timestamp) {
         this.sender = sender;
         this.receiver = receiver;
-        this.status = "pending";
+        this.status = FriendRequestEnum.Pending;
         this.timestamp = timestamp;
     }
-    public void setStatus(String status) {
+    public void setStatus(FriendRequestEnum status) {
         this.status = status;
     }
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
-    public String getStatus() {
+    public FriendRequestEnum getStatus() {
         return status;
     }
 

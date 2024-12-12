@@ -45,7 +45,7 @@ public class RequestManagerC implements RequestManagerI { // Friends list
     @Override
     public void acceptFriendRequest(FriendRequest friendRequest) throws IOException {
         // TODO: Handle the access to this method in the UIX
-        friendRequest.setStatus("accepted");
+        friendRequest.setStatus(FriendRequestEnum.Accepted);
         User sender = friendRequest.getSender();
         User receiver = friendRequest.getReceiver();
         receiver.getFriendManager().addFriend(receiver,sender);
@@ -57,7 +57,7 @@ public class RequestManagerC implements RequestManagerI { // Friends list
 
     // Delete (or cancel) friend request;
     public void cancelRequest(FriendRequest friendRequest) throws IOException {
-        friendRequest.setStatus("cancelled");
+        friendRequest.setStatus(FriendRequestEnum.Declined);
         removeFriendRequest(friendRequest);
         database.saveUser(friendRequest.getReceiver());
     }
