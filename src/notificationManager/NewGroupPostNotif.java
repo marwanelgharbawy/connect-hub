@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import javax.swing.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class NewGroupPostNotif implements Notification {
     @Override
@@ -23,6 +24,11 @@ public class NewGroupPostNotif implements Notification {
 
     @Override
     public JSONObject toJSONObject() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<JButton> getNotifBtns() {
         return null;
     }
 }
