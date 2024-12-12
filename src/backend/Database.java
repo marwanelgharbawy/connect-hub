@@ -111,28 +111,26 @@ public class Database {
 
         // Read groups.json
         String data = Files.readString(Path.of(groups_json_file));
-        JSONArray array = new JSONArray(data); // Array of JSON objects representing groups IDs
+        JSONArray idsArray = new JSONArray(data); // Array of JSON objects representing groups IDs
         System.out.println("Groups data loaded successfully from file");
 
         // Load groups' credentials
-        for (Object obj : array) {
+        for (Object obj : idsArray) {
             JSONObject jsonObject = (JSONObject) obj;
             // No need to send the whole object to the constructor since it's just the group ID
             String groupID = (String) obj;
             Group group = new Group(groupID);
             id_to_group.put(group.getGroupId(), group);
             System.out.println("Successfully added group: " + group.getName());
-        }
 
-        // Load groups' data from each group file
-        for (String id : id_to_group.keySet()) {
-            String group_file = groups_folder + "/" + id + ".json";
+            // Load each group's data from the file
+            String group_file = groups_folder + "/" + groupID + ".json";
             String group_data = Files.readString(Path.of(group_file));
             // JSON object representing group data, handled in Group class
             JSONObject groupData = new JSONObject(group_data);
-            System.out.println("Setting group data: " + getGroup(id).getName());
-            getGroup(id).setGroupData(groupData);
-            System.out.println("Successfully added group data: " + getGroup(id).getName());
+            System.out.println("Setting group data: " + getGroup(groupID).getName());
+            getGroup(groupID).setGroupData(groupData);
+            System.out.println("Successfully added group data: " + getGroup(groupID).getName());
         }
     }
 
