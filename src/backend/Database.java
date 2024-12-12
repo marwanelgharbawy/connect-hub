@@ -117,8 +117,8 @@ public class Database {
         // Load groups' credentials
         for (Object obj : array) {
             JSONObject jsonObject = (JSONObject) obj;
-            // No need to send the whole object since it's just group ID
-            String groupID = jsonObject.getString("group-id");
+            // No need to send the whole object to the constructor since it's just the group ID
+            String groupID = (String) obj;
             Group group = new Group(groupID);
             id_to_group.put(group.getGroupId(), group);
             System.out.println("Successfully added group: " + group.getName());
