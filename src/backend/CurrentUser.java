@@ -4,6 +4,12 @@ import Group.Group;
 import Group.GroupRole;
 import content.Post;
 import content.Story;
+
+import notificationManager.Notification;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -69,6 +75,12 @@ public class CurrentUser{
 
     public void changeRole(Group group, GroupRole role){
         groups.put(group.getGroupId(), role);
+    }
+
+
+    public ArrayList<Notification> getNotifications(){
+        user.getNotifsManager().populateFriendRequests();
+        return user.getNotifsManager().getAllNotifications();
     }
 
 }

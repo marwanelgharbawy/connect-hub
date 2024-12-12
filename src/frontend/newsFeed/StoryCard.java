@@ -4,6 +4,7 @@ import backend.Database;
 import backend.User;
 import content.ContentFields;
 import content.Story;
+import utils.UIUtils;
 import utils.Utilities;
 
 import javax.swing.*;
@@ -23,7 +24,7 @@ public class StoryCard extends JPanel {
     }
 
     private void initUI() {
-        this.setBackground(Utilities.HEX2Color("e8e8e8"));
+        this.setBackground(UIUtils.HEX2Color("e8e8e8"));
         this.setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
