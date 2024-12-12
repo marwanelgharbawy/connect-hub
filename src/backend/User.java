@@ -1,4 +1,5 @@
 package backend;
+import Group.Member;
 import content.ContentManager;
 import friendManager.FriendManagerC;
 import friendManager.FriendManagerFactory;
@@ -13,7 +14,10 @@ import utils.Utilities;
 
 import java.io.IOException;
 import java.time.LocalDate;
+
+import java.util.HashMap;
 import java.time.LocalDateTime;
+
 
 import org.json.*;
 

@@ -1,7 +1,10 @@
 package backend;
 
+import Group.Group;
+import Group.GroupRole;
 import content.Post;
 import content.Story;
+
 import notificationManager.Notification;
 import org.json.JSONObject;
 
@@ -9,15 +12,18 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 
 public class CurrentUser{
     private ArrayList<Post> newsFeedPosts;
     private ArrayList<Story> newsFeedStories;
     private User user;
+    private HashMap<String, GroupRole> groups;
 
 
     public CurrentUser(User user){
         this.user = user;
+        this.groups = new HashMap<>();
     }
 
     public User getUser() {
@@ -59,8 +65,22 @@ public class CurrentUser{
         return newsFeedStories;
     }
 
+    public void addGroup(Group group, GroupRole role){
+        groups.put(group.getGroupId(), role);
+    }
+
+    public void removeGroup(Group group){
+        groups.remove(group.getGroupId());
+    }
+
+    public void changeRole(Group group, GroupRole role){
+        groups.put(group.getGroupId(), role);
+    }
+
+
     public ArrayList<Notification> getNotifications(){
         user.getNotifsManager().populateFriendRequests();
         return user.getNotifsManager().getAllNotifications();
     }
+
 }
