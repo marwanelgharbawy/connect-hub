@@ -108,12 +108,4 @@ public class Utilities {
         }
     }
 
-    public static Color HEX2Color(String hex){
-        if(hex.length() > 6) throw new IllegalArgumentException("Wrong Color format : " + hex);
-
-        int r = Integer.parseInt(hex.substring(0, 2), 16);
-        int g = Integer.parseInt(hex.substring(2, 4), 16);
-        int b = Integer.parseInt(hex.substring(4, 6), 16);
-        return new Color(r, g, b);
-    }
 }

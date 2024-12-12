@@ -10,6 +10,7 @@ import content.Story;
 import friendManager.*;
 
 
+import searchManager.SearchManagerC;
 import utils.Utilities;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import org.json.*;
 
 public class User {
     private final FriendManagerC friendManager;
+    private final SearchManagerC searchManager;
     private String userId;
     private String email;
     private String username;
@@ -33,7 +35,8 @@ public class User {
     // Empty constructor for creating a new user
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile(this, "", "", "");
+        this.searchManager = new SearchManagerC();
+        this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
     }
 
@@ -47,7 +50,8 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile(this,"", "", "");
+        this.searchManager = new SearchManagerC();
+        this.profile = new Profile(this,"", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
     }
 
@@ -59,7 +63,8 @@ public class User {
         email = credentials.getString("email");
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
-        this.profile = new Profile(this, "", "", "");
+        this.searchManager = new SearchManagerC();
+        this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
     }
 
@@ -151,6 +156,10 @@ public class User {
 
     public ContentManager getContentManager(){
         return contentManager;
+    }
+
+    public SearchManagerC getSearchManager() {
+        return searchManager;
     }
 
     public Profile getProfile(){
