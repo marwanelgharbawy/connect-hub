@@ -30,9 +30,8 @@ public class RequestManagerC implements RequestManagerI { // Friends list
     @Override
     public void sendFriendRequest(User sender, User receiver) throws IOException {
         if (!sender.getFriendManager().getFriends().contains(receiver) && !receiver.equals(sender)
-                && !FriendUtils.isBlocked(sender,receiver) && !FriendUtils.isAlreadyFriends(sender,receiver) && !FriendUtils.isDuplicate(sender,receiver.getFriendManager().getFriends())) {
+                && !FriendUtils.isBlocked(sender,receiver) && !FriendUtils.isAlreadyFriends(sender,receiver) && !FriendUtils.havePendingRequest(sender,receiver)) {
             FriendRequest request = new FriendRequest(sender, receiver);
-            sentRequests.add(request);
             receiver.getFriendManager().getRequestManager().addFriendRequest(request);
             if(sender.getFriendManager().getSuggestionManager().suggestionsContain(receiver)){
                 sender.getFriendManager().getSuggestionManager().removeSuggestion(receiver);
@@ -65,12 +64,21 @@ public class RequestManagerC implements RequestManagerI { // Friends list
     @Override
     public void addFriendRequest(FriendRequest friendRequest) {
         receivedRequests.add(friendRequest);
+        friendRequest.getSender().getFriendManager().getRequestManager().getSentRequests().add(friendRequest);
     }
 
     @Override
     public FriendRequest getReceivedRequest(String senderId) {
         for (FriendRequest friendRequest: receivedRequests){
             if (friendRequest.getSender().getUserId().equals(senderId))
+                return friendRequest;
+        }
+        return null;
+    }
+    @Override
+    public FriendRequest getSentRequest(String receiverId) {
+        for (FriendRequest friendRequest: sentRequests){
+            if (friendRequest.getReceiver().getUserId().equals(receiverId))
                 return friendRequest;
         }
         return null;

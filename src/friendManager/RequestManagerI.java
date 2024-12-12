@@ -12,6 +12,7 @@ public interface RequestManagerI {
     void cancelRequest(FriendRequest friendRequest) throws IOException;
     void addFriendRequest(FriendRequest friendRequest);
     FriendRequest getReceivedRequest(String senderId);
+    FriendRequest getSentRequest(String receiverId);
     ArrayList<FriendRequest> getReceivedRequests();
     ArrayList<FriendRequest> getSentRequests();
 }
