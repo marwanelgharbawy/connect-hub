@@ -4,6 +4,7 @@ import backend.Database;
 import backend.User;
 import content.ContentFields;
 import content.Post;
+import utils.UIUtils;
 import utils.Utilities;
 
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class PostCard extends JPanel{
     }
 
     private void initUI(){
-        this.setBackground(Utilities.HEX2Color("b8b8b8"));
+        this.setBackground(UIUtils.HEX2Color("b8b8b8"));
         this.setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 

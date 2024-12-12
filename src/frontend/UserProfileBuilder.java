@@ -62,40 +62,40 @@ public class UserProfileBuilder {
         bioLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         bioLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
-//        JPanel buttons = getButtons(currentUser, desiredUser);
+        JPanel buttons = getButtons(currentUser, desiredUser);
 
         bioPanel.add(bioLabel, BorderLayout.CENTER);
-//        bioPanel.add(buttons, BorderLayout.EAST);
+        bioPanel.add(buttons, BorderLayout.EAST);
 
         return bioPanel;
     }
 
-//    private static JPanel getButtons(User currentUser, User desiredUser) {
-//        JPanel buttons = new JPanel();
-//
-//        if (currentUser.getFriendManager().getFriends().contains(desiredUser)){
-//            JButton unfriendButton = new JButton("Unfriend");
-//            JButton blockButton = new JButton("Block");
-//            buttons.add(unfriendButton, BorderLayout.NORTH);
-//            buttons.add(blockButton, BorderLayout.SOUTH);
-//        } else if (currentUser.getFriendManager().getBlockManager().getBlockedUsers().contains(desiredUser)){
-//            JButton unblockButton = new JButton("Unblock");
-//            buttons.add(unblockButton, BorderLayout.NORTH);
-//        } else if (currentUser.isRequestSent(desiredUser)){
-//            JLabel pendingLabel = new JLabel("Pending request");
-//            JButton cancelRequest = new JButton("Cancel Request");
-//            buttons.add(pendingLabel, BorderLayout.NORTH);
-//            buttons.add(cancelRequest, BorderLayout.SOUTH);
-//        } else if (currentUser.isRequestReceived(desiredUser)){
-//            JButton cancelButton = new JButton()
-//        } else{
-//            JButton addFriendButton = new JButton("Add friend");
-//            JButton blockButton = new JButton("Block");
-//            buttons.add(addFriendButton, BorderLayout.NORTH);
-//            buttons.add(blockButton, BorderLayout.SOUTH);
-//        }
-//        return buttons;
-//    }
+    private static JPanel getButtons(User currentUser, User desiredUser) {
+        JPanel buttons = new JPanel();
+        if (currentUser.getFriendManager().getFriends().contains(desiredUser)){
+            JButton unfriendButton = new JButton("Unfriend");
+            JButton blockButton = new JButton("Block");
+            buttons.add(unfriendButton, BorderLayout.NORTH);
+            buttons.add(blockButton, BorderLayout.SOUTH);
+        } else if (currentUser.getFriendManager().getBlockManager().getBlockedUsers().contains(desiredUser)){
+            JButton unblockButton = new JButton("Unblock");
+            buttons.add(unblockButton, BorderLayout.NORTH);
+        } else if (currentUser.isRequestSent(desiredUser)){
+            JLabel pendingLabel = new JLabel("Pending request");
+            JButton cancelRequest = new JButton("Cancel Request");
+            buttons.add(pendingLabel, BorderLayout.NORTH);
+            buttons.add(cancelRequest, BorderLayout.SOUTH);
+        } else if (currentUser.isRequestReceived(desiredUser)){
+            JButton cancelButton = new JButton();
+            buttons.add(cancelButton);
+        } else{
+            JButton addFriendButton = new JButton("Add friend");
+            JButton blockButton = new JButton("Block");
+            buttons.add(addFriendButton, BorderLayout.NORTH);
+            buttons.add(blockButton, BorderLayout.SOUTH);
+        }
+        return buttons;
+    }
 
     public JPanel buildPostsPanel() throws IOException {
         JPanel postsPanel = new JPanel();
