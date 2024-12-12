@@ -2,6 +2,7 @@ package backend;
 
 import content.Post;
 import content.Story;
+import notificationManager.Notification;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -58,4 +59,8 @@ public class CurrentUser{
         return newsFeedStories;
     }
 
+    public ArrayList<Notification> getNotifications(){
+        user.getNotifsManager().populateFriendRequests();
+        return user.getNotifsManager().getAllNotifications();
+    }
 }
