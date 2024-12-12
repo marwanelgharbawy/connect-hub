@@ -169,6 +169,10 @@ public class User {
         return profile;
     }
 
+    public NotificationsManager getNotifsManager() {
+        return notifsManager;
+    }
+
     public JSONObject getCredentials(){
         JSONObject credentials = new JSONObject();
         credentials.put("id", userId);
