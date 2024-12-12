@@ -7,6 +7,7 @@ import frontend.MainMenu;
 import frontend.UserProfile;
 import frontend.contentCreation.ContentCreation;
 import frontend.friendManager.FriendManagerWindow;
+import frontend.notification.NotificationsWindow;
 import frontend.searchManager.SearchWindow;
 import utils.UIUtils;
 import utils.Utilities;
@@ -85,6 +86,7 @@ public class NewsFeed extends JFrame {
         JButton friend_manager_btn = UIUtils.createIconButton("icons/friends.png", "Friend Manager");
         friend_manager_btn.addActionListener(friend_manager_btn_evt());
         JButton notification_btn =UIUtils.createIconButton("icons/notification.png", "notifications");
+        notification_btn.addActionListener(notification_btn_evt());
         JButton search_btn = UIUtils.createIconButton("icons/search.png", "Search");
         search_btn.addActionListener(search_btn_evt());
 
@@ -170,7 +172,6 @@ public class NewsFeed extends JFrame {
             }
         };
     }
-
     ActionListener log_out_btn_evt(){
         return new ActionListener() {
             @Override
@@ -188,6 +189,18 @@ public class NewsFeed extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e){
                 new SearchWindow(current_user.getUser());
+            }
+        };
+    }
+    ActionListener notification_btn_evt (){
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    new NotificationsWindow();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         };
     }

@@ -4,17 +4,16 @@ import friendManager.FriendManagerC;
 import friendManager.FriendManagerFactory;
 import friendManager.FriendManagerI;
 
-import content.Post;
-import content.Story;
-
 import friendManager.*;
 
 
+import notificationManager.NotificationsManager;
 import searchManager.SearchManagerC;
 import utils.Utilities;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.json.*;
 
@@ -29,6 +28,7 @@ public class User {
     boolean online;
     private final Profile profile;
     private final ContentManager contentManager;
+    private final NotificationsManager notifsManager;
 
     // Constructors
 
@@ -38,6 +38,7 @@ public class User {
         this.searchManager = new SearchManagerC();
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
+        this.notifsManager = new NotificationsManager(this);
     }
 
     // Constructor for creating a new user
@@ -53,6 +54,7 @@ public class User {
         this.searchManager = new SearchManagerC();
         this.profile = new Profile(this,"", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
+        this.notifsManager = new NotificationsManager(this);
     }
 
     // Constructor for creating a user from the database's JSON object containing CREDENTIALS
@@ -66,6 +68,7 @@ public class User {
         this.searchManager = new SearchManagerC();
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
+        this.notifsManager = new NotificationsManager(this);
     }
 
     // Set user's data from the database's JSON object
@@ -166,6 +169,10 @@ public class User {
         return profile;
     }
 
+    public NotificationsManager getNotifsManager() {
+        return notifsManager;
+    }
+
     public JSONObject getCredentials(){
         JSONObject credentials = new JSONObject();
         credentials.put("id", userId);
@@ -231,13 +238,15 @@ public class User {
     public void setRequests(Database database,JSONObject userData){
         JSONArray requests = userData.getJSONArray("requests");
         for (Object request : requests) {
-            String senderId = (String) request;
+            JSONObject json = (JSONObject)request;
+            String senderId = json.getString("sender-id");
+            LocalDateTime date = Utilities.y_M_d_hh_mmToDate(json.getString("date"));
             User sender = database.getUser(senderId);
             {
                 if (sender != null) {
                     FriendRequest friendRequest = friendManager.getRequestManager().getReceivedRequest(senderId);
                     if (friendRequest == null) {
-                        friendManager.getRequestManager().addFriendRequest(new FriendRequest(sender, this));
+                        friendManager.getRequestManager().addFriendRequest(new FriendRequest(sender, this, date));
                     }
                 }
             }
@@ -265,7 +274,7 @@ public class User {
     public void loadRequests(JSONObject data){
         JSONArray friendRequests = new JSONArray();
         for (FriendRequest friendRequest : friendManager.getRequestManager().getReceivedRequests()) {
-            friendRequests.put(friendRequest.getSender().userId); // Each friend request is linked to its sender
+            friendRequests.put(friendRequest.toJSONObject()); // Each friend request is linked to its sender
         }
         data.put("requests", friendRequests);
 
