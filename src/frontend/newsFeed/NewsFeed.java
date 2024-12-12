@@ -100,6 +100,23 @@ public class NewsFeed extends JFrame {
         top_btn_panel.add(log_out_btn);
         top_btn_panel.add(search_btn);
 
+        JPanel search_panel = new JPanel();
+//        search_panel.setLayout(new BoxLayout(search_panel, BoxLayout.X_AXIS));
+        search_panel.setLayout(new BorderLayout());
+        search_panel.setBackground(Color.white);
+        Border lineBorder = BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0, 102, 204));
+        JTextField search_textEdit = new JTextField(25);
+        search_textEdit.setBorder(lineBorder);
+        search_textEdit.setBackground(Color.white);
+        search_textEdit.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        JButton search_btn2 = createIconButton("icons/search.png", "Search");
+
+
+        search_panel.add(search_textEdit, BorderLayout.WEST);
+        search_panel.add(search_btn2, BorderLayout.CENTER);
+
+        top_panel.add(search_panel, BorderLayout.WEST);
         top_panel.add(top_btn_panel, BorderLayout.EAST);
 
         contentPanel = new JPanel();
@@ -222,6 +239,62 @@ public class NewsFeed extends JFrame {
             }
         }
     }
+
+    private JButton createIconButton(String icon_path, String tool_tip){
+        JButton button = new JButton(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.setColor(getModel().isPressed() ? new Color(56, 151, 139) : new Color(70, 179, 165));
+                g2d.fillOval(0, 0, getWidth(), getHeight());
+
+                g2d.dispose();
+                super.paintComponent(g);
+            }
+        };
+
+        ImageIcon originalIcon = new ImageIcon(icon_path);
+        Image scaledImage = originalIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        button.setIcon(scaledIcon);
+
+        button.setToolTipText(tool_tip);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false); // Prevent default button background
+        button.setPreferredSize(new Dimension(40, 40)); // Set button size
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return button;
+    }
+
+    private JButton createSideButton(String text) {
+        JButton button = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                g2d.setColor(getModel().isPressed() ? new Color(56, 151, 139) : new Color(70, 179, 165));
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 40, 40);
+                g2d.dispose();
+                super.paintComponent(g);
+            }
+
+
+        };
+
+        button.setForeground(Color.WHITE); // Set text color
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setFont(new Font("Arial", Font.BOLD, 14)); // Set font style and size
+        button.setPreferredSize(new Dimension(120, 40)); // Set button size
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setContentAreaFilled(false); // Prevent default button background
+
+        return button;
+    }
+
     private JButton createOnlineUserButton(User user){
         JButton button = UIUtils.createUserButton(user);
         button.addActionListener(new ActionListener() {
