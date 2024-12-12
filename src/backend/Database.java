@@ -21,11 +21,9 @@ public class Database {
     private Map<String, User> email_to_user = new HashMap<>();
     private Map<String, User> username_to_user = new HashMap<>();
     private CurrentUser currentUser;
-    private final ArrayList<User> users;
 
     private Database() throws IOException {
         checkExistenceOfDatabase();
-        users = new ArrayList<>();
     }
 
     public static Database getInstance() throws IOException {
@@ -40,7 +38,7 @@ public class Database {
         return id_to_user.get(user_id);
     }
     public User[] getUsers(){
-        return users.toArray(new User[0]);
+        return username_to_user.values().toArray(new User[0]);
     }
 
     /**
@@ -61,7 +59,6 @@ public class Database {
         id_to_user.clear();
         email_to_user.clear();
         username_to_user.clear();
-        users.clear();
 
         // Read users.json
         String data = Files.readString(Path.of(users_json_file));
@@ -76,7 +73,6 @@ public class Database {
             email_to_user.put(user.getEmail(), user);
             username_to_user.put(user.getEmail(), user);
             System.out.println("Successfully added user: " + user.getUsername());
-            users.add(user);
         }
 
         // Load users' data from each user file
@@ -151,7 +147,6 @@ public class Database {
             return "Error writing to file";
         }
         currentUser = new CurrentUser(newUser);
-
         return null;
     }
 
