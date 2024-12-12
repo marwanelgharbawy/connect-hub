@@ -24,14 +24,6 @@ public class Group {
     private final PrimaryAdmin primaryAdmin;
     private final String groupId;
 
-    private String groupId;
-    private String name;
-    private String description;
-    private Picture groupPhoto;
-    private Member primaryAdmin;
-    private ArrayList<Member> admins;
-    private ArrayList<Member> members;
-
     public Group(String name, String description, String groupPhotoPath, User primaryAdmin) throws IOException {
         this.name = name;
         this.description = description;
@@ -73,39 +65,39 @@ public class Group {
         this.groupPhoto = groupPhoto.setImage(groupPhotoPath);
     }
 
-    public boolean isMember(User user){
+    public boolean isMember(User user) {
         return members.contains(user);
     }
 
-    public boolean isAdmin(User user){
+    public boolean isAdmin(User user) {
         return admins.contains(user);
     }
 
-    public boolean isPrimaryAdmin(User user){
+    public boolean isPrimaryAdmin(User user) {
         return user == primaryAdmin.getUser();
     }
 
-    private void addGroupToCurrentUser(CurrentUser user, GroupRole role){
+    private void addGroupToCurrentUser(CurrentUser user, GroupRole role) {
         user.addGroup(this, role);
     }
 
-    private void removeGroupFromCurrentUser(CurrentUser user){
+    private void removeGroupFromCurrentUser(CurrentUser user) {
         user.removeGroup(this);
     }
 
-    public void removeMember(Member member){
+    public void removeMember(Member member) {
         this.members.remove(member.getUser());
     }
 
-    public void removeMember(User user){
+    public void removeMember(User user) {
         this.members.remove(user);
     }
 
-    public void addMember(Member member){
+    public void addMember(Member member) {
         this.members.add(member.getUser());
     }
 
-    public void addMember(User user){
+    public void addMember(User user) {
         this.members.add(user);
     }
 
@@ -113,7 +105,7 @@ public class Group {
         return groupContent;
     }
 
-    public void addPost(Post post){
+    public void addPost(Post post) {
         this.groupContent.addPost(post);
     }
 
@@ -121,30 +113,26 @@ public class Group {
         return admins;
     }
 
-    public void addAdmin(Member member){
+    public void addAdmin(Member member) {
         members.remove(member.getUser());
         admins.add(member.getUser());
     }
 
-    public void addAdmin(User user){
+    public void addAdmin(User user) {
         members.remove(user);
         admins.add(user);
     }
 
-    public void removeAdmin(Admin admin){
+    public void removeAdmin(Admin admin) {
         members.add(admin.getUser());
         admins.remove(admin.getUser());
     }
 
-    public void removeAdmin(User user){
+    public void removeAdmin(User user) {
         members.add(user);
         admins.remove(user);
     }
 
-    public String getGroupId() {
-        return groupId;
-    }
-}
     public void setGroupData(JSONObject data) throws IOException {
         this.name = (String) data.get("name");
         this.description = (String) data.get("description");
@@ -155,7 +143,7 @@ public class Group {
 //        this.members = new ArrayList<>();
     }
 
-    public boolean includeUser(Member member){
+    public boolean includeUser(Member member) {
         return members.contains(member);
     }
 

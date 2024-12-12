@@ -29,7 +29,6 @@ public class Database {
     private Map<String, User> id_to_user = new HashMap<>();
     private Map<String, User> email_to_user = new HashMap<>();
     private Map<String, User> username_to_user = new HashMap<>();
-    private final ArrayList<User> users;
     private CurrentUser currentUser;
 
     private Database() throws IOException {
