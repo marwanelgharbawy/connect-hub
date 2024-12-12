@@ -1,6 +1,9 @@
 package Group;
 
+import backend.Database;
 import backend.User;
+
+import java.io.IOException;
 
 public class PrimaryAdmin extends Admin{
 
@@ -13,6 +16,16 @@ public class PrimaryAdmin extends Admin{
     public static PrimaryAdmin getInstance(Group group, User user){
         if (instance == null)
             return new PrimaryAdmin(group, user);
+        return instance;
+    }
+
+    private PrimaryAdmin(Group group, String userId) throws IOException {
+        super(group, Database.getInstance().getUser(userId));
+    }
+
+    public static PrimaryAdmin getInstance(Group group, String userId) throws IOException {
+        if (instance == null)
+            instance = new PrimaryAdmin(group, userId);
         return instance;
     }
 

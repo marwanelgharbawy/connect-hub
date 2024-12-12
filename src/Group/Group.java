@@ -21,7 +21,7 @@ public class Group {
     private final GroupContent groupContent;
     private ArrayList<User> members;
     private ArrayList<User> admins;
-    private final PrimaryAdmin primaryAdmin;
+    private PrimaryAdmin primaryAdmin;
     private final String groupId;
 
     public Group(String name, String description, String groupPhotoPath, User primaryAdmin) throws IOException {
@@ -33,7 +33,8 @@ public class Group {
         this.groupContent = GroupContent.getInstance();
     }
 
-    public Group(String groupId) {
+    public Group( String groupId) {
+        this.groupContent = GroupContent.getInstance();
         this.groupId = groupId;
     }
 
@@ -138,7 +139,7 @@ public class Group {
         this.description = (String) data.get("description");
         this.groupPhoto = new Picture((String) data.get("group-photo")); // Takes the path of the image
         // TODO: Parse JSON for the following attributes
-//        this.primaryAdmin = new Member();
+        this.primaryAdmin = PrimaryAdmin.getInstance(this, (String) data.get("primary-admin"));
 //        this.admins = new ArrayList<>();
 //        this.members = new ArrayList<>();
     }
