@@ -36,8 +36,9 @@ public class Picture {
         return image;
     }
 
-    public void changeImage(String imagePath) throws IOException {
+    public Picture setImage(String imagePath) throws IOException {
         this.image = constructImage(imagePath);
+        return this;
     }
 
     // Recommended dimensions based on Facebook

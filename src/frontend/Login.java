@@ -16,7 +16,7 @@ public class Login extends JFrame {
     private JTextField textField1;
     private JButton backButton;
     private JButton loginButton;
-    private MainMenu parent;
+    private final MainMenu parent;
 
     public Login(MainMenu parent) {
         this.parent = parent;
