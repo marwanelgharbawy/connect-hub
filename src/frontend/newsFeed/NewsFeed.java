@@ -105,18 +105,6 @@ public class NewsFeed extends JFrame {
         search_panel.setLayout(new BorderLayout());
         search_panel.setBackground(Color.white);
         Border lineBorder = BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(0, 102, 204));
-        JTextField search_textEdit = new JTextField(25);
-        search_textEdit.setBorder(lineBorder);
-        search_textEdit.setBackground(Color.white);
-        search_textEdit.setFont(new Font("Arial", Font.PLAIN, 14));
-
-        JButton search_btn2 = createIconButton("icons/search.png", "Search");
-
-
-        search_panel.add(search_textEdit, BorderLayout.WEST);
-        search_panel.add(search_btn2, BorderLayout.CENTER);
-
-        top_panel.add(search_panel, BorderLayout.WEST);
         top_panel.add(top_btn_panel, BorderLayout.EAST);
 
         contentPanel = new JPanel();

@@ -96,6 +96,7 @@ public class SearchWindow extends JFrame {
             for (User searchedUser : userResults) {
                 JButton button = UIUtils.createUserButton(searchedUser);
                 button.addActionListener(e -> {
+                    setVisible(false);
                     JFrame userProfileWindow = new JFrame();
                     UserProfile userProfile;
                     try {
@@ -106,6 +107,17 @@ public class SearchWindow extends JFrame {
                             userProfile = new UserProfile(user);
                         }
                         userProfileWindow.setContentPane(userProfile);
+                        userProfileWindow.addWindowListener(new java.awt.event.WindowAdapter() {
+                            @Override
+                            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                                try {
+                                    performSearch(user, searchKey);
+                                    setVisible(true);
+                                } catch (IOException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                            }
+                        });
 
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
@@ -131,6 +143,33 @@ public class SearchWindow extends JFrame {
         for (Group searchedGroup : groupResults) {
             JButton button = UIUtils.createGroupButton(searchedGroup);
             resultsPanel.add(button);
+                button.addActionListener(e -> {
+                    setVisible(false);
+                    // TODO: Init group window here
+                    try {
+
+
+                        groupWindow.addWindowListener(new java.awt.event.WindowAdapter() {
+                            @Override
+                            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                                try {
+                                    performSearch(user, searchKey);
+                                    setVisible(true);
+                                } catch (IOException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                            }
+                        });
+
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    groupWindow.pack();
+                    groupWindow.setVisible(true);
+                });
+
+                resultsPanel.add(button);
+                resultsPanel.add(button);
         }
     }
     */
