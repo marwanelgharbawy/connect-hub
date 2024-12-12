@@ -71,4 +71,15 @@ public class Group {
     public String getGroupId() {
         return groupId;
     }
+
+    public JSONObject getGroupData() {
+        JSONObject data = new JSONObject();
+        data.put("name", name);
+        data.put("description", description);
+        // data.put("group-photo", /*photo's path*/ );
+        // data.put("primary-admin", /*primaryAdmin*/ );
+        // data.put("admins", /*admins*/ );
+        // data.put("members", /*members*/ );
+        return data;
+    }
 }

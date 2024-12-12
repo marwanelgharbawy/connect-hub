@@ -240,4 +240,33 @@ public class Database {
             writeDataToFiles();
     }
 
+    // This will be called to save a group in the database class and files
+    public void saveGroup(Group group) throws IOException {
+        id_to_group.put(group.getGroupId(), group);
+        writeGroupData(group);
+        writeGroupsIDToFiles();
+    }
+
+    // Writes the group data to its own file
+    private void writeGroupData(Group group) throws IOException {
+        FileWriter file = new FileWriter(groups_folder + "/" + group.getGroupId() + ".json");
+        file.write(group.getGroupData().toString(2));
+        file.close();
+    }
+
+    // Writes all groups IDs to groups.json
+    // This should be called when adding a group to the database to append its ID to groups.json
+    private void writeGroupsIDToFiles() throws IOException {
+        JSONArray groups = new JSONArray();
+        for (Group group : id_to_group.values()) {
+            groups.put(group.getGroupId()); // JSON array of IDs
+        }
+        try {
+            FileWriter file = new FileWriter(groups_json_file);
+            file.write(groups.toString(2));
+            file.close();
+        } catch (IOException e) {
+            System.out.println("Database error.");
+        }
+    }
 }
