@@ -15,6 +15,7 @@ import utils.Utilities;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.json.*;
 
@@ -231,13 +232,15 @@ public class User {
     public void setRequests(Database database,JSONObject userData){
         JSONArray requests = userData.getJSONArray("requests");
         for (Object request : requests) {
-            String senderId = (String) request;
+            JSONObject json = (JSONObject)request;
+            String senderId = json.getString("sender-id");
+            LocalDateTime date = Utilities.y_M_d_hh_mmToDate(json.getString("date"));
             User sender = database.getUser(senderId);
             {
                 if (sender != null) {
                     FriendRequest friendRequest = friendManager.getRequestManager().getReceivedRequest(senderId);
                     if (friendRequest == null) {
-                        friendManager.getRequestManager().addFriendRequest(new FriendRequest(sender, this));
+                        friendManager.getRequestManager().addFriendRequest(new FriendRequest(sender, this, date));
                     }
                 }
             }
@@ -265,7 +268,7 @@ public class User {
     public void loadRequests(JSONObject data){
         JSONArray friendRequests = new JSONArray();
         for (FriendRequest friendRequest : friendManager.getRequestManager().getReceivedRequests()) {
-            friendRequests.put(friendRequest.getSender().userId); // Each friend request is linked to its sender
+            friendRequests.put(friendRequest.toJSONObject()); // Each friend request is linked to its sender
         }
         data.put("requests", friendRequests);
 
