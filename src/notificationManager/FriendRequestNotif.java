@@ -3,6 +3,8 @@ package notificationManager;
 import backend.User;
 import org.json.JSONObject;
 
+import javax.swing.*;
+import java.awt.*;
 import java.time.LocalDateTime;
 
 public class FriendRequestNotif implements Notification{
@@ -20,6 +22,13 @@ public class FriendRequestNotif implements Notification{
     @Override
     public LocalDateTime getNotifDate() {
         return null;
+    }
+
+    @Override
+    public ImageIcon getNotifImage() {
+        ImageIcon originalIcon = sender_user.getProfile().getProfilePhoto().toIcon();
+        Image scaledImage = originalIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
     }
 
     @Override
