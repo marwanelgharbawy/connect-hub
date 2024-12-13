@@ -7,6 +7,7 @@ import friendManager.FriendUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import Group.*;
 
 public class SearchManagerC implements SearchManagerI{
     private final ArrayList<User> searchedUsers;

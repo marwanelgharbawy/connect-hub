@@ -17,12 +17,12 @@ public class PrimaryAdmin extends Admin{
         super(Database.getInstance().getUser(userId), group);
     }
 
-    public void makeAdmin(Member member){
-        group.addAdmin(member);
+    public void makeAdmin(User user){
+        group.addAdmin(user);
     }
 
-    public void demoteAdmin(Admin admin){
-        group.removeAdmin(admin);
+    public void demoteAdmin(User user){
+        group.removeAdmin(user);
     }
 
     public void deleteGroup(){

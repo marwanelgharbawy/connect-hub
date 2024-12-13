@@ -81,6 +81,11 @@ public class User {
         this.groupID_to_joiningDate = new HashMap<>();
     }
 
+    @Override
+    public String toString(){
+        return getUsername();
+    }
+
     // Set user's data from the database's JSON object
     public void setUserData(JSONObject userData) throws IOException {
         dateOfBirth = Utilities.y_M_dToDate(userData.getString("dateOfBirth"));

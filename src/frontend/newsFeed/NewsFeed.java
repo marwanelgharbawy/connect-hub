@@ -193,7 +193,7 @@ public class NewsFeed extends JFrame {
         return new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                new SearchWindow(current_user.getUser());
+                new SearchWindow(current_user);
             }
         };
     }

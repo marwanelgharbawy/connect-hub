@@ -2,7 +2,6 @@ package Group;
 
 import content.ContentFields;
 import content.Post;
-import frontend.Group.GroupPageBuilder;
 
 import java.util.ArrayList;
 

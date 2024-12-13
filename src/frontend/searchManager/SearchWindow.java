@@ -15,10 +15,12 @@ public class SearchWindow extends JFrame {
 
     private JTextField searchField;
     private JPanel resultsPanel;
+    private final CurrentUser currentUser;
     private final User user;
 
-    public SearchWindow(User user) {
-        this.user = user;
+    public SearchWindow(CurrentUser currentUser) {
+        this.currentUser = currentUser;
+        this.user = currentUser.getUser();
         initUI();
     }
 
