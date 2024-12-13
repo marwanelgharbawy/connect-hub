@@ -25,12 +25,14 @@ public class MembershipRequestManager {
         admin.declineRequest(request);
         request.setStatus(MembershipRequestStatus.Declined);
         membershipRequests.remove(request);
+        group.saveGroup();
     }
 
     public void acceptRequest(MembershipRequest request, Admin admin){
         admin.acceptRequest(request);
         request.setStatus(MembershipRequestStatus.Approved);
         membershipRequests.remove(request);
+        group.saveGroup();
     }
 
     public void sendMembershipRequest(User sender){
@@ -38,12 +40,14 @@ public class MembershipRequestManager {
         if (!(receiver.isMember(sender) || receiver.isAdmin(sender) || receiver.isPrimaryAdmin(sender))) {
             MembershipRequest request = new MembershipRequest(sender, receiver);
             membershipRequests.add(request);
+            group.saveGroup();
         }
     }
 
     public void cancelRequest(MembershipRequest request, CurrentUser user){
         request.setStatus(MembershipRequestStatus.Declined);
         membershipRequests.remove(request);
+        group.saveGroup();
     }
 
     public ArrayList<MembershipRequest> getMembershipRequests() {
@@ -58,11 +62,10 @@ public class MembershipRequestManager {
         return groupRequests;
     }
 
-    public ArrayList<MembershipRequest> getUserMembershipRequests(User user){
-        ArrayList<MembershipRequest> userRequests = new ArrayList<>();
+    public MembershipRequest getUserMembershipRequests(User user){
         for (MembershipRequest request: membershipRequests)
-            if (request.getSender() == user)
-                userRequests.add(request);
-        return userRequests;
+            if (request.getSender().getUserId().equals(user.getUserId()))
+                return request;
+        return null;
     }
 }
