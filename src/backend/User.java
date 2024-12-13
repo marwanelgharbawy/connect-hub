@@ -289,9 +289,13 @@ public class User {
     public void setGroups(JSONObject userData){
         JSONArray groups = userData.getJSONArray("groups");
         for(Object group: groups){
-            JSONObject groupJson = (JSONObject) group;
-            String group_id = groupJson.getString("group-id");
-            LocalDateTime joining_date = Utilities.y_M_d_hh_mmToDate(groupJson.getString("joining-date"));
+//            JSONObject groupJson = (JSONObject) group;
+//            String group_id = groupJson.getString("group-id");
+//            LocalDateTime joining_date = Utilities.y_M_d_hh_mmToDate(groupJson.getString("joining-date"));
+//            groupID_to_joiningDate.put(group_id, joining_date);
+            // TODO: FIX JOINING DATE
+            LocalDateTime joining_date = LocalDateTime.now(); // To prevent errors
+            String group_id = (String) group;
             groupID_to_joiningDate.put(group_id, joining_date);
         }
     }
