@@ -1,11 +1,8 @@
 package backend;
 import content.ContentManager;
-import friendManager.FriendManagerC;
-import friendManager.FriendManagerFactory;
-import friendManager.FriendManagerI;
 
 import friendManager.*;
-
+import Group.Group;
 
 import notificationManager.NotificationsManager;
 import searchManager.SearchManagerC;
@@ -367,4 +364,9 @@ public class User {
         return desiredUser.isRequestSent(this);
     }
 
+    public void createGroup(Group group) throws IOException {
+        groupID_to_joiningDate.put(group.getGroupId(), LocalDateTime.now());
+        Database.getInstance().saveGroup(group); // Save the group in the database
+        saveUser();                              // To update its group array in the database
+    }
 }

@@ -45,7 +45,7 @@ public class CreateGroup extends JFrame {
 
             try {
                 Group group = new Group(name, description, photoPath, user);
-                Database.getInstance().saveGroup(group);
+                user.createGroup(group);
                 JOptionPane.showMessageDialog(this, "Group created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             } catch (IOException e) {
