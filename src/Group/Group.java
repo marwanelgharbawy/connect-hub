@@ -23,6 +23,7 @@ public class Group {
     private ArrayList<User> admins;
     private PrimaryAdmin primaryAdmin;
     private final String groupId;
+    private final GroupNotifManager groupNotifManager;
 
     // Constructor when creating a new group from the frontend (New Group)
     public Group(String name, String description, String groupPhotoPath, User primaryAdmin) throws IOException {
@@ -32,12 +33,14 @@ public class Group {
         this.groupId = Utilities.generateId();
         this.primaryAdmin = getInstance(this, primaryAdmin);
         this.groupContent = GroupContent.getInstance();
+        this.groupNotifManager = new GroupNotifManager(this);
     }
 
     // Constructor when loading a group from the database
     public Group(String groupId) {
         this.groupContent = GroupContent.getInstance();
         this.groupId = groupId;
+        this.groupNotifManager = new GroupNotifManager(this);
     }
 
     public String getName() {
@@ -108,6 +111,10 @@ public class Group {
         return groupContent;
     }
 
+    public GroupNotifManager getGroupNotifManager(){
+        return groupNotifManager;
+    }
+
     public void addPost(Post post) {
         this.groupContent.addPost(post);
     }
@@ -144,6 +151,7 @@ public class Group {
         this.primaryAdmin = PrimaryAdmin.getInstance(this, (String) data.get("primary-admin"));
 //        this.admins = new ArrayList<>();
 //        this.members = new ArrayList<>();
+        this.groupNotifManager.setGroupNotifs(data.getJSONObject("notifications"));
     }
 
     public JSONObject getGroupData() throws IOException {
@@ -157,6 +165,7 @@ public class Group {
 
         // data.put("admins", /*admins*/ );
         // data.put("members", /*members*/ );
+        data.put("notifications", groupNotifManager.toJSONObject());
         return data;
     }
 
