@@ -23,6 +23,7 @@ public class Group {
     private ArrayList<User> admins;
     private PrimaryAdmin primaryAdmin;
     private final String groupId;
+    private final GroupNotifManager groupNotifManager;
 
     public Group(String name, String description, String groupPhotoPath, User primaryAdmin) throws IOException {
         this.name = name;
@@ -31,11 +32,13 @@ public class Group {
         this.groupId = Utilities.generateId();
         this.primaryAdmin = getInstance(this, primaryAdmin);
         this.groupContent = GroupContent.getInstance();
+        this.groupNotifManager = new GroupNotifManager(this);
     }
 
     public Group( String groupId) {
         this.groupContent = GroupContent.getInstance();
         this.groupId = groupId;
+        this.groupNotifManager = new GroupNotifManager(this);
     }
 
     public String getName() {
@@ -106,6 +109,10 @@ public class Group {
         return groupContent;
     }
 
+    public GroupNotifManager getGroupNotifManager(){
+        return groupNotifManager;
+    }
+
     public void addPost(Post post) {
         this.groupContent.addPost(post);
     }
@@ -142,6 +149,7 @@ public class Group {
         this.primaryAdmin = PrimaryAdmin.getInstance(this, (String) data.get("primary-admin"));
 //        this.admins = new ArrayList<>();
 //        this.members = new ArrayList<>();
+        this.groupNotifManager.setGroupNotifs(data.getJSONObject("notifications"));
     }
 
     public boolean includeUser(Member member) {
@@ -160,6 +168,7 @@ public class Group {
         // data.put("primary-admin", /*primaryAdmin*/ );
         // data.put("admins", /*admins*/ );
         // data.put("members", /*members*/ );
+        data.put("notifications", groupNotifManager.toJSONObject());
         return data;
     }
 }
