@@ -1,5 +1,7 @@
 package backend;
-import Group.Member;
+import Group.Group;
+import Group.MembershipManager.MembershipRequestManager;
+import Group.GroupRole;
 import content.ContentManager;
 import friendManager.FriendManagerC;
 import friendManager.FriendManagerFactory;
@@ -15,7 +17,6 @@ import utils.Utilities;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import java.util.HashMap;
 import java.time.LocalDateTime;
 
 
@@ -24,6 +25,7 @@ import org.json.*;
 public class User {
     private final FriendManagerC friendManager;
     private final SearchManagerC searchManager;
+    private final MembershipRequestManager membershipManager;
     private String userId;
     private String email;
     private String username;
@@ -40,6 +42,7 @@ public class User {
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.searchManager = new SearchManagerC();
+        this.membershipManager = new MembershipRequestManager();
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
@@ -56,6 +59,7 @@ public class User {
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.searchManager = new SearchManagerC();
+        this.membershipManager = new MembershipRequestManager();
         this.profile = new Profile(this,"", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
@@ -70,6 +74,7 @@ public class User {
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.searchManager = new SearchManagerC();
+        this.membershipManager = new MembershipRequestManager();
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
@@ -313,5 +318,4 @@ public class User {
     public boolean isRequestReceived(User desiredUser){
         return desiredUser.isRequestSent(this);
     }
-
 }

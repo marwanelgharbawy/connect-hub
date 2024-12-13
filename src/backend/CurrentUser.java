@@ -17,8 +17,8 @@ import java.util.HashMap;
 public class CurrentUser{
     private ArrayList<Post> newsFeedPosts;
     private ArrayList<Story> newsFeedStories;
-    private User user;
-    private HashMap<String, GroupRole> groups;
+    private final User user;
+    private final HashMap<String, GroupRole> groups;
 
 
     public CurrentUser(User user){

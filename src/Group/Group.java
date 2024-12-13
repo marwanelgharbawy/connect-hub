@@ -4,14 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
+import Group.MembershipManager.MembershipRequestManager;
+import Group.MembershipManager.MembershipRequestStatus;
 import backend.CurrentUser;
 import backend.User;
 import content.Post;
 
 import org.json.JSONObject;
 import utils.*;
-
-import static Group.PrimaryAdmin.getInstance;
 
 public class Group {
 
@@ -23,19 +23,22 @@ public class Group {
     private ArrayList<User> admins;
     private PrimaryAdmin primaryAdmin;
     private final String groupId;
+    private final MembershipRequestManager membershipManager;
 
     public Group(String name, String description, String groupPhotoPath, User primaryAdmin) throws IOException {
         this.name = name;
         this.description = description;
         this.groupPhoto = new Picture(groupPhotoPath);
         this.groupId = Utilities.generateId();
-        this.primaryAdmin = getInstance(this, primaryAdmin);
-        this.groupContent = GroupContent.getInstance();
+        this.primaryAdmin = new PrimaryAdmin(primaryAdmin, this);
+        this.groupContent = new GroupContent(this);
+        this.membershipManager = new MembershipRequestManager();
     }
 
-    public Group( String groupId) {
-        this.groupContent = GroupContent.getInstance();
+    public Group( String groupId) throws IOException {
+        this.groupContent = new GroupContent(this);
         this.groupId = groupId;
+        this.membershipManager = new MembershipRequestManager();
     }
 
     public String getName() {
@@ -52,6 +55,10 @@ public class Group {
 
     public ArrayList<User> getMembers() {
         return members;
+    }
+
+    public PrimaryAdmin getPrimaryAdmin() {
+        return primaryAdmin;
     }
 
     public void setName(String name) {
@@ -78,12 +85,16 @@ public class Group {
         return user == primaryAdmin.getUser();
     }
 
-    private void addGroupToCurrentUser(CurrentUser user, GroupRole role) {
-        user.addGroup(this, role);
+    private void addGroupToCurrentUser(CurrentUser user) {
+        user.addGroup(this, new Member(user.getUser(), this));
     }
 
     private void removeGroupFromCurrentUser(CurrentUser user) {
         user.removeGroup(this);
+    }
+
+    private void changeRoleFromCurrentUer(CurrentUser user, GroupRole role){
+        user.changeRole(this, role);
     }
 
     public void removeMember(Member member) {
@@ -94,12 +105,22 @@ public class Group {
         this.members.remove(user);
     }
 
+    public void removeMember(CurrentUser currentUser){
+        this.members.remove(currentUser.getUser());
+        removeGroupFromCurrentUser(currentUser);
+    }
+
     public void addMember(Member member) {
         this.members.add(member.getUser());
     }
 
     public void addMember(User user) {
         this.members.add(user);
+    }
+
+    public void addMember(CurrentUser currentUser){
+        this.members.add(currentUser.getUser());
+        addGroupToCurrentUser(currentUser);
     }
 
     public GroupContent getGroupContent() {
@@ -124,9 +145,20 @@ public class Group {
         admins.add(user);
     }
 
+    public void addAdmin(CurrentUser currentUser) throws IOException {
+        members.remove(currentUser.getUser());
+        currentUser.changeRole(this, new Admin(currentUser.getUser(), this));
+    }
+
     public void removeAdmin(Admin admin) {
         members.add(admin.getUser());
         admins.remove(admin.getUser());
+    }
+
+    public void removeAdmin(CurrentUser user){
+        members.add(user.getUser());
+        admins.remove(user.getUser());
+        user.changeRole(this, new Member(user.getUser(), this));
     }
 
     public void removeAdmin(User user) {
@@ -139,7 +171,7 @@ public class Group {
         this.description = (String) data.get("description");
         this.groupPhoto = new Picture((String) data.get("group-photo")); // Takes the path of the image
         // TODO: Parse JSON for the following attributes
-        this.primaryAdmin = PrimaryAdmin.getInstance(this, (String) data.get("primary-admin"));
+        this.primaryAdmin = new PrimaryAdmin(this, (String) data.get("primary-admin"));
 //        this.admins = new ArrayList<>();
 //        this.members = new ArrayList<>();
     }
@@ -161,5 +193,9 @@ public class Group {
         // data.put("admins", /*admins*/ );
         // data.put("members", /*members*/ );
         return data;
+    }
+
+    public MembershipRequestManager getMembershipManager() {
+        return membershipManager;
     }
 }

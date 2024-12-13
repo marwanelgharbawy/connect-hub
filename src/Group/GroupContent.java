@@ -2,21 +2,17 @@ package Group;
 
 import content.ContentFields;
 import content.Post;
+import frontend.Group.GroupPageBuilder;
 
 import java.util.ArrayList;
 
 public class GroupContent {
+    Group group;
     ArrayList<Post> posts;
-    private static GroupContent instance;
 
-    private GroupContent(){
+    public GroupContent(Group group){
+        this.group = group;
         this.posts = new ArrayList<>();
-    }
-
-    public static GroupContent getInstance(){
-        if (instance == null)
-            return new GroupContent();
-        return instance;
     }
 
     public ArrayList<Post> getPosts() {

@@ -9,24 +9,12 @@ public class PrimaryAdmin extends Admin{
 
     private static PrimaryAdmin instance;
 
-    private PrimaryAdmin(Group group, User user) {
-        super(group, user);
+    public PrimaryAdmin(User user, Group group) throws IOException {
+        super(user, group);
     }
 
-    public static PrimaryAdmin getInstance(Group group, User user){
-        if (instance == null)
-            return new PrimaryAdmin(group, user);
-        return instance;
-    }
-
-    private PrimaryAdmin(Group group, String userId) throws IOException {
-        super(group, Database.getInstance().getUser(userId));
-    }
-
-    public static PrimaryAdmin getInstance(Group group, String userId) throws IOException {
-        if (instance == null)
-            instance = new PrimaryAdmin(group, userId);
-        return instance;
+    public PrimaryAdmin(Group group, String userId) throws IOException {
+        super(Database.getInstance().getUser(userId), group);
     }
 
     public void makeAdmin(Member member){
@@ -36,4 +24,9 @@ public class PrimaryAdmin extends Admin{
     public void demoteAdmin(Admin admin){
         group.removeAdmin(admin);
     }
+
+    public void deleteGroup(){
+        group = null;
+    }
+
 }
