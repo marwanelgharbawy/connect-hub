@@ -88,8 +88,8 @@ public class UIUtils {
         button.setFocusPainted(false);
         button.setBorderPainted(false);
         button.setFont(new Font("Arial", Font.PLAIN, 12));
-        button.setPreferredSize(new Dimension(80, 25));
-        button.setMaximumSize(new Dimension(80, 25));
+        button.setPreferredSize(new Dimension(100, 25));
+        button.setMaximumSize(new Dimension(100, 25));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setContentAreaFilled(false); // Transparent content area for custom painting
 
