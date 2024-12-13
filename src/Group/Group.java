@@ -5,12 +5,12 @@ import java.util.ArrayList;
 
 
 import Group.MembershipManager.MembershipRequestManager;
-import Group.MembershipManager.MembershipRequestStatus;
 import backend.CurrentUser;
 import backend.Database;
 import backend.User;
 import content.Post;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.*;
 
@@ -205,13 +205,29 @@ public class Group {
         data.put("description", description);
         data.put("group-photo", groupPhoto.getImagePath());
 
-        // THIS MIGHT NEED TO BE CHANGED AFTER MERGING
         data.put("primary-admin", primaryAdmin.getUser().getUserId());
 
-        // data.put("admins", /*admins*/ );
-        // data.put("members", /*members*/ );
+        loadAdmins(data);
+        loadMembers(data);
+
         data.put("notifications", groupNotifManager.toJSONObject());
         return data;
+    }
+
+    private void loadAdmins(JSONObject data) {
+        JSONArray admins = new JSONArray();
+        for (User user : this.admins) {
+            admins.put(user.getUserId());
+        }
+        data.put("admins", admins);
+    }
+
+    private void loadMembers(JSONObject data) {
+        JSONArray members = new JSONArray();
+        for (User user : this.members) {
+            members.put(user.getUserId());
+        }
+        data.put("members", members);
     }
 
     public MembershipRequestManager getMembershipManager() {
