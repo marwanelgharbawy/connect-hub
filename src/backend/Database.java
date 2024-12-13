@@ -89,7 +89,7 @@ public class Database {
             User user = new User(jsonObject);
             id_to_user.put(user.getUserId(), user);
             email_to_user.put(user.getEmail(), user);
-            username_to_user.put(user.getEmail(), user);
+            username_to_user.put(user.getUsername(), user);
             System.out.println("Successfully added user: " + user.getUsername());
         }
 
