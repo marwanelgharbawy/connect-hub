@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import Group.MembershipManager.MembershipRequestManager;
 import Group.MembershipManager.MembershipRequestStatus;
 import backend.CurrentUser;
+import backend.Database;
 import backend.User;
 import content.Post;
 
@@ -223,5 +224,23 @@ public class Group {
 
     public String getGroupId() {
         return groupId;
+    }
+
+    public void delete() {
+        // Make all members leave the group
+        for (User member : members) {
+            member.leaveGroup(this.groupId);
+        }
+        // Make all admins leave the group
+        for (User admin : admins) {
+            admin.leaveGroup(this.groupId);
+        }
+        // Make the primary admin leave the group
+        primaryAdmin.getUser().leaveGroup(this.groupId);
+        try {
+            Database.getInstance().deleteGroup(this.groupId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
