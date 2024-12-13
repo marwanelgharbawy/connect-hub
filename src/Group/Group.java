@@ -208,7 +208,7 @@ public class Group {
             String user_id = (String) request;
             User user = Database.getInstance().getUser(user_id);
             if(user != null){
-                membershipManager.sendMembershipRequest(user);
+                membershipManager.getMembershipRequests().add(new MembershipRequest(user, this));
             }
         }
     }
@@ -225,7 +225,7 @@ public class Group {
         this.members.clear();
         for(Object member: memberJson){
             String user_id = (String) member;
-            this.admins.add(Database.getInstance().getUser(user_id));
+            this.members.add(Database.getInstance().getUser(user_id));
         }
     }
 

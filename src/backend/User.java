@@ -104,6 +104,14 @@ public class User {
         setGroups(userData);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        User user = (User) obj;
+        return this.userId.equals(user.userId);
+    }
+
     public void joinGroup(String group_id){
         groupID_to_joiningDate.put(group_id, LocalDateTime.now());
         saveUser();

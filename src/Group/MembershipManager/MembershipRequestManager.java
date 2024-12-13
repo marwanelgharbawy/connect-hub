@@ -32,6 +32,7 @@ public class MembershipRequestManager {
         admin.acceptRequest(request);
         request.setStatus(MembershipRequestStatus.Approved);
         membershipRequests.remove(request);
+        group.getGroupNotifManager().addNewUserNotif(request.getSender());
         group.saveGroup();
     }
 
@@ -55,11 +56,7 @@ public class MembershipRequestManager {
     }
 
     public ArrayList<MembershipRequest> getGroupRequests() {
-        ArrayList<MembershipRequest> groupRequests = new ArrayList<>();
-        for (MembershipRequest request: membershipRequests)
-            if (request.getReceiver() == group)
-                groupRequests.add(request);
-        return groupRequests;
+        return membershipRequests;
     }
 
     public MembershipRequest getUserMembershipRequests(User user){
