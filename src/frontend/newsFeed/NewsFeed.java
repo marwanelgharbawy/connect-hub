@@ -115,6 +115,7 @@ public class NewsFeed extends JFrame {
         refreshPages();
         home_btn.addActionListener(e-> cardLayout.show(contentPanel, home_btn.getText()));
         stories_btn.addActionListener(e-> cardLayout.show(contentPanel, stories_btn.getText()));
+        groups_btn.addActionListener(e-> cardLayout.show(contentPanel, groups_btn.getText()));
         my_profile_btn.addActionListener(e-> cardLayout.show(contentPanel, my_profile_btn.getText()));
         log_out_btn.addActionListener(log_out_btn_evt());
         this.addWindowListener(close_evt());
@@ -148,6 +149,10 @@ public class NewsFeed extends JFrame {
         /*My Profile*/
         UserProfile current_user_profile = new UserProfile(current_user.getUser());
         contentPanel.add(current_user_profile, "My Profile");
+
+        /* Groups */
+        GroupsNewsFeed groupsNewsFeed = new GroupsNewsFeed();
+        contentPanel.add(groupsNewsFeed, "Groups");
     }
 
     private ActionListener refresh_btn_evt(){

@@ -37,6 +37,8 @@ public class Group {
         this.groupContent = new GroupContent(this);
         this.membershipManager = new MembershipRequestManager();
         this.groupNotifManager = new GroupNotifManager(this);
+        members = new ArrayList<>();
+        admins = new ArrayList<>();
     }
 
     // Constructor when loading a group from the database
@@ -45,6 +47,8 @@ public class Group {
         this.groupId = groupId;
         this.membershipManager = new MembershipRequestManager();
         this.groupNotifManager = new GroupNotifManager(this);
+        members = new ArrayList<>();
+        admins = new ArrayList<>();
     }
 
     public String getName() {
@@ -88,7 +92,12 @@ public class Group {
     }
 
     public boolean isPrimaryAdmin(User user) {
-        return user == primaryAdmin.getUser();
+        return user.getUserId().equals(primaryAdmin.getUser().getUserId());
+    }
+
+    public boolean isInGroup(User user){
+        System.out.println();
+        return  isMember(user) || isAdmin(user) || isPrimaryAdmin(user);
     }
 
     private void addGroupToCurrentUser(CurrentUser user) {
@@ -180,6 +189,8 @@ public class Group {
         this.name = (String) data.get("name");
         this.description = (String) data.get("description");
         this.groupPhoto = new Picture((String) data.get("group-photo")); // Takes the path of the image
+        this.members.clear();
+        this.admins.clear();
         // TODO: Parse JSON for the following attributes
         this.primaryAdmin = new PrimaryAdmin(this, (String) data.get("primary-admin"));
 //        this.admins = new ArrayList<>();
