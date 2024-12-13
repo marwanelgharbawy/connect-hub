@@ -38,13 +38,11 @@ public class NotificationsManager {
     public ArrayList<Notification> getAllNotifications() throws IOException {
         ArrayList<Notification> notifs = new ArrayList<>();
         notifs.addAll(friendRequestNotifs);
-//        for(GroupNotifManager group: group_NotifManager.values())
-//            notifs.addAll(group.getAllNotifications());
-        for(String group_id: user.getUserGroups()){
-            Group group = Database.getInstance().getGroup(group_id);
-            notifs.addAll(group.getGroupNotifManager().getAllNotifications());
-            // TODO: get only notifications after user's joining data
-        }
+//        for(String group_id: user.getUserGroups()){
+//            Group group = Database.getInstance().getGroup(group_id);
+//            notifs.addAll(group.getGroupNotifManager().getAllNotifications());
+//            // TODO: get only notifications after user's joining data
+//        }
         return notifs;
     }
 }
