@@ -274,12 +274,31 @@ public class Group {
         this.description = (String) data.get("description");
         this.groupPhoto = new Picture((String) data.get("group-photo")); // Takes the path of the image
         this.members.clear();
+        this.admins.clear();
+
         this.primaryAdmin = new PrimaryAdmin(this, (String) data.get("primary-admin"));
 
-        setAdmins(data);
-        setMembers(data);
-        setRequests(data);
+        setAdmins(data.getJSONArray("admins"));
+        setMembers(data.getJSONArray("members"));
+
+        setRequests(data);  
         this.groupNotifManager.setGroupNotifs(data.getJSONObject("notifications"));
+    }
+
+    private void setAdmins(JSONArray admins) throws IOException {
+        for (Object obj : admins) {
+            String userID = (String) obj;
+            User user = Database.getInstance().getUser(userID);
+            this.admins.add(user);
+        }
+    }
+
+    private void setMembers(JSONArray members) throws IOException {
+        for (Object obj : members) {
+            String userID = (String) obj;
+            User user = Database.getInstance().getUser(userID);
+            this.members.add(user);
+        }
     }
 
     public JSONObject getGroupData() throws IOException {
@@ -288,15 +307,31 @@ public class Group {
         data.put("description", description);
         data.put("group-photo", groupPhoto.getImagePath());
 
-        // THIS MIGHT NEED TO BE CHANGED AFTER MERGING
         data.put("primary-admin", primaryAdmin.getUser().getUserId());
 
         loadAdmins(data);
         loadMembers(data);
+      
         loadRequest(data);
 
         data.put("notifications", groupNotifManager.toJSONObject());
         return data;
+    }
+
+    private void loadAdmins(JSONObject data) {
+        JSONArray admins = new JSONArray();
+        for (User user : this.admins) {
+            admins.put(user.getUserId());
+        }
+        data.put("admins", admins);
+    }
+
+    private void loadMembers(JSONObject data) {
+        JSONArray members = new JSONArray();
+        for (User user : this.members) {
+            members.put(user.getUserId());
+        }
+        data.put("members", members);
     }
 
     public MembershipRequestManager getMembershipManager() {
@@ -309,5 +344,23 @@ public class Group {
 
     public String getGroupId() {
         return groupId;
+    }
+
+    public void delete() {
+        // Make all members leave the group
+        for (User member : members) {
+            member.leaveGroup(this.groupId);
+        }
+        // Make all admins leave the group
+        for (User admin : admins) {
+            admin.leaveGroup(this.groupId);
+        }
+        // Make the primary admin leave the group
+        primaryAdmin.getUser().leaveGroup(this.groupId);
+        try {
+            Database.getInstance().deleteGroup(this.groupId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
