@@ -59,7 +59,6 @@ public class GroupsNewsFeed extends JPanel {
 
     private void populateMyGroups(boolean isMember) throws IOException {
         contentPanel.removeAll();
-        System.out.println("hello########isMemeber "+isMember);
         Group[] groups = Database.getInstance().getGroups();
         boolean empty = true;
         for(Group group: groups){
