@@ -134,17 +134,20 @@ public class Group {
 
     public void addMember(Member member) {
         this.members.add(member.getUser());
+        getGroupNotifManager().addNewUserNotif(member.getUser());
         saveGroup();
     }
 
     public void addMember(User user) {
         this.members.add(user);
+        getGroupNotifManager().addNewUserNotif(user);
         saveGroup();
     }
 
     public void addMember(CurrentUser currentUser){
         this.members.add(currentUser.getUser());
         addGroupToCurrentUser(currentUser);
+        getGroupNotifManager().addNewUserNotif(currentUser.getUser());
         saveGroup();
     }
 
@@ -168,23 +171,28 @@ public class Group {
     public void addAdmin(Member member) {
         members.remove(member.getUser());
         admins.add(member.getUser());
+        getGroupNotifManager().addStatusChangeNotif(member.getUser());
+        saveGroup();
     }
 
     public void addAdmin(User user) {
         members.remove(user);
         admins.add(user);
+        getGroupNotifManager().addStatusChangeNotif(user);
         saveGroup();
     }
 
     public void addAdmin(CurrentUser currentUser) throws IOException {
         members.remove(currentUser.getUser());
         currentUser.changeRole(this, new Admin(currentUser.getUser(), this));
+        getGroupNotifManager().addStatusChangeNotif(currentUser.getUser());
         saveGroup();
     }
 
     public void removeAdmin(Admin admin) {
         members.add(admin.getUser());
         admins.remove(admin.getUser());
+        getGroupNotifManager().addStatusChangeNotif(admin.getUser());
         saveGroup();
     }
 
@@ -192,12 +200,14 @@ public class Group {
         members.add(user.getUser());
         admins.remove(user.getUser());
         user.changeRole(this, new Member(user.getUser(), this));
+        getGroupNotifManager().addStatusChangeNotif(user.getUser());
         saveGroup();
     }
 
     public void removeAdmin(User user) {
         members.add(user);
         admins.remove(user);
+        getGroupNotifManager().addStatusChangeNotif(user);
         saveGroup();
     }
 
