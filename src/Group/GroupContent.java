@@ -20,6 +20,7 @@ public class GroupContent {
 
     public void addPost(Post post){
         this.posts.add(post);
+        group.getGroupNotifManager().addNewPostNotif(post);
     }
 
     public void removePost(Post post){

@@ -2,6 +2,7 @@ package frontend.newsFeed;
 
 import Group.Group;
 import backend.Database;
+import backend.User;
 import content.Post;
 import frontend.CreateGroup;
 import utils.UIUtils;
@@ -37,7 +38,7 @@ public class GroupsNewsFeed extends JPanel {
         my_groups_btn.addActionListener(my_groups_btn_evt());
         top_btn_panel.add(my_groups_btn);
         JButton suggestion_btn = UIUtils.createGroupCardButton("Suggestion");
-        my_groups_btn.addActionListener(suggestion_btn_evt());
+        suggestion_btn.addActionListener(suggestion_btn_evt());
         top_btn_panel.add(suggestion_btn);
 
         top_panel.add(top_btn_panel, BorderLayout.WEST);
@@ -61,12 +62,15 @@ public class GroupsNewsFeed extends JPanel {
         contentPanel.removeAll();
         Group[] groups = Database.getInstance().getGroups();
         boolean empty = true;
+        User current_user = Database.getInstance().getCurrentUser().getUser();
         for(Group group: groups){
-            if(group.isInGroup(Database.getInstance().getCurrentUser().getUser()) == isMember){
-                GroupCard groupCard = new GroupCard(group, true);
-                contentPanel.add(groupCard);
-                contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                empty = false;
+            if(group.isInGroup(current_user) == isMember){
+                if(group.getMembershipManager().getUserMembershipRequests(current_user)==null) {
+                    GroupCard groupCard = new GroupCard(group, isMember);
+                    contentPanel.add(groupCard);
+                    contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    empty = false;
+                }
             }
         }
         if(empty){

@@ -207,7 +207,6 @@ public class GroupPageBuilder extends Component {
         JButton membershipRequests = new JButton("Review Membership requests");
         membershipRequests.addActionListener(_ -> membershipRequestsActionListeners());
         JButton removeMember = new JButton("Remove Member");
-        removeMember.addActionListener(_ -> removeMemberActionListener());
         JButton managePosts = new JButton("Manage Posts");
         managePosts.addActionListener(_ -> managePostsActionListeners());
         JButton post = new JButton("Post");

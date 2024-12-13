@@ -89,7 +89,7 @@ public class Database {
             User user = new User(jsonObject);
             id_to_user.put(user.getUserId(), user);
             email_to_user.put(user.getEmail(), user);
-            username_to_user.put(user.getEmail(), user);
+            username_to_user.put(user.getUsername(), user);
             System.out.println("Successfully added user: " + user.getUsername());
         }
 
@@ -264,5 +264,30 @@ public class Database {
         } catch (IOException e) {
             System.out.println("Database error.");
         }
+    }
+
+    public void deleteGroup(String groupId) {
+        id_to_group.remove(groupId);
+        try {
+            writeGroupsIDToFiles(); // Rewrite the groups.json file
+            // The group file won't be deleted, but will be deleted from the groups.json file
+            // TODO: Delete the group file (optional)
+            System.out.println("Group with ID: " + groupId + " deleted successfully");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Delete group with its reference, in case we need it
+    public void deleteGroup(Group group) {
+        deleteGroup(group.getGroupId());
+    }
+
+    public int getNumberOfUsers() {
+        return id_to_user.size();
+    }
+
+    public int getNumberOfGroups() {
+        return id_to_group.size();
     }
 }

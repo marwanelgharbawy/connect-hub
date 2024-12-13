@@ -1,6 +1,7 @@
 package Group;
 
 import backend.User;
+import content.Post;
 import notificationManager.GroupStatusNotif;
 import notificationManager.NewGroupPostNotif;
 import notificationManager.NewGroupUserNotif;
@@ -8,6 +9,9 @@ import notificationManager.Notification;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class GroupNotifManager {
@@ -23,34 +27,64 @@ public class GroupNotifManager {
         this.groupUserNotifs = new ArrayList<>();
     }
 
-    public void setGroupNotifs(JSONObject notifsJson){
+    public void setGroupNotifs(JSONObject notifsJson) throws IOException {
         JSONArray new_user = notifsJson.getJSONArray("new-user");
-        // TODO: populate List
+        for(Object obj: new_user){
+            NewGroupUserNotif notif = new NewGroupUserNotif(group, (JSONObject)obj);
+            groupUserNotifs.add(notif);
+        }
 
         JSONArray new_post = notifsJson.getJSONArray("new-post");
-        // TODO: populate List
+        for (Object obj: new_post){
+            NewGroupPostNotif notif = new NewGroupPostNotif(group, (JSONObject)obj);
+            groupPostNotifs.add(notif);
+        }
 
         JSONArray status_changed = notifsJson.getJSONArray("status-changed");
-        // TODO: populate List
+        for(Object obj: status_changed){
+            GroupStatusNotif notif = new GroupStatusNotif(group, (JSONObject) obj);
+            groupStatusNotifs.add(notif);
+        }
     }
 
     public void addNewUserNotif(User new_user){
-
+        NewGroupUserNotif notif = new NewGroupUserNotif(group, new_user);
+        groupUserNotifs.add(notif);
     }
 
-    public void addStatusChangeNotif(){
-
+    public void addStatusChangeNotif(User user){
+        GroupStatusNotif notif = new GroupStatusNotif(group, user);
     }
 
-    public void addNewPostNotif(){
-
+    public void addNewPostNotif(Post post){
+        NewGroupPostNotif notif = new NewGroupPostNotif(group, post);
+        groupPostNotifs.add(notif);
     }
 
-    public ArrayList<Notification> getAllNotifications(){
+    private boolean isValidNotification(Notification notif, LocalDateTime date){
+        return date.isBefore(notif.getNotifDate());
+    }
+
+    public ArrayList<Notification> getAllNotifications(User user, LocalDateTime date){
         ArrayList<Notification> notifs = new ArrayList<>();
-        notifs.addAll(groupStatusNotifs);
-        notifs.addAll(groupPostNotifs);
-        notifs.addAll(groupUserNotifs);
+
+        for(GroupStatusNotif notif : groupStatusNotifs){
+            if(isValidNotification(notif, date) && notif.getUser().getUserId().equals(user.getUserId()))
+                notifs.add(notif);
+        }
+//        notifs.addAll(groupStatusNotifs);
+
+        for(Notification notif: groupPostNotifs){
+            if(isValidNotification(notif, date))
+                notifs.add(notif);
+        }
+//        notifs.addAll(groupPostNotifs);
+
+        for(Notification notif: groupUserNotifs){
+            if(isValidNotification(notif, date))
+                notifs.add(notif);
+        }
+//        notifs.addAll(groupUserNotifs);
         return notifs;
     }
 

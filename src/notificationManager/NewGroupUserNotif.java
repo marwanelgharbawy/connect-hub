@@ -4,10 +4,13 @@ import Group.Group;
 import backend.Database;
 import backend.User;
 import org.json.JSONObject;
+import utils.UIUtils;
 import utils.Utilities;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -66,7 +69,16 @@ public class NewGroupUserNotif implements Notification{
 
     @Override
     public ArrayList<JButton> getNotifBtns() {
-        // TODO: setup buttons
-        return null;
+        ArrayList<JButton> btns = new ArrayList<>();
+
+        JButton view_group_btn = UIUtils.createNotifButton("View Group");
+        view_group_btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        btns.add(view_group_btn);
+        return btns;
     }
 }

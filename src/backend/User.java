@@ -22,6 +22,7 @@ import org.json.*;
 public class User {
     private final FriendManagerC friendManager;
     private final SearchManagerC searchManager;
+//    private final MembershipRequestManager membershipManager;
     private String userId;
     private String email;
     private String username;
@@ -39,6 +40,7 @@ public class User {
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.searchManager = new SearchManagerC();
+//        this.membershipManager = new MembershipRequestManager();
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
@@ -56,6 +58,7 @@ public class User {
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.searchManager = new SearchManagerC();
+//        this.membershipManager = new MembershipRequestManager();
         this.profile = new Profile(this,"", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
@@ -71,6 +74,7 @@ public class User {
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.searchManager = new SearchManagerC();
+//        this.membershipManager = new MembershipRequestManager();
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
@@ -109,6 +113,14 @@ public class User {
         setGroups(userData);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        User user = (User) obj;
+        return this.userId.equals(user.userId);
+    }
+
     public void joinGroup(String group_id){
         groupID_to_joiningDate.put(group_id, LocalDateTime.now());
         saveUser();
@@ -129,6 +141,10 @@ public class User {
 
     public String[] getUserGroups(){
         return groupID_to_joiningDate.keySet().toArray(new String[0]);
+    }
+
+    public LocalDateTime getJoiningTime(String group_id){
+        return groupID_to_joiningDate.get(group_id);
     }
 
     public String getEmail() {
@@ -312,8 +328,8 @@ public class User {
             friends.put(user.getUserId());
         }
         data.put("friends", friends);
-
     }
+
     public void loadBlocked(JSONObject data){
         JSONArray blocked = new JSONArray();
         for (User user : friendManager.getBlockManager().getBlockedUsers()) {

@@ -26,7 +26,6 @@ public class PrimaryAdmin extends Admin{
     }
 
     public void deleteGroup(){
-        group = null;
+        group.delete();
     }
-
 }
