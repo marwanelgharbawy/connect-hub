@@ -14,6 +14,7 @@ import utils.Utilities;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.time.LocalDateTime;
 
@@ -103,6 +104,20 @@ public class User {
         setRequests(database,userData);
         /* groups */
         setGroups(userData);
+    }
+
+    public void joinGroup(String group_id){
+        groupID_to_joiningDate.put(group_id, LocalDateTime.now());
+        saveUser();
+    }
+
+    public void leaveGroup(String group_id){
+        groupID_to_joiningDate.remove(group_id);
+        saveUser();
+    }
+
+    public boolean isMemberInGroup(String group_id){
+        return  groupID_to_joiningDate.containsKey(group_id);
     }
 
     public boolean isOnline() {
