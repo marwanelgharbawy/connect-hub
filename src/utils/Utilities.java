@@ -1,5 +1,9 @@
 package utils;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.io.File;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -108,4 +112,34 @@ public class Utilities {
         }
     }
 
+    public static String addPicture(JFrame parentWindow) {
+        // Get file via file chooser
+        String cwd = Path.of("").toAbsolutePath().toString();
+        JFileChooser fileChooser = new JFileChooser(cwd);
+        FileNameExtensionFilter restrict = new FileNameExtensionFilter("Only .png , .jpeg or .jpg", "png", "jpeg", "jpg");
+        fileChooser.setFileFilter(restrict);
+
+        fileChooser.setDialogTitle("Upload Image");
+
+        int userSelection;
+        userSelection = fileChooser.showOpenDialog(parentWindow);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+
+            // Check if the file is in the correct format : ".png",".jpg",".jpeg"
+//            if (!file.getName().toLowerCase().endsWith(".png") && !file.getName().toLowerCase().endsWith(".jpg")
+//                    && !file.getName().toLowerCase().endsWith(".jpeg")) {
+//                // Display error message if format is invalid
+//                JOptionPane.showMessageDialog(null, "Invalid file format! Please an image file.", "Error", JOptionPane.ERROR_MESSAGE);
+//                return null;
+//            }
+            // Return image path
+            System.out.println(file.getPath());
+            return file.getPath();
+        }
+        else {
+            return "";
+        }
+    }
 }

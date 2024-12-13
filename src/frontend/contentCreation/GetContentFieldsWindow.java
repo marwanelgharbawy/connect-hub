@@ -1,7 +1,7 @@
 package frontend.contentCreation;
 
 import content.ContentFields;
-import utils.UIUtils;
+import utils.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -34,7 +34,7 @@ public class GetContentFieldsWindow extends JFrame {
     private void setupButtonListeners(ContentFields contentFields) {
 
         // Get picture path and add picture to project directory
-        addPictureButton.addActionListener(_ -> imagePath = addPicture());
+        addPictureButton.addActionListener(_ -> imagePath = Utilities.addPicture(this));
         // Get content
         submitButton.addActionListener(_ -> {
             // Get text and check that the field is not empty
@@ -51,34 +51,5 @@ public class GetContentFieldsWindow extends JFrame {
 
     }
 
-    private String addPicture() {
-        // Get file via file chooser
-        String cwd = Path.of("").toAbsolutePath().toString();
-        JFileChooser fileChooser = new JFileChooser(cwd);
-        FileNameExtensionFilter restrict = new FileNameExtensionFilter("Only .png , .jpeg or .jpg", "png", "jpeg", "jpg");
-        fileChooser.setFileFilter(restrict);
 
-        fileChooser.setDialogTitle("Upload Image");
-
-        int userSelection;
-        userSelection = fileChooser.showOpenDialog(this);
-
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-
-            // Check if the file is in the correct format : ".png",".jpg",".jpeg"
-//            if (!file.getName().toLowerCase().endsWith(".png") && !file.getName().toLowerCase().endsWith(".jpg")
-//                    && !file.getName().toLowerCase().endsWith(".jpeg")) {
-//                // Display error message if format is invalid
-//                JOptionPane.showMessageDialog(null, "Invalid file format! Please an image file.", "Error", JOptionPane.ERROR_MESSAGE);
-//                return null;
-//            }
-            // Return image path
-            System.out.println(file.getPath());
-            return file.getPath();
-        }
-        else {
-            return "";
-        }
-    }
 }

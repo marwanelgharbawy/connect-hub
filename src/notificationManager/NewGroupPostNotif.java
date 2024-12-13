@@ -46,7 +46,7 @@ public class NewGroupPostNotif implements Notification {
     public JSONObject toJSONObject() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("post-id", post.getContentId());
-        jsonObject.put("date", Utilities.DataTo_y_M_d_hh_mm(date));
+        jsonObject.put("date", Utilities.DataTo_y_M_d_hh_mm(getNotifDate()));
         return null;
     }
 
