@@ -68,7 +68,7 @@ public class MembershipRequestManager {
     }
 
     public boolean isRequestSent(Group group, User user){
-        ArrayList<MembershipRequest> requestsSent = getUserMembershipRequests(user);
+        ArrayList<MembershipRequest> requestsSent = getGroupRequests();
         for (MembershipRequest request: requestsSent)
             if (request.getReceiver() == group)
                 return true;

@@ -1,5 +1,6 @@
 package frontend.searchManager;
 
+import backend.CurrentUser;
 import backend.User;
 import frontend.UserProfile;
 import utils.UIUtils;
