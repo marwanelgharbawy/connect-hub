@@ -50,7 +50,7 @@ public class PostCard extends JPanel{
         add(infoPanel, BorderLayout.NORTH);
         add(textScrollPanel, BorderLayout.CENTER);
 
-        if(!post.getContentFields().getImagePath().isEmpty()){
+    if(post.getContentFields().getImagePath()!= null && !post.getContentFields().getImagePath().isEmpty()){
             /* post image*/
             ImageIcon postImage = new ImageIcon(post.getContentFields().getImagePath());
             postImage = resizeIcon(postImage, 400, 200);

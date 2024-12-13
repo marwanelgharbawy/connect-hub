@@ -28,7 +28,7 @@ public class GroupPageBuilder extends Component {
         this.group = group;
         this.currentUser = user;
         this.status = getStatus();
-        this.mainPanel = new JPanel();
+        this.mainPanel = new JPanel(new BorderLayout());
     }
 
     private UserGroupStatus getStatus() {
@@ -233,7 +233,6 @@ public class GroupPageBuilder extends Component {
         JComboBox<Post> postsBox = new JComboBox<>();
         for (Post post: posts)
             postsBox.addItem(post);
-
         if (posts.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No posts to edit.");
 
@@ -305,7 +304,7 @@ public class GroupPageBuilder extends Component {
     }
 
     private void membershipRequestsActionListeners() {
-        ArrayList<MembershipRequest> requests = group.getMembershipManager().getGroupRequests(group);
+        ArrayList<MembershipRequest> requests = group.getMembershipManager().getGroupRequests();
         if (requests.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No requests to review.");
             return;
@@ -322,16 +321,17 @@ public class GroupPageBuilder extends Component {
         JButton declineButton = new JButton("Decline request");
         membershipRequestPanel.add(acceptButton);
         membershipRequestPanel.add(declineButton);
-
+        acceptButton.addActionListener(_ -> acceptRequestActionListener((MembershipRequest) requestsBox.getSelectedItem()));
+        declineButton.addActionListener(_ -> declineRequestActionListener((MembershipRequest) requestsBox.getSelectedItem()));
         int result = JOptionPane.showConfirmDialog(null, membershipRequestPanel, "Membership Requests", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
-            MembershipRequest selectedRequest = (MembershipRequest) requestsBox.getSelectedItem();
+//        MembershipRequest selectedRequest = null;
+//        if (result == JOptionPane.OK_OPTION) {
+//        MembershipRequest selectedRequest = (MembershipRequest) requestsBox.getSelectedItem();
 
-            if (selectedRequest != null) {
-                acceptButton.addActionListener(_ -> acceptRequestActionListener(selectedRequest));
-                declineButton.addActionListener(_ -> declineRequestActionListener(selectedRequest));
-            }
-        }
+//            if (selectedRequest != null)
+//            }
+//        }
+
 
 
     }
@@ -346,6 +346,7 @@ public class GroupPageBuilder extends Component {
     }
 
     private void acceptRequestActionListener(MembershipRequest request) {
+        System.out.println("########################");
         int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to accept this request?", "Accept Request", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             group.addMember(request.getSender());
@@ -404,7 +405,7 @@ public class GroupPageBuilder extends Component {
 
     private void joinGroupButtonActionListeners() {
         if (!group.isMember(currentUser.getUser()) && !group.isAdmin(currentUser.getUser())) {
-            group.getMembershipManager().sendMembershipRequest(group, currentUser.getUser());
+            group.getMembershipManager().sendMembershipRequest(currentUser.getUser());
             JOptionPane.showMessageDialog(null, "Join request sent.");
         } else {
             JOptionPane.showMessageDialog(null, "You are already a member or admin of this group.");

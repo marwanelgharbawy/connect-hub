@@ -3,6 +3,8 @@ package frontend.newsFeed;
 import Group.Group;
 import backend.Database;
 import backend.User;
+import frontend.Group.GroupPage;
+import frontend.UserProfile;
 import utils.Picture;
 import utils.UIUtils;
 
@@ -74,6 +76,20 @@ public class GroupCard extends JPanel {
             btns.add(join_group_btn);
         }else {
             JButton view_group_btn = UIUtils.createGroupCardButton("View group");
+            view_group_btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JFrame group_frame = new JFrame();
+                    try {
+                        GroupPage groupPage = new GroupPage(group, Database.getInstance().getCurrentUser());
+                        group_frame.setContentPane(groupPage);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    group_frame.pack();
+                    group_frame.setVisible(true);
+                }
+            });
             btns.add(view_group_btn);
         }
         return btns;

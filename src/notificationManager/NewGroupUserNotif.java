@@ -3,6 +3,7 @@ package notificationManager;
 import Group.Group;
 import backend.Database;
 import backend.User;
+import frontend.Group.GroupPage;
 import org.json.JSONObject;
 import utils.UIUtils;
 import utils.Utilities;
@@ -75,7 +76,15 @@ public class NewGroupUserNotif implements Notification{
         view_group_btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                JFrame group_frame = new JFrame();
+                try {
+                    GroupPage groupPage = new GroupPage(group, Database.getInstance().getCurrentUser());
+                    group_frame.setContentPane(groupPage);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                group_frame.pack();
+                group_frame.setVisible(true);
             }
         });
         btns.add(view_group_btn);

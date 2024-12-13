@@ -30,12 +30,17 @@ public class CurrentUser{
         return user;
     }
 
-    public ArrayList<Post> getNewsFeedPosts(){
+    public ArrayList<Post> getNewsFeedPosts() throws IOException {
         newsFeedPosts = new ArrayList<>();
         newsFeedPosts.addAll(user.getContentManager().getPosts());
 
         for(User friend: user.getFriendManager().getFriends()){
             newsFeedPosts.addAll(friend.getContentManager().getPosts());
+        }
+
+        for(String group_id: user.getUserGroups()){
+            Group group = Database.getInstance().getGroup(group_id);
+            newsFeedPosts.addAll(group.getGroupContent().getPosts());
         }
 
         //sort posts
@@ -80,7 +85,9 @@ public class CurrentUser{
 
     public ArrayList<Notification> getNotifications() throws IOException {
         user.getNotifsManager().populateFriendRequests();
-        return user.getNotifsManager().getAllNotifications();
+        ArrayList<Notification> notifs = user.getNotifsManager().getAllNotifications();
+        notifs.sort(Comparator.comparing(Notification::getNotifDate).reversed());
+        return notifs;
     }
 
 }
