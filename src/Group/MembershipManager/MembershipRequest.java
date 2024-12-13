@@ -55,4 +55,9 @@ public class MembershipRequest {
         json.put("date", Utilities.DataTo_y_M_d_hh_mm(getTimestamp()));
         return json;
     }
+
+    @Override
+    public String toString(){
+        return "Sender " + getSender().getUsername();
+    }
 }

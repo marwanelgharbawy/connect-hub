@@ -5,6 +5,7 @@ import Group.Admin;
 import backend.CurrentUser;
 import backend.Database;
 import backend.User;
+import com.sun.net.httpserver.Request;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,5 +62,20 @@ public class MembershipRequestManager {
             if (request.getSender() == user)
                 userRequests.add(request);
         return userRequests;
+    }
+
+    public boolean isRequestSent(Group group, User user){
+        ArrayList<MembershipRequest> requestsSent = getUserMembershipRequests(user);
+        for (MembershipRequest request: requestsSent)
+            if (request.getReceiver() == group)
+                return true;
+        return false;
+    }
+
+    public MembershipRequest getRequest(Group group, User user){
+        for (MembershipRequest request: membershipRequests)
+            if (request.getSender() == user && request.getReceiver() == group)
+                return request;
+        return null;
     }
 }

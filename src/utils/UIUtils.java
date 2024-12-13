@@ -5,6 +5,7 @@ import backend.User;
 
 import javax.swing.*;
 import java.awt.*;
+import Group.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -180,7 +181,7 @@ public class UIUtils {
             }
         };
         // Add profile image path
-        ImageIcon profilePicIcon = new ImageIcon(group.getImgPath());
+        ImageIcon profilePicIcon = group.getGroupPhoto().toIcon();
         Image profilePic = profilePicIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         ImageIcon profilePicScaled = new ImageIcon(profilePic);
         button.setIcon(profilePicScaled);

@@ -3,6 +3,7 @@ package searchManager;
 import backend.User;
 
 import java.io.IOException;
+import Group.*;
 import java.util.ArrayList;
 
 public interface SearchManagerI {
