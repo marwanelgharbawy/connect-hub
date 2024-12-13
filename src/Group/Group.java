@@ -109,6 +109,10 @@ public class Group {
         return groupContent;
     }
 
+    public GroupNotifManager getGroupNotifManager(){
+        return groupNotifManager;
+    }
+
     public void addPost(Post post) {
         this.groupContent.addPost(post);
     }

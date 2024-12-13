@@ -14,6 +14,7 @@ import utils.Utilities;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.time.LocalDateTime;
@@ -122,6 +123,10 @@ public class User {
 
     public boolean isOnline() {
         return online;
+    }
+
+    public String[] getUserGroups(){
+        return groupID_to_joiningDate.keySet().toArray(new String[0]);
     }
 
     public String getEmail() {

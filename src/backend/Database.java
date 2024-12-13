@@ -130,7 +130,7 @@ public class Database {
         }
     }
 
-    private Group getGroup(String id) {
+    public Group getGroup(String id) {
         return id_to_group.get(id);
     }
 

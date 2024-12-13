@@ -1,8 +1,11 @@
 package notificationManager;
 
+import Group.Group;
+import backend.Database;
 import backend.User;
 import friendManager.FriendRequest;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,13 +16,11 @@ public class NotificationsManager {
     /**
      * key: group_id value: groupNotifManager
      * */
-    private final HashMap<String, GroupNotifManager> group_NotifManager;
 
 
     public NotificationsManager(User user) {
         this.user = user;
         this.friendRequestNotifs = new ArrayList<>();
-        this.group_NotifManager = new HashMap<>();
     }
 
 
@@ -34,11 +35,16 @@ public class NotificationsManager {
         }
     }
 
-    public ArrayList<Notification> getAllNotifications(){
+    public ArrayList<Notification> getAllNotifications() throws IOException {
         ArrayList<Notification> notifs = new ArrayList<>();
         notifs.addAll(friendRequestNotifs);
-        for(GroupNotifManager group: group_NotifManager.values())
-            notifs.addAll(group.getAllNotifications());
+//        for(GroupNotifManager group: group_NotifManager.values())
+//            notifs.addAll(group.getAllNotifications());
+        for(String group_id: user.getUserGroups()){
+            Group group = Database.getInstance().getGroup(group_id);
+            notifs.addAll(group.getGroupNotifManager().getAllNotifications());
+            // TODO: get only notifications after user's joining data
+        }
         return notifs;
     }
 }
