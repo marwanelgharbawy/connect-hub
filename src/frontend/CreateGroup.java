@@ -1,8 +1,14 @@
 package frontend;
 
 import javax.swing.*;
+
+import backend.Database;
 import backend.User;
 import utils.UIUtils;
+import utils.Utilities;
+import Group.Group;
+
+import java.io.IOException;
 
 public class CreateGroup extends JFrame {
     private JPanel contentPane;
@@ -11,11 +17,18 @@ public class CreateGroup extends JFrame {
     private JButton addPhotoButton;
     private JButton createGroupButton;
     private JButton backButton;
+    private String photoPath;
+    private User user;
 
     public CreateGroup(User user) {
         UIUtils.initializeWindow(this, contentPane, "Create Group", 400, 400);
+        this.user = user;
+        addEventListeners();
+    }
+
+    public void addEventListeners() {
         addPhotoButton.addActionListener(e -> {
-            addPhoto();
+            photoPath = Utilities.addPicture(this);
         });
         createGroupButton.addActionListener(e -> {
             createGroup();
@@ -25,16 +38,20 @@ public class CreateGroup extends JFrame {
         });
     }
 
-    private void addPhoto() {
-
-    }
-
     private void createGroup() {
         if (inputIsValid()) {
             String name = nameField.getText();
             String description = descriptionField.getText();
 
-            dispose();
+            try {
+                Group group = new Group(name, description, photoPath, user);
+                Database.getInstance().saveGroup(group);
+                JOptionPane.showMessageDialog(this, "Group created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Database Error", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -48,6 +65,7 @@ public class CreateGroup extends JFrame {
             return false;
         }
 
+        // Validations test passed successfully
         return true;
     }
 
