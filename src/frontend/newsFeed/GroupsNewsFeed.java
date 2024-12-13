@@ -2,6 +2,7 @@ package frontend.newsFeed;
 
 import Group.Group;
 import backend.Database;
+import backend.User;
 import content.Post;
 import frontend.CreateGroup;
 import utils.UIUtils;
@@ -61,12 +62,15 @@ public class GroupsNewsFeed extends JPanel {
         contentPanel.removeAll();
         Group[] groups = Database.getInstance().getGroups();
         boolean empty = true;
+        User current_user = Database.getInstance().getCurrentUser().getUser();
         for(Group group: groups){
-            if(group.isInGroup(Database.getInstance().getCurrentUser().getUser()) == isMember){
-                GroupCard groupCard = new GroupCard(group, isMember);
-                contentPanel.add(groupCard);
-                contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                empty = false;
+            if(group.isInGroup(current_user) == isMember){
+                if(group.getMembershipManager().getUserMembershipRequests(current_user)==null) {
+                    GroupCard groupCard = new GroupCard(group, isMember);
+                    contentPanel.add(groupCard);
+                    contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                    empty = false;
+                }
             }
         }
         if(empty){
