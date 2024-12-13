@@ -277,4 +277,17 @@ public class Database {
             e.printStackTrace();
         }
     }
+
+    // Delete group with its reference, in case we need it
+    public void deleteGroup(Group group) {
+        deleteGroup(group.getGroupId());
+    }
+
+    public int getNumberOfUsers() {
+        return id_to_user.size();
+    }
+
+    public int getNumberOfGroups() {
+        return id_to_group.size();
+    }
 }
