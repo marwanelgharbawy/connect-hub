@@ -39,6 +39,7 @@ public class Database {
         if (instance == null) {
             instance = new Database();
             instance.parseUsersData();
+            instance.parseGroupsData();
         }
         return instance;
     }
@@ -112,8 +113,6 @@ public class Database {
 
         // Load groups' credentials
         for (Object obj : idsArray) {
-            JSONObject jsonObject = (JSONObject) obj;
-            // No need to send the whole object to the constructor since it's just the group ID
             String groupID = (String) obj;
             Group group = new Group(groupID);
             id_to_group.put(group.getGroupId(), group);
