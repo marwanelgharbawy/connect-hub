@@ -75,14 +75,17 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
+        saveGroup();
     }
 
     public void setDescription(String description) {
         this.description = description;
+        saveGroup();
     }
 
     public void setGroupPhoto(String groupPhotoPath) throws IOException {
         this.groupPhoto = groupPhoto.setImage(groupPhotoPath);
+        saveGroup();
     }
 
     public boolean isMember(User user) {
@@ -115,28 +118,34 @@ public class Group {
 
     public void removeMember(Member member) {
         this.members.remove(member.getUser());
+        saveGroup();
     }
 
     public void removeMember(User user) {
         this.members.remove(user);
+        saveGroup();
     }
 
     public void removeMember(CurrentUser currentUser){
         this.members.remove(currentUser.getUser());
         removeGroupFromCurrentUser(currentUser);
+        saveGroup();
     }
 
     public void addMember(Member member) {
         this.members.add(member.getUser());
+        saveGroup();
     }
 
     public void addMember(User user) {
         this.members.add(user);
+        saveGroup();
     }
 
     public void addMember(CurrentUser currentUser){
         this.members.add(currentUser.getUser());
         addGroupToCurrentUser(currentUser);
+        saveGroup();
     }
 
     public GroupContent getGroupContent() {
@@ -149,6 +158,7 @@ public class Group {
 
     public void addPost(Post post) {
         this.groupContent.addPost(post);
+        saveGroup();
     }
 
     public ArrayList<User> getAdmins() {
@@ -163,27 +173,32 @@ public class Group {
     public void addAdmin(User user) {
         members.remove(user);
         admins.add(user);
+        saveGroup();
     }
 
     public void addAdmin(CurrentUser currentUser) throws IOException {
         members.remove(currentUser.getUser());
         currentUser.changeRole(this, new Admin(currentUser.getUser(), this));
+        saveGroup();
     }
 
     public void removeAdmin(Admin admin) {
         members.add(admin.getUser());
         admins.remove(admin.getUser());
+        saveGroup();
     }
 
     public void removeAdmin(CurrentUser user){
         members.add(user.getUser());
         admins.remove(user.getUser());
         user.changeRole(this, new Member(user.getUser(), this));
+        saveGroup();
     }
 
     public void removeAdmin(User user) {
         members.add(user);
         admins.remove(user);
+        saveGroup();
     }
 
     private void setRequests(JSONObject data) throws IOException {
@@ -234,6 +249,14 @@ public class Group {
             membersJson.put(member.getUserId());
         }
         data.put("members", membersJson);
+    }
+
+    public void saveGroup(){
+        try {
+            Database.getInstance().saveGroup(this);
+        } catch (IOException e){
+            System.out.println("Database error");
+        }
     }
 
     public void setGroupData(JSONObject data) throws IOException {
