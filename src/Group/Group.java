@@ -34,6 +34,8 @@ public class Group {
         this.primaryAdmin = getInstance(this, primaryAdmin);
         this.groupContent = GroupContent.getInstance();
         this.groupNotifManager = new GroupNotifManager(this);
+        members = new ArrayList<>();
+        admins = new ArrayList<>();
     }
 
     // Constructor when loading a group from the database
@@ -41,6 +43,8 @@ public class Group {
         this.groupContent = GroupContent.getInstance();
         this.groupId = groupId;
         this.groupNotifManager = new GroupNotifManager(this);
+        members = new ArrayList<>();
+        admins = new ArrayList<>();
     }
 
     public String getName() {
@@ -84,6 +88,7 @@ public class Group {
     }
 
     public boolean isInGroup(User user){
+        System.out.println();
         return  isMember(user) || isAdmin(user) || isPrimaryAdmin(user);
     }
 
@@ -151,8 +156,8 @@ public class Group {
         this.name = (String) data.get("name");
         this.description = (String) data.get("description");
         this.groupPhoto = new Picture((String) data.get("group-photo")); // Takes the path of the image
-        this.members = new ArrayList<>();
-        this.admins = new ArrayList<>();
+        this.members.clear();
+        this.admins.clear();
         // TODO: Parse JSON for the following attributes
         this.primaryAdmin = PrimaryAdmin.getInstance(this, (String) data.get("primary-admin"));
 //        this.admins = new ArrayList<>();
