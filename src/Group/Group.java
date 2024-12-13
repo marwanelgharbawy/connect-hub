@@ -146,22 +146,25 @@ public class Group {
 //        this.members = new ArrayList<>();
     }
 
+    public JSONObject getGroupData() throws IOException {
+        JSONObject data = new JSONObject();
+        data.put("name", name);
+        data.put("description", description);
+        data.put("group-photo", groupPhoto.getImagePath());
+
+        // THIS MIGHT NEED TO BE CHANGED AFTER MERGING
+        data.put("primary-admin", primaryAdmin.getUser().getUserId());
+
+        // data.put("admins", /*admins*/ );
+        // data.put("members", /*members*/ );
+        return data;
+    }
+
     public boolean includeUser(Member member) {
         return members.contains(member);
     }
 
     public String getGroupId() {
         return groupId;
-    }
-
-    public JSONObject getGroupData() {
-        JSONObject data = new JSONObject();
-        data.put("name", name);
-        data.put("description", description);
-        // data.put("group-photo", /*photo's path*/ );
-        // data.put("primary-admin", /*primaryAdmin*/ );
-        // data.put("admins", /*admins*/ );
-        // data.put("members", /*members*/ );
-        return data;
     }
 }
