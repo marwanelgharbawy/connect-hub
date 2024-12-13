@@ -3,20 +3,22 @@ package Group.MembershipManager;
 import Group.Group;
 import Group.Admin;
 import backend.CurrentUser;
-import backend.Database;
 import backend.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class MembershipRequestManager {
-
+    private Group group;
     private ArrayList<MembershipRequest> membershipRequests;
-    private Database database;
 
-    public MembershipRequestManager() throws IOException {
-        this.database = Database.getInstance();
+    public MembershipRequestManager(Group group) throws IOException {
+        this.group = group;
         this.membershipRequests = new ArrayList<MembershipRequest>();
+    }
+
+    public void clearRequests(){
+        membershipRequests.clear();
     }
 
     public void removeMembershipRequest(MembershipRequest request, Admin admin){
@@ -31,7 +33,8 @@ public class MembershipRequestManager {
         membershipRequests.remove(request);
     }
 
-    public void sendMembershipRequest(Group receiver, User sender){
+    public void sendMembershipRequest(User sender){
+        Group receiver = group;
         if (!(receiver.isMember(sender) || receiver.isAdmin(sender) || receiver.isPrimaryAdmin(sender))) {
             MembershipRequest request = new MembershipRequest(sender, receiver);
             membershipRequests.add(request);
@@ -47,7 +50,7 @@ public class MembershipRequestManager {
         return membershipRequests;
     }
 
-    public ArrayList<MembershipRequest> getGroupRequests(Group group) {
+    public ArrayList<MembershipRequest> getGroupRequests() {
         ArrayList<MembershipRequest> groupRequests = new ArrayList<>();
         for (MembershipRequest request: membershipRequests)
             if (request.getReceiver() == group)

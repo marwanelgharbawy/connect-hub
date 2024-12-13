@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
+import Group.MembershipManager.MembershipRequest;
 import Group.MembershipManager.MembershipRequestManager;
-import Group.MembershipManager.MembershipRequestStatus;
 import backend.CurrentUser;
+import backend.Database;
 import backend.User;
 import content.Post;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.*;
 
@@ -35,7 +37,7 @@ public class Group {
         this.groupId = Utilities.generateId();
         this.primaryAdmin = new PrimaryAdmin(primaryAdmin, this);
         this.groupContent = new GroupContent(this);
-        this.membershipManager = new MembershipRequestManager();
+        this.membershipManager = new MembershipRequestManager(this);
         this.groupNotifManager = new GroupNotifManager(this);
         members = new ArrayList<>();
         admins = new ArrayList<>();
@@ -45,7 +47,7 @@ public class Group {
     public Group(String groupId) throws IOException {
         this.groupContent = new GroupContent(this);
         this.groupId = groupId;
-        this.membershipManager = new MembershipRequestManager();
+        this.membershipManager = new MembershipRequestManager(this);
         this.groupNotifManager = new GroupNotifManager(this);
         members = new ArrayList<>();
         admins = new ArrayList<>();
@@ -184,16 +186,66 @@ public class Group {
         admins.remove(user);
     }
 
+    private void setRequests(JSONObject data) throws IOException {
+        JSONArray requests =  data.getJSONArray("requests");
+        membershipManager.clearRequests();
+        for(Object request: requests){
+            String user_id = (String) request;
+            User user = Database.getInstance().getUser(user_id);
+            if(user != null){
+                membershipManager.sendMembershipRequest(user);
+            }
+        }
+    }
+    private void setAdmins(JSONObject data) throws IOException {
+        JSONArray adminsJson = data.getJSONArray("admins");
+        this.admins.clear();
+        for(Object admin: adminsJson){
+            String user_id = (String) admin;
+            this.admins.add(Database.getInstance().getUser(user_id));
+        }
+    }
+    private void setMembers(JSONObject data) throws IOException{
+        JSONArray memberJson = data.getJSONArray("members");
+        this.members.clear();
+        for(Object member: memberJson){
+            String user_id = (String) member;
+            this.admins.add(Database.getInstance().getUser(user_id));
+        }
+    }
+
+    private void loadRequest(JSONObject data){
+        JSONArray requestJson = new JSONArray();
+        for(MembershipRequest request: this.membershipManager.getGroupRequests()){
+            requestJson.put(request.getSender().getUserId());
+        }
+        data.put("requests", requestJson);
+    }
+    private void loadAdmins(JSONObject data){
+        JSONArray adminsJson = new JSONArray();
+        for(User admin: this.admins){
+            adminsJson.put(admin.getUserId());
+        }
+        data.put("admins", adminsJson);
+    }
+    private void loadMembers(JSONObject data){
+        JSONArray membersJson = new JSONArray();
+        for(User member: this.members){
+            membersJson.put(member.getUserId());
+        }
+        data.put("members", membersJson);
+    }
+
     public void setGroupData(JSONObject data) throws IOException {
         this.name = (String) data.get("name");
         this.description = (String) data.get("description");
         this.groupPhoto = new Picture((String) data.get("group-photo")); // Takes the path of the image
         this.members.clear();
-        this.admins.clear();
-        // TODO: Parse JSON for the following attributes
         this.primaryAdmin = new PrimaryAdmin(this, (String) data.get("primary-admin"));
-//        this.admins = new ArrayList<>();
-//        this.members = new ArrayList<>();
+
+        setAdmins(data);
+        setMembers(data);
+        setRequests(data);
         this.groupNotifManager.setGroupNotifs(data.getJSONObject("notifications"));
     }
 
@@ -206,8 +258,10 @@ public class Group {
         // THIS MIGHT NEED TO BE CHANGED AFTER MERGING
         data.put("primary-admin", primaryAdmin.getUser().getUserId());
 
-        // data.put("admins", /*admins*/ );
-        // data.put("members", /*members*/ );
+        loadAdmins(data);
+        loadMembers(data);
+        loadRequest(data);
+
         data.put("notifications", groupNotifManager.toJSONObject());
         return data;
     }
