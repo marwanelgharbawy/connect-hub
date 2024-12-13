@@ -14,6 +14,7 @@ public class UIUtils {
         window.setContentPane(panel);
         window.setTitle(title);
         window.setSize(width, height);
+        window.setLocationRelativeTo(null);
         window.setVisible(true);
     }
     public static JButton createIconButton(String icon_path, String tool_tip){
