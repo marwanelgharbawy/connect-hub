@@ -52,6 +52,8 @@ public class Database {
         return username_to_user.values().toArray(new User[0]);
     }
 
+    public Group[] getGroups(){return id_to_group.values().toArray(new Group[0]);}
+
     /**
      * check the existence of database folder, users folder and users.json
      */
