@@ -1,5 +1,4 @@
 package backend;
-import Group.Member;
 import content.ContentManager;
 import friendManager.FriendManagerC;
 import friendManager.FriendManagerFactory;
@@ -33,6 +32,7 @@ public class User {
     private final Profile profile;
     private final ContentManager contentManager;
     private final NotificationsManager notifsManager;
+    private final HashMap<String, LocalDateTime> groupID_to_joiningDate;
 
     // Constructors
 
@@ -43,6 +43,7 @@ public class User {
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
+        this.groupID_to_joiningDate = new HashMap<>();
     }
 
     // Constructor for creating a new user
@@ -59,6 +60,7 @@ public class User {
         this.profile = new Profile(this,"", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
+        this.groupID_to_joiningDate = new HashMap<>();
     }
 
     // Constructor for creating a user from the database's JSON object containing CREDENTIALS
@@ -73,6 +75,7 @@ public class User {
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
+        this.groupID_to_joiningDate = new HashMap<>();
     }
 
     // Set user's data from the database's JSON object
@@ -98,6 +101,8 @@ public class User {
         setBlocked(database,userData);
         // requests
         setRequests(database,userData);
+        /* groups */
+        setGroups(userData);
     }
 
     public boolean isOnline() {
@@ -206,7 +211,8 @@ public class User {
         data.put("posts", contentManager.postsToJsonArray());
         /* stories */
         data.put("stories", contentManager.storiesToJsonArray());
-
+        /* groups */
+        loadGroups(data);
         return data;
     }
 
@@ -257,6 +263,29 @@ public class User {
 
         }
 
+    }
+
+    // This method set the user's groups and joining date after loading it from the database
+    public void setGroups(JSONObject userData){
+        JSONArray groups = userData.getJSONArray("groups");
+        for(Object group: groups){
+            JSONObject groupJson = (JSONObject) group;
+            String group_id = groupJson.getString("group-id");
+            LocalDateTime joining_date = Utilities.y_M_d_hh_mmToDate(groupJson.getString("joining-date"));
+            groupID_to_joiningDate.put(group_id, joining_date);
+        }
+    }
+
+    public void loadGroups(JSONObject data){
+        JSONArray groups = new JSONArray();
+        for(String group_id: groupID_to_joiningDate.keySet()){
+            JSONObject groupJson = new JSONObject();
+            groupJson.put("group-id", group_id);
+            LocalDateTime joining_date = groupID_to_joiningDate.get(group_id);
+            groupJson.put("joining-date" , Utilities.DataTo_y_M_d_hh_mm(joining_date));
+            groups.put(groupJson);
+        }
+        data.put("groups", groups);
     }
 
     public void loadFriends(JSONObject data){
