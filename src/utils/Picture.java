@@ -10,6 +10,7 @@ import java.io.IOException;
 public class Picture {
 
     BufferedImage image;
+    String imagePath;
 
     public Picture(String imagePath) throws IOException {
         if(imagePath.isEmpty()){
@@ -20,8 +21,10 @@ public class Picture {
             graphics.dispose();
             this.image = grayImage;
         }
-        else
+        else {
             this.image = constructImage(imagePath);
+            this.imagePath = imagePath;
+        }
     }
 
     public Picture(BufferedImage image){
@@ -74,5 +77,9 @@ public class Picture {
 
     public BufferedImage reduceToNewsfeed(int size){
         return resizeWithRespectToRation(size, size);
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }
