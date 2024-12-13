@@ -83,9 +83,7 @@ public class GroupPageBuilder {
         JButton membershipRequests = new JButton("Review Membership requests");
         membershipRequests.addActionListener(_ -> membershipRequestsActionListeners());
         JButton removeMember = new JButton("Remove Member");
-        removeMember.addActionListener(_ -> removeMemberActionListener());
         JButton managePosts = new JButton("Manage Posts");
-        managePosts.addActionListener(_ -> managePostsActionLIsteners());
         JButton post = new JButton("Post");
         post.addActionListener(_ -> postButtonActionListeners());
         JButton leaveGroup = new JButton("Leave Group");

@@ -96,7 +96,6 @@ public class Group {
     }
 
     public boolean isInGroup(User user){
-        System.out.println();
         return  isMember(user) || isAdmin(user) || isPrimaryAdmin(user);
     }
 

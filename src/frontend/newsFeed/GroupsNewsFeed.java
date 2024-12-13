@@ -37,7 +37,7 @@ public class GroupsNewsFeed extends JPanel {
         my_groups_btn.addActionListener(my_groups_btn_evt());
         top_btn_panel.add(my_groups_btn);
         JButton suggestion_btn = UIUtils.createGroupCardButton("Suggestion");
-        my_groups_btn.addActionListener(suggestion_btn_evt());
+        suggestion_btn.addActionListener(suggestion_btn_evt());
         top_btn_panel.add(suggestion_btn);
 
         top_panel.add(top_btn_panel, BorderLayout.WEST);
@@ -59,11 +59,12 @@ public class GroupsNewsFeed extends JPanel {
 
     private void populateMyGroups(boolean isMember) throws IOException {
         contentPanel.removeAll();
+        System.out.println("hello########isMemeber "+isMember);
         Group[] groups = Database.getInstance().getGroups();
         boolean empty = true;
         for(Group group: groups){
             if(group.isInGroup(Database.getInstance().getCurrentUser().getUser()) == isMember){
-                GroupCard groupCard = new GroupCard(group, true);
+                GroupCard groupCard = new GroupCard(group, isMember);
                 contentPanel.add(groupCard);
                 contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
                 empty = false;

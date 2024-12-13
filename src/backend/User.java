@@ -22,7 +22,6 @@ import org.json.*;
 public class User {
     private final FriendManagerC friendManager;
     private final SearchManagerC searchManager;
-    private final MembershipRequestManager membershipManager;
     private String userId;
     private String email;
     private String username;
@@ -40,7 +39,6 @@ public class User {
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.searchManager = new SearchManagerC();
-        this.membershipManager = new MembershipRequestManager();
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
@@ -58,7 +56,6 @@ public class User {
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.searchManager = new SearchManagerC();
-        this.membershipManager = new MembershipRequestManager();
         this.profile = new Profile(this,"", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
@@ -74,7 +71,6 @@ public class User {
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.searchManager = new SearchManagerC();
-        this.membershipManager = new MembershipRequestManager();
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
