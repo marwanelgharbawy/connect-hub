@@ -10,21 +10,20 @@ import java.io.IOException;
 public class Picture {
 
     BufferedImage image;
-    String imagePath;
+    String imagePath = "";
 
     public Picture(String imagePath) throws IOException {
-        if(imagePath.isEmpty()){
-            BufferedImage grayImage = new BufferedImage(500, 300, BufferedImage.TYPE_INT_RGB);
-            Graphics2D graphics = grayImage.createGraphics();
-            graphics.setColor(Color.LIGHT_GRAY);
-            graphics.fillRect(0, 0, 500, 300);
-            graphics.dispose();
-            this.image = grayImage;
-        }
-        else {
-            this.image = constructImage(imagePath);
-            this.imagePath = imagePath;
-        }
+        if (imagePath == null || imagePath.isEmpty()) {
+                BufferedImage grayImage = new BufferedImage(500, 300, BufferedImage.TYPE_INT_RGB);
+                Graphics2D graphics = grayImage.createGraphics();
+                graphics.setColor(Color.LIGHT_GRAY);
+                graphics.fillRect(0, 0, 500, 300);
+                graphics.dispose();
+                this.image = grayImage;
+            } else {
+                this.image = constructImage(imagePath);
+                this.imagePath = imagePath;
+            }
     }
 
     public Picture(BufferedImage image){
