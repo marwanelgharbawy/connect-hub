@@ -39,6 +39,7 @@ public class Database {
         if (instance == null) {
             instance = new Database();
             instance.parseUsersData();
+            instance.parseGroupsData();
         }
         return instance;
     }
@@ -112,8 +113,6 @@ public class Database {
 
         // Load groups' credentials
         for (Object obj : idsArray) {
-            JSONObject jsonObject = (JSONObject) obj;
-            // No need to send the whole object to the constructor since it's just the group ID
             String groupID = (String) obj;
             Group group = new Group(groupID);
             id_to_group.put(group.getGroupId(), group);
@@ -130,7 +129,7 @@ public class Database {
         }
     }
 
-    private Group getGroup(String id) {
+    public Group getGroup(String id) {
         return id_to_group.get(id);
     }
 
@@ -237,9 +236,9 @@ public class Database {
 
     // This will be called to save a group in the database class and files
     public void saveGroup(Group group) throws IOException {
-        id_to_group.put(group.getGroupId(), group);
-        writeGroupData(group);
-        writeGroupsIDToFiles();
+        id_to_group.put(group.getGroupId(), group); // Add group to the map (Current database instance)
+        writeGroupData(group);                      // Write the group data to its own file
+        writeGroupsIDToFiles();                     // Update the groups.json file with the new group ID
     }
 
     // Writes the group data to its own file

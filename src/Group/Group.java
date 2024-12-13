@@ -24,7 +24,10 @@ public class Group {
     private PrimaryAdmin primaryAdmin;
     private final String groupId;
     private final MembershipRequestManager membershipManager;
+    private final GroupNotifManager groupNotifManager;
 
+
+    // Constructor when creating a new group from the frontend (New Group)
     public Group(String name, String description, String groupPhotoPath, User primaryAdmin) throws IOException {
         this.name = name;
         this.description = description;
@@ -33,12 +36,15 @@ public class Group {
         this.primaryAdmin = new PrimaryAdmin(primaryAdmin, this);
         this.groupContent = new GroupContent(this);
         this.membershipManager = new MembershipRequestManager();
+        this.groupNotifManager = new GroupNotifManager(this);
     }
 
-    public Group( String groupId) throws IOException {
+    // Constructor when loading a group from the database
+    public Group(String groupId) throws IOException {
         this.groupContent = new GroupContent(this);
         this.groupId = groupId;
         this.membershipManager = new MembershipRequestManager();
+        this.groupNotifManager = new GroupNotifManager(this);
     }
 
     public String getName() {
@@ -127,6 +133,10 @@ public class Group {
         return groupContent;
     }
 
+    public GroupNotifManager getGroupNotifManager(){
+        return groupNotifManager;
+    }
+
     public void addPost(Post post) {
         this.groupContent.addPost(post);
     }
@@ -174,28 +184,33 @@ public class Group {
         this.primaryAdmin = new PrimaryAdmin(this, (String) data.get("primary-admin"));
 //        this.admins = new ArrayList<>();
 //        this.members = new ArrayList<>();
+        this.groupNotifManager.setGroupNotifs(data.getJSONObject("notifications"));
     }
 
+    public JSONObject getGroupData() throws IOException {
+        JSONObject data = new JSONObject();
+        data.put("name", name);
+        data.put("description", description);
+        data.put("group-photo", groupPhoto.getImagePath());
+
+        // THIS MIGHT NEED TO BE CHANGED AFTER MERGING
+        data.put("primary-admin", primaryAdmin.getUser().getUserId());
+
+        // data.put("admins", /*admins*/ );
+        // data.put("members", /*members*/ );
+        data.put("notifications", groupNotifManager.toJSONObject());
+        return data;
+    }
+
+    public MembershipRequestManager getMembershipManager() {
+        return membershipManager;
+    }
+  
     public boolean includeUser(Member member) {
         return members.contains(member);
     }
 
     public String getGroupId() {
         return groupId;
-    }
-
-    public JSONObject getGroupData() {
-        JSONObject data = new JSONObject();
-        data.put("name", name);
-        data.put("description", description);
-        // data.put("group-photo", /*photo's path*/ );
-        // data.put("primary-admin", /*primaryAdmin*/ );
-        // data.put("admins", /*admins*/ );
-        // data.put("members", /*members*/ );
-        return data;
-    }
-
-    public MembershipRequestManager getMembershipManager() {
-        return membershipManager;
     }
 }

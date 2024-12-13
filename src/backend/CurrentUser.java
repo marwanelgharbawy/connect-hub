@@ -78,7 +78,7 @@ public class CurrentUser{
     }
 
 
-    public ArrayList<Notification> getNotifications(){
+    public ArrayList<Notification> getNotifications() throws IOException {
         user.getNotifsManager().populateFriendRequests();
         return user.getNotifsManager().getAllNotifications();
     }
