@@ -192,11 +192,29 @@ public class Group {
         this.groupPhoto = new Picture((String) data.get("group-photo")); // Takes the path of the image
         this.members.clear();
         this.admins.clear();
-        // TODO: Parse JSON for the following attributes
+
         this.primaryAdmin = new PrimaryAdmin(this, (String) data.get("primary-admin"));
-//        this.admins = new ArrayList<>();
-//        this.members = new ArrayList<>();
+
+        setAdmins(data.getJSONArray("admins"));
+        setMembers(data.getJSONArray("members"));
+
         this.groupNotifManager.setGroupNotifs(data.getJSONObject("notifications"));
+    }
+
+    private void setAdmins(JSONArray admins) throws IOException {
+        for (Object obj : admins) {
+            String userID = (String) obj;
+            User user = Database.getInstance().getUser(userID);
+            this.admins.add(user);
+        }
+    }
+
+    private void setMembers(JSONArray members) throws IOException {
+        for (Object obj : members) {
+            String userID = (String) obj;
+            User user = Database.getInstance().getUser(userID);
+            this.members.add(user);
+        }
     }
 
     public JSONObject getGroupData() throws IOException {
