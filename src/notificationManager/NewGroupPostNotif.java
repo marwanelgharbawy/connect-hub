@@ -3,10 +3,14 @@ package notificationManager;
 import Group.Group;
 import content.Post;
 import org.json.JSONObject;
+import utils.UIUtils;
 import utils.Utilities;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -52,7 +56,16 @@ public class NewGroupPostNotif implements Notification {
 
     @Override
     public ArrayList<JButton> getNotifBtns() {
-        // TODO: setup buttons
-        return null;
+        ArrayList<JButton> btns = new ArrayList<>();
+
+        JButton view_group_btn = UIUtils.createNotifButton("View Group");
+        view_group_btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        btns.add(view_group_btn);
+        return btns;
     }
 }

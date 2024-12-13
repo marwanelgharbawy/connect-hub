@@ -8,6 +8,8 @@ import utils.UIUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -54,11 +56,25 @@ public class GroupCard extends JPanel {
     private ArrayList<JButton> getButtons() throws IOException {
         User current_user = Database.getInstance().getCurrentUser().getUser();
         ArrayList<JButton> btns = new ArrayList<>();
-        JButton btn1 = UIUtils.createGroupCardButton("View group");
-        btns.add(btn1);
         if(!isMember){
-            JButton btn2 = UIUtils.createGroupCardButton("Join Group");
-            btns.add(btn2);
+            JButton join_group_btn = UIUtils.createGroupCardButton("Join Group");
+            join_group_btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    User current_user = null;
+                    try {
+                        current_user = Database.getInstance().getCurrentUser().getUser();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    group.getMembershipManager().sendMembershipRequest(current_user);
+                    join_group_btn.setVisible(false);
+                }
+            });
+            btns.add(join_group_btn);
+        }else {
+            JButton view_group_btn = UIUtils.createGroupCardButton("View group");
+            btns.add(view_group_btn);
         }
         return btns;
     }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
+import Group.MembershipManager.MembershipRequest;
 import Group.MembershipManager.MembershipRequestManager;
 import backend.CurrentUser;
 import backend.Database;
@@ -36,7 +37,7 @@ public class Group {
         this.groupId = Utilities.generateId();
         this.primaryAdmin = new PrimaryAdmin(primaryAdmin, this);
         this.groupContent = new GroupContent(this);
-        this.membershipManager = new MembershipRequestManager();
+        this.membershipManager = new MembershipRequestManager(this);
         this.groupNotifManager = new GroupNotifManager(this);
         members = new ArrayList<>();
         admins = new ArrayList<>();
@@ -46,7 +47,7 @@ public class Group {
     public Group(String groupId) throws IOException {
         this.groupContent = new GroupContent(this);
         this.groupId = groupId;
-        this.membershipManager = new MembershipRequestManager();
+        this.membershipManager = new MembershipRequestManager(this);
         this.groupNotifManager = new GroupNotifManager(this);
         members = new ArrayList<>();
         admins = new ArrayList<>();
@@ -74,14 +75,17 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
+        saveGroup();
     }
 
     public void setDescription(String description) {
         this.description = description;
+        saveGroup();
     }
 
     public void setGroupPhoto(String groupPhotoPath) throws IOException {
         this.groupPhoto = groupPhoto.setImage(groupPhotoPath);
+        saveGroup();
     }
 
     public boolean isMember(User user) {
@@ -97,7 +101,6 @@ public class Group {
     }
 
     public boolean isInGroup(User user){
-        System.out.println();
         return  isMember(user) || isAdmin(user) || isPrimaryAdmin(user);
     }
 
@@ -115,28 +118,37 @@ public class Group {
 
     public void removeMember(Member member) {
         this.members.remove(member.getUser());
+        saveGroup();
     }
 
     public void removeMember(User user) {
         this.members.remove(user);
+        saveGroup();
     }
 
     public void removeMember(CurrentUser currentUser){
         this.members.remove(currentUser.getUser());
         removeGroupFromCurrentUser(currentUser);
+        saveGroup();
     }
 
     public void addMember(Member member) {
         this.members.add(member.getUser());
+        getGroupNotifManager().addNewUserNotif(member.getUser());
+        saveGroup();
     }
 
     public void addMember(User user) {
         this.members.add(user);
+        getGroupNotifManager().addNewUserNotif(user);
+        saveGroup();
     }
 
     public void addMember(CurrentUser currentUser){
         this.members.add(currentUser.getUser());
         addGroupToCurrentUser(currentUser);
+        getGroupNotifManager().addNewUserNotif(currentUser.getUser());
+        saveGroup();
     }
 
     public GroupContent getGroupContent() {
@@ -149,6 +161,7 @@ public class Group {
 
     public void addPost(Post post) {
         this.groupContent.addPost(post);
+        saveGroup();
     }
 
     public ArrayList<User> getAdmins() {
@@ -158,32 +171,102 @@ public class Group {
     public void addAdmin(Member member) {
         members.remove(member.getUser());
         admins.add(member.getUser());
+        getGroupNotifManager().addStatusChangeNotif(member.getUser());
+        saveGroup();
     }
 
     public void addAdmin(User user) {
         members.remove(user);
         admins.add(user);
+        getGroupNotifManager().addStatusChangeNotif(user);
+        saveGroup();
     }
 
     public void addAdmin(CurrentUser currentUser) throws IOException {
         members.remove(currentUser.getUser());
         currentUser.changeRole(this, new Admin(currentUser.getUser(), this));
+        getGroupNotifManager().addStatusChangeNotif(currentUser.getUser());
+        saveGroup();
     }
 
     public void removeAdmin(Admin admin) {
         members.add(admin.getUser());
         admins.remove(admin.getUser());
+        getGroupNotifManager().addStatusChangeNotif(admin.getUser());
+        saveGroup();
     }
 
     public void removeAdmin(CurrentUser user){
         members.add(user.getUser());
         admins.remove(user.getUser());
         user.changeRole(this, new Member(user.getUser(), this));
+        getGroupNotifManager().addStatusChangeNotif(user.getUser());
+        saveGroup();
     }
 
     public void removeAdmin(User user) {
         members.add(user);
         admins.remove(user);
+        getGroupNotifManager().addStatusChangeNotif(user);
+        saveGroup();
+    }
+
+    private void setRequests(JSONObject data) throws IOException {
+        JSONArray requests =  data.getJSONArray("requests");
+        membershipManager.clearRequests();
+        for(Object request: requests){
+            String user_id = (String) request;
+            User user = Database.getInstance().getUser(user_id);
+            if(user != null){
+                membershipManager.getMembershipRequests().add(new MembershipRequest(user, this));
+            }
+        }
+    }
+    private void setAdmins(JSONObject data) throws IOException {
+        JSONArray adminsJson = data.getJSONArray("admins");
+        this.admins.clear();
+        for(Object admin: adminsJson){
+            String user_id = (String) admin;
+            this.admins.add(Database.getInstance().getUser(user_id));
+        }
+    }
+    private void setMembers(JSONObject data) throws IOException{
+        JSONArray memberJson = data.getJSONArray("members");
+        this.members.clear();
+        for(Object member: memberJson){
+            String user_id = (String) member;
+            this.members.add(Database.getInstance().getUser(user_id));
+        }
+    }
+
+    private void loadRequest(JSONObject data){
+        JSONArray requestJson = new JSONArray();
+        for(MembershipRequest request: this.membershipManager.getGroupRequests()){
+            requestJson.put(request.getSender().getUserId());
+        }
+        data.put("requests", requestJson);
+    }
+    private void loadAdmins(JSONObject data){
+        JSONArray adminsJson = new JSONArray();
+        for(User admin: this.admins){
+            adminsJson.put(admin.getUserId());
+        }
+        data.put("admins", adminsJson);
+    }
+    private void loadMembers(JSONObject data){
+        JSONArray membersJson = new JSONArray();
+        for(User member: this.members){
+            membersJson.put(member.getUserId());
+        }
+        data.put("members", membersJson);
+    }
+
+    public void saveGroup(){
+        try {
+            Database.getInstance().saveGroup(this);
+        } catch (IOException e){
+            System.out.println("Database error");
+        }
     }
 
     public void setGroupData(JSONObject data) throws IOException {
@@ -198,6 +281,7 @@ public class Group {
         setAdmins(data.getJSONArray("admins"));
         setMembers(data.getJSONArray("members"));
 
+        setRequests(data);  
         this.groupNotifManager.setGroupNotifs(data.getJSONObject("notifications"));
     }
 
@@ -227,6 +311,8 @@ public class Group {
 
         loadAdmins(data);
         loadMembers(data);
+      
+        loadRequest(data);
 
         data.put("notifications", groupNotifManager.toJSONObject());
         return data;

@@ -12,11 +12,8 @@ import java.io.IOException;
 
 public class Admin extends Member{
 
-    private MembershipRequestManager requestsManager;
-
     public Admin(User user, Group group) throws IOException {
         super(user, group);
-        requestsManager = new MembershipRequestManager();
     }
 
     public void acceptRequest(MembershipRequest request){
