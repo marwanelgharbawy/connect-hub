@@ -24,6 +24,7 @@ public class Group {
     private PrimaryAdmin primaryAdmin;
     private final String groupId;
 
+    // Constructor when creating a new group from the frontend (New Group)
     public Group(String name, String description, String groupPhotoPath, User primaryAdmin) throws IOException {
         this.name = name;
         this.description = description;
@@ -33,7 +34,8 @@ public class Group {
         this.groupContent = GroupContent.getInstance();
     }
 
-    public Group( String groupId) {
+    // Constructor when loading a group from the database
+    public Group(String groupId) {
         this.groupContent = GroupContent.getInstance();
         this.groupId = groupId;
     }
