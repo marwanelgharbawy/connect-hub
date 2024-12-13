@@ -237,9 +237,9 @@ public class Database {
 
     // This will be called to save a group in the database class and files
     public void saveGroup(Group group) throws IOException {
-        id_to_group.put(group.getGroupId(), group);
-        writeGroupData(group);
-        writeGroupsIDToFiles();
+        id_to_group.put(group.getGroupId(), group); // Add group to the map (Current database instance)
+        writeGroupData(group);                      // Write the group data to its own file
+        writeGroupsIDToFiles();                     // Update the groups.json file with the new group ID
     }
 
     // Writes the group data to its own file
