@@ -134,6 +134,10 @@ public class User {
         return groupID_to_joiningDate.keySet().toArray(new String[0]);
     }
 
+    public LocalDateTime getJoiningTime(String group_id){
+        return groupID_to_joiningDate.get(group_id);
+    }
+
     public String getEmail() {
         return email;
     }
