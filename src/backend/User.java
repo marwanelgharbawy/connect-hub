@@ -1,8 +1,9 @@
 package backend;
+
+import Group.*;
 import content.ContentManager;
 
 import friendManager.*;
-import Group.Group;
 
 import notificationManager.NotificationsManager;
 import searchManager.SearchManagerC;
@@ -16,12 +17,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.time.LocalDateTime;
 
-
 import org.json.*;
 
 public class User {
     private final FriendManagerC friendManager;
     private final SearchManagerC searchManager;
+    private final MembershipRequestManager membershipManager;
     private String userId;
     private String email;
     private String username;
@@ -39,6 +40,7 @@ public class User {
     public User() throws IOException {
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.searchManager = new SearchManagerC();
+        this.membershipManager = new MembershipRequestManager();
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
@@ -56,6 +58,7 @@ public class User {
         this.online = true;
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.searchManager = new SearchManagerC();
+        this.membershipManager = new MembershipRequestManager();
         this.profile = new Profile(this,"", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
@@ -71,6 +74,7 @@ public class User {
         password = credentials.getString("password");
         this.friendManager = FriendManagerFactory.createFriendManager();
         this.searchManager = new SearchManagerC();
+        this.membershipManager = new MembershipRequestManager();
         this.profile = new Profile(this, "", "icons/profile-icon.jpeg", "");
         this.contentManager = new ContentManager(this);
         this.notifsManager = new NotificationsManager(this);
@@ -268,18 +272,14 @@ public class User {
             JSONObject json = (JSONObject)request;
             String senderId = json.getString("sender-id");
             LocalDateTime date = Utilities.y_M_d_hh_mmToDate(json.getString("date"));
-            User sender = database.getUser(senderId);
-            {
-                if (sender != null) {
-                    FriendRequest friendRequest = friendManager.getRequestManager().getReceivedRequest(senderId);
-                    if (friendRequest == null) {
-                        friendManager.getRequestManager().addFriendRequest(new FriendRequest(sender, this, date));
-                    }
+            User sender = database.getUser(senderId);        
+            if (sender != null) {
+                FriendRequest friendRequest = friendManager.getRequestManager().getReceivedRequest(senderId);
+                if (friendRequest == null) {
+                    friendManager.getRequestManager().addFriendRequest(new FriendRequest(sender, this, date));
                 }
-            }
-
+            }         
         }
-
     }
 
     // This method set the user's groups and joining date after loading it from the database
@@ -359,7 +359,7 @@ public class User {
     public boolean isRequestReceived(User desiredUser){
         return desiredUser.isRequestSent(this);
     }
-
+  
     public void createGroup(Group group) throws IOException {
         groupID_to_joiningDate.put(group.getGroupId(), LocalDateTime.now());
         Database.getInstance().saveGroup(group); // Save the group in the database
