@@ -80,7 +80,11 @@ public class Group {
     }
 
     public boolean isPrimaryAdmin(User user) {
-        return user == primaryAdmin.getUser();
+        return user.getUserId().equals(primaryAdmin.getUser().getUserId());
+    }
+
+    public boolean isInGroup(User user){
+        return  isMember(user) || isAdmin(user) || isPrimaryAdmin(user);
     }
 
     private void addGroupToCurrentUser(CurrentUser user, GroupRole role) {
@@ -147,6 +151,8 @@ public class Group {
         this.name = (String) data.get("name");
         this.description = (String) data.get("description");
         this.groupPhoto = new Picture((String) data.get("group-photo")); // Takes the path of the image
+        this.members = new ArrayList<>();
+        this.admins = new ArrayList<>();
         // TODO: Parse JSON for the following attributes
         this.primaryAdmin = PrimaryAdmin.getInstance(this, (String) data.get("primary-admin"));
 //        this.admins = new ArrayList<>();
