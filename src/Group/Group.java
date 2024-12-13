@@ -246,20 +246,20 @@ public class Group {
         }
         data.put("requests", requestJson);
     }
-    private void loadAdmins(JSONObject data){
-        JSONArray adminsJson = new JSONArray();
-        for(User admin: this.admins){
-            adminsJson.put(admin.getUserId());
-        }
-        data.put("admins", adminsJson);
-    }
-    private void loadMembers(JSONObject data){
-        JSONArray membersJson = new JSONArray();
-        for(User member: this.members){
-            membersJson.put(member.getUserId());
-        }
-        data.put("members", membersJson);
-    }
+//    private void loadAdmins(JSONObject data){
+//        JSONArray adminsJson = new JSONArray();
+//        for(User admin: this.admins){
+//            adminsJson.put(admin.getUserId());
+//        }
+//        data.put("admins", adminsJson);
+//    }
+//    private void loadMembers(JSONObject data){
+//        JSONArray membersJson = new JSONArray();
+//        for(User member: this.members){
+//            membersJson.put(member.getUserId());
+//        }
+//        data.put("members", membersJson);
+//    }
 
     public void saveGroup(){
         try {
