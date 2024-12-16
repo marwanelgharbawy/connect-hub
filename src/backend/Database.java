@@ -329,6 +329,8 @@ public class Database {
         return id_to_group.size();
     }
 
+    // This is the method that should be called from the frontend, it will return the conversation between two users
+    // If no conversation exists, it will create a new one
     public Conversation getConversation(User user1, User user2) {
         for (Conversation conversation : conversations) {
             if (conversation.getUser1().equals(user1) && conversation.getUser2().equals(user2) ||
@@ -336,7 +338,11 @@ public class Database {
                 return conversation;
             }
         }
-        Conversation conversation = new Conversation(user1, user2); // Create a new conversation;
+        return createNewConversation(user1, user2);
+    }
+
+    private Conversation createNewConversation(User user1, User user2) {
+        Conversation conversation = new Conversation(user1, user2);
         conversations.add(conversation);
         return conversation;
     }
