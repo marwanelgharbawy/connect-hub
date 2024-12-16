@@ -21,14 +21,16 @@ public class Database {
     private final String users_json_file = database_folder + "/users.json";
     private final String groups_folder = database_folder + "/groups";
     private final String groups_json_file = database_folder + "/groups.json";
+    private final String chats_folder = database_folder + "/chats";
+    private final String chats_json_file = database_folder + "/chats.json";
 
     // Group maps
-    private Map<String, Group> id_to_group = new HashMap<>();
+    private final Map<String, Group> id_to_group = new HashMap<>();
 
     // User maps
-    private Map<String, User> id_to_user = new HashMap<>();
-    private Map<String, User> email_to_user = new HashMap<>();
-    private Map<String, User> username_to_user = new HashMap<>();
+    private final Map<String, User> id_to_user = new HashMap<>();
+    private final Map<String, User> email_to_user = new HashMap<>();
+    private final Map<String, User> username_to_user = new HashMap<>();
     private CurrentUser currentUser;
 
     private Database() throws IOException {
