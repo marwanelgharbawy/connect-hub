@@ -44,6 +44,7 @@ public class Database {
                 instance = new Database();
                 instance.parseUsersData();
                 instance.parseGroupsData();
+                instance.parseChatsData();
             } catch (IOException e) {
                 e.printStackTrace();
             }
