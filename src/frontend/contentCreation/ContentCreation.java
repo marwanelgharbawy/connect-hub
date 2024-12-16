@@ -45,20 +45,12 @@ public class ContentCreation extends JFrame {
                 if (contentFields.getText() != null) {
                     if (isStory) {
                         Story story = new Story(authorId, contentFields);
-                        try {
-                            User current_user = Database.getInstance().getCurrentUser().getUser();
-                            current_user.getContentManager().addStory(story);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
+                        User current_user = Database.getInstance().getCurrentUser().getUser();
+                        current_user.getContentManager().addStory(story);
                     } else {
                         Post post = new Post(authorId, contentFields);
-                        try {
-                            User current_user = Database.getInstance().getCurrentUser().getUser();
-                            current_user.getContentManager().addPost(post);
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
+                        User current_user = Database.getInstance().getCurrentUser().getUser();
+                        current_user.getContentManager().addPost(post);
                     }
                 }
                 // Show content creation window again

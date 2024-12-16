@@ -12,8 +12,6 @@ import Group.Group;
 import org.json.*;
 import utils.Utilities;
 
-
-
 public class Database {
     private static Database instance;
     private final String database_folder = "database";
@@ -21,25 +19,35 @@ public class Database {
     private final String users_json_file = database_folder + "/users.json";
     private final String groups_folder = database_folder + "/groups";
     private final String groups_json_file = database_folder + "/groups.json";
-
-    // Group maps
-    private Map<String, Group> id_to_group = new HashMap<>();
+    private final String chats_folder = database_folder + "/chats";
+    private final String chats_json_file = database_folder + "/chats.json";
 
     // User maps
-    private Map<String, User> id_to_user = new HashMap<>();
-    private Map<String, User> email_to_user = new HashMap<>();
-    private Map<String, User> username_to_user = new HashMap<>();
+    private final Map<String, User> id_to_user = new HashMap<>();
+    private final Map<String, User> email_to_user = new HashMap<>();
+    private final Map<String, User> username_to_user = new HashMap<>();
     private CurrentUser currentUser;
+
+    // Group maps
+    private final Map<String, Group> id_to_group = new HashMap<>();
+
+    // Chat maps
+    private final ArrayList<Conversation> conversations = new ArrayList<>();
 
     private Database() throws IOException {
         checkExistenceOfDatabase();
     }
 
-    public static Database getInstance() throws IOException {
+    public static Database getInstance() {
         if (instance == null) {
-            instance = new Database();
-            instance.parseUsersData();
-            instance.parseGroupsData();
+            try {
+                instance = new Database();
+                instance.parseUsersData();
+                instance.parseGroupsData();
+                instance.parseChatsData();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return instance;
     }
@@ -128,6 +136,37 @@ public class Database {
             System.out.println("Setting group data: " + getGroup(groupID).getName());
             getGroup(groupID).setGroupData(groupData);
             System.out.println("Successfully added group data: " + getGroup(groupID).getName());
+        }
+    }
+
+    private void parseChatsData() throws IOException {
+        conversations.clear();
+
+        // Read chats.json, an array of IDs (ID1_ID2)
+        String data = Files.readString(Path.of(chats_json_file));
+        JSONArray array = new JSONArray(data);
+
+        // Load each conversation, an array of messages (sender, timestamp, content)
+        for (Object obj : array) {
+            String chatID = (String) obj;
+            String chat_file = chats_folder + "/" + chatID + ".json";
+
+            String messages_ = Files.readString(Path.of(chat_file));
+
+            // Load messages in the conversation
+            JSONArray messages = new JSONArray(messages_); // JSON array of messages
+            ArrayList<Message> messagesList = new ArrayList<>();
+            for (Object message : messages) {
+                JSONObject msg = (JSONObject) message;
+                Message textMessage = new Message(msg); // Send JSON object to Message constructor
+                messagesList.add(textMessage);
+            }
+
+            String[] ids = chatID.split("_");
+            User user1 = getUser(ids[0]);
+            User user2 = getUser(ids[1]);
+            Conversation conversation = new Conversation(user1, user2, messagesList);
+            conversations.add(conversation);
         }
     }
 
@@ -289,5 +328,23 @@ public class Database {
 
     public int getNumberOfGroups() {
         return id_to_group.size();
+    }
+
+    // This is the method that should be called from the frontend, it will return the conversation between two users
+    // If no conversation exists, it will create a new one
+    public Conversation getConversation(User user1, User user2) {
+        for (Conversation conversation : conversations) {
+            if (conversation.getUser1().equals(user1) && conversation.getUser2().equals(user2) ||
+                    conversation.getUser1().equals(user2) && conversation.getUser2().equals(user1)) {
+                return conversation;
+            }
+        }
+        return createNewConversation(user1, user2);
+    }
+
+    private Conversation createNewConversation(User user1, User user2) {
+        Conversation conversation = new Conversation(user1, user2);
+        conversations.add(conversation);
+        return conversation;
     }
 }

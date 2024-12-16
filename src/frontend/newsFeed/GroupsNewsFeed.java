@@ -88,11 +88,7 @@ public class GroupsNewsFeed extends JPanel {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
                     new CreateGroup(Database.getInstance().getCurrentUser().getUser());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
             }
         };
     }
