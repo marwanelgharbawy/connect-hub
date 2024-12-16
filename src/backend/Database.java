@@ -12,8 +12,6 @@ import Group.Group;
 import org.json.*;
 import utils.Utilities;
 
-
-
 public class Database {
     private static Database instance;
     private final String database_folder = "database";
@@ -137,6 +135,37 @@ public class Database {
             System.out.println("Setting group data: " + getGroup(groupID).getName());
             getGroup(groupID).setGroupData(groupData);
             System.out.println("Successfully added group data: " + getGroup(groupID).getName());
+        }
+    }
+
+    private void parseChatsData() throws IOException {
+        conversations.clear();
+
+        // Read chats.json, an array of IDs (ID1_ID2)
+        String data = Files.readString(Path.of(chats_json_file));
+        JSONArray array = new JSONArray(data);
+
+        // Load each conversation, an array of messages (sender, timestamp, content)
+        for (Object obj : array) {
+            String chatID = (String) obj;
+            String chat_file = chats_folder + "/" + chatID + ".json";
+
+            String messages_ = Files.readString(Path.of(chat_file));
+
+            // Load messages in the conversation
+            JSONArray messages = new JSONArray(messages_); // JSON array of messages
+            ArrayList<Message> messagesList = new ArrayList<>();
+            for (Object message : messages) {
+                JSONObject msg = (JSONObject) message;
+                Message textMessage = new Message(msg); // Send JSON object to Message constructor
+                messagesList.add(textMessage);
+            }
+
+            String[] ids = chatID.split("_");
+            User user1 = getUser(ids[0]);
+            User user2 = getUser(ids[1]);
+            Conversation conversation = new Conversation(user1, user2, messagesList);
+            conversations.add(conversation);
         }
     }
 
