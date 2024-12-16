@@ -328,4 +328,16 @@ public class Database {
     public int getNumberOfGroups() {
         return id_to_group.size();
     }
+
+    public Conversation getConversation(User user1, User user2) {
+        for (Conversation conversation : conversations) {
+            if (conversation.getUser1().equals(user1) && conversation.getUser2().equals(user2) ||
+                    conversation.getUser1().equals(user2) && conversation.getUser2().equals(user1)) {
+                return conversation;
+            }
+        }
+        Conversation conversation = new Conversation(user1, user2); // Create a new conversation;
+        conversations.add(conversation);
+        return conversation;
+    }
 }
