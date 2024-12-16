@@ -2,7 +2,6 @@ package backend;
 
 import org.json.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Conversation {
@@ -24,5 +23,25 @@ public class Conversation {
 
     public User getUser2() {
         return user2;
+    }
+
+    public ArrayList<Message> getMessages() {
+        return messages;
+    }
+
+    public void addMessage(Message message) {
+        messages.add(message);
+    }
+
+    public JSONObject toJSON() {
+        JSONObject data = new JSONObject();
+        data.put("user1", user1.getUserId());
+        data.put("user2", user2.getUserId());
+        JSONArray messagesArray = new JSONArray();
+        for (Message message : messages) {
+            messagesArray.put(message.toJSON());
+        }
+        data.put("messages", messagesArray);
+        return data;
     }
 }
