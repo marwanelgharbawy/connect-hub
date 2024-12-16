@@ -38,4 +38,12 @@ public class Message {
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
+
+    public JSONArray toJSON() {
+        JSONArray data = new JSONArray();
+        data.put(content);
+        data.put(sender.getUserId());
+        data.put(timestamp.toString());
+        return data;
+    }
 }
