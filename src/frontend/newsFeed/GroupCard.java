@@ -63,12 +63,7 @@ public class GroupCard extends JPanel {
             join_group_btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    User current_user = null;
-                    try {
-                        current_user = Database.getInstance().getCurrentUser().getUser();
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
+                    User current_user = Database.getInstance().getCurrentUser().getUser();
                     group.getMembershipManager().sendMembershipRequest(current_user);
                     join_group_btn.setVisible(false);
                 }

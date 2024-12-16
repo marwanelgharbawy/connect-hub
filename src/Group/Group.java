@@ -357,10 +357,6 @@ public class Group {
         }
         // Make the primary admin leave the group
         primaryAdmin.getUser().leaveGroup(this.groupId);
-        try {
-            Database.getInstance().deleteGroup(this.groupId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Database.getInstance().deleteGroup(this.groupId);
     }
 }
