@@ -3,6 +3,7 @@ package backend;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import org.json.*;
+import utils.Utilities;
 
 public class Message {
     private String content;          // Text of the message
@@ -24,7 +25,7 @@ public class Message {
         this.content = json.getString("content");
         String UserID = json.getString("sender");
         this.sender = database.getUser(UserID);
-        this.timestamp = LocalDateTime.parse(json.getString("timestamp"));
+        this.timestamp = Utilities.y_M_d_hh_mmToDate(json.getString("timestamp"));
     }
 
     public String getContent() {
