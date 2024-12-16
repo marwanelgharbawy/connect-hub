@@ -24,24 +24,31 @@ public class Database {
     private final String chats_folder = database_folder + "/chats";
     private final String chats_json_file = database_folder + "/chats.json";
 
-    // Group maps
-    private final Map<String, Group> id_to_group = new HashMap<>();
-
     // User maps
     private final Map<String, User> id_to_user = new HashMap<>();
     private final Map<String, User> email_to_user = new HashMap<>();
     private final Map<String, User> username_to_user = new HashMap<>();
     private CurrentUser currentUser;
 
+    // Group maps
+    private final Map<String, Group> id_to_group = new HashMap<>();
+
+    // Chat maps
+    private final ArrayList<Conversation> conversations = new ArrayList<>();
+
     private Database() throws IOException {
         checkExistenceOfDatabase();
     }
 
-    public static Database getInstance() throws IOException {
+    public static Database getInstance() {
         if (instance == null) {
-            instance = new Database();
-            instance.parseUsersData();
-            instance.parseGroupsData();
+            try {
+                instance = new Database();
+                instance.parseUsersData();
+                instance.parseGroupsData();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return instance;
     }
