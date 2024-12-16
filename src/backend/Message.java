@@ -8,9 +8,11 @@ public class Message {
     private String content;          // Text of the message
     private User sender;             // User who sent the message
     private LocalDateTime timestamp; // Time the message was sent
+    private Database database;
 
     // Create time from frontend
     public Message(User sender, String message) {
+        this.database = Database.getInstance();
         this.content = message;
         this.sender = sender;
         this.timestamp = LocalDateTime.now();
@@ -18,9 +20,10 @@ public class Message {
 
     // Load message from database
     public Message(JSONObject json) {
+        this.database = Database.getInstance();
         this.content = json.getString("content");
         String UserID = json.getString("sender");
-        this.sender = Database.getInstance().getUser(UserID);
+        this.sender = database.getUser(UserID);
         this.timestamp = LocalDateTime.parse(json.getString("timestamp"));
     }
 
