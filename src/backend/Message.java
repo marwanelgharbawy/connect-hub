@@ -17,7 +17,7 @@ public class Message {
     }
 
     // Load message from database
-    public Message(JSONObject json) throws IOException {
+    public Message(JSONObject json) {
         this.content = json.getString("content");
         String UserID = json.getString("sender");
         this.sender = Database.getInstance().getUser(UserID);
