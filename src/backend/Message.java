@@ -36,15 +36,15 @@ public class Message {
         return sender;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public String getTimestamp() {
+        return Utilities.DataTo_y_M_d_hh_mm(timestamp);
     }
 
-    public JSONArray toJSON() {
-        JSONArray data = new JSONArray();
-        data.put(content);
-        data.put(sender.getUserId());
-        data.put(timestamp.toString());
+    public JSONObject toJSON() {
+        JSONObject data = new JSONObject();
+        data.put("content", content);
+        data.put("sender", sender.getUserId());
+        data.put("timestamp", Utilities.DataTo_y_M_d_hh_mm(timestamp));
         return data;
     }
 }

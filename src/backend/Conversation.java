@@ -47,6 +47,15 @@ public class Conversation {
         database.saveConversation(this);
     }
 
+    // Converts conversation into a JSON array of messages
+    public JSONArray toJSON() {;
+        JSONArray messagesArray = new JSONArray();
+        for (Message message : messages) {
+            messagesArray.put(message.toJSON());
+        }
+        return messagesArray;
+    }
+
     public void printConversation() {
         System.out.println("Conversation between " + user1.getUsername() + " and " + user2.getUsername());
         for (Message message : messages) {
