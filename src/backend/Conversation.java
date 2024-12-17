@@ -40,24 +40,26 @@ public class Conversation {
 
     public void addMessage(Message message) {
         messages.add(message);
+        save();
     }
 
-    public JSONObject toJSON() {
-        JSONObject data = new JSONObject();
-        data.put("user1", user1.getUserId());
-        data.put("user2", user2.getUserId());
+    private void save() {
+        database.saveConversation(this);
+    }
+
+    // Converts conversation into a JSON array of messages
+    public JSONArray toJSON() {;
         JSONArray messagesArray = new JSONArray();
         for (Message message : messages) {
             messagesArray.put(message.toJSON());
         }
-        data.put("messages", messagesArray);
-        return data;
+        return messagesArray;
     }
 
     public void printConversation() {
         System.out.println("Conversation between " + user1.getUsername() + " and " + user2.getUsername());
         for (Message message : messages) {
-            System.out.println(message.getSender().getUsername() + ": " + message.getContent());
+            System.out.println(message.getSender().getUsername() + ": " + message.getContent() + " at: " + message.getTimestamp());
         }
     }
 }
