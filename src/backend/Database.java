@@ -347,4 +347,32 @@ public class Database {
         conversations.add(conversation);
         return conversation;
     }
+
+    // Update the conversation file
+    public void saveConversation(Conversation conversation) {
+        String chatID1 = conversation.getUser1().getUserId() + "_" + conversation.getUser2().getUserId();
+        String chat_file1 = chats_folder + "/" + chatID1 + ".json";
+        String chatFile; // File to be written
+
+        if (Files.exists(Path.of(chat_file1))) {
+            chatFile = chat_file1;
+        } else { // Switch both users IDs
+            String chatID2 = conversation.getUser2().getUserId() + "_" + conversation.getUser1().getUserId();
+            String chat_file2 = chats_folder + "/" + chatID2 + ".json";
+            if (Files.exists(Path.of(chat_file2))) {
+                chatFile = chat_file2;
+            } else {
+                chatFile = chat_file1; // Create a new file with the name user1_user2
+            }
+        }
+        // Objective: Write in chatFile
+        try {
+            FileWriter file = new FileWriter(chatFile);
+            file.write(conversation.toJSON().toString(2));
+            file.close();
+        } catch (IOException e) {
+            System.out.println("Database error, failed to write to file.");
+            e.printStackTrace();
+        }
+    }
 }
